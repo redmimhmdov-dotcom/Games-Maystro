@@ -3,340 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>الدفاع المدني - V11</title>
-    <!-- خط عريض وجذاب -->
+    <title>الدفاع المدني - V13</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            direction: rtl;
-        }
-        body {
-            font-family: 'Cairo', sans-serif;
-            font-weight: 900;
-            background: #0a0a0a;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 12px;
-        }
-        .app {
-            background: #121212;
-            border-radius: 28px;
-            max-width: 460px;
-            width: 100%;
-            box-shadow: 0 0 50px rgba(255, 94, 0, 0.15);
-            overflow: hidden;
-            border: 1px solid #2a2a2a;
-            min-height: 700px;
-            position: relative;
-        }
-        .page {
-            display: none;
-            padding: 20px 18px;
-            animation: fadeSlide 0.25s ease;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; direction: rtl; }
+        body { font-family: 'Cairo', sans-serif; font-weight: 900; background: #0a0a0a; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 12px; }
+        .app { background: #121212; border-radius: 28px; max-width: 460px; width: 100%; box-shadow: 0 0 50px rgba(255, 94, 0, 0.15); overflow: hidden; border: 1px solid #2a2a2a; min-height: 700px; position: relative; }
+        .page { display: none; padding: 20px 18px; animation: fadeSlide 0.25s ease; }
         .page.active { display: block; }
-        @keyframes fadeSlide {
-            0% { opacity: 0; transform: translateY(12px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== هيدر ===== */
-        .header {
-            text-align: center;
-            padding: 10px 0 15px;
-            border-bottom: 2px solid #1f1f1f;
-            margin-bottom: 20px;
-            position: relative;
-        }
-        .logo {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 5px;
-            display: block;
-            filter: drop-shadow(0 0 15px rgba(255, 94, 0, 0.3));
-        }
-        .app-title {
-            font-size: 32px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ff7300, #e65c00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
-        }
-        .app-sub {
-            font-size: 14px;
-            color: #888;
-            font-weight: 700;
-        }
-        .back-btn {
-            background: none;
-            border: none;
-            color: #ff7300;
-            font-size: 26px;
-            font-weight: 900;
-            cursor: pointer;
-            padding: 5px 12px;
-            position: absolute;
-            top: 12px;
-            right: 15px;
-        }
-
-        /* ===== الأزرار الرئيسية ===== */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 30px;
-        }
-        .main-btn {
-            background: #1e1e1e;
-            border: 2px solid #2a2a2a;
-            border-radius: 20px;
-            padding: 35px 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.25s;
-            font-weight: 900;
-            font-size: 20px;
-            color: #eee;
-        }
+        @keyframes fadeSlide { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
+        .header { text-align: center; padding: 10px 0 15px; border-bottom: 2px solid #1f1f1f; margin-bottom: 20px; position: relative; }
+        .logo { width: 70px; height: 70px; margin: 0 auto 5px; display: block; filter: drop-shadow(0 0 15px rgba(255, 94, 0, 0.3)); }
+        .app-title { font-size: 32px; font-weight: 900; background: linear-gradient(135deg, #ff7300, #e65c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .app-sub { font-size: 14px; color: #888; font-weight: 700; }
+        .back-btn { background: none; border: none; color: #ff7300; font-size: 26px; font-weight: 900; cursor: pointer; padding: 5px 12px; position: absolute; top: 12px; right: 15px; }
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 30px; }
+        .main-btn { background: #1e1e1e; border: 2px solid #2a2a2a; border-radius: 20px; padding: 35px 10px; text-align: center; cursor: pointer; transition: 0.25s; font-weight: 900; font-size: 20px; color: #eee; }
         .main-btn .icon { font-size: 48px; display: block; margin-bottom: 10px; }
         .main-btn.citizen { border-color: #ff7300; background: #1a100a; }
         .main-btn.citizen:hover { background: #2a1a0f; transform: scale(1.02); }
         .main-btn.civil { border-color: #ff7300; background: #1a0a0a; }
         .main-btn.civil:hover { background: #2a1210; transform: scale(1.02); }
-
-        /* ===== خدمات المواطن ===== */
-        .service-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin: 15px 0;
-        }
-        .service-btn {
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 16px;
-            padding: 22px 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-            font-weight: 900;
-            font-size: 16px;
-            color: #ddd;
-        }
+        .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0; }
+        .service-btn { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 22px 8px; text-align: center; cursor: pointer; transition: 0.2s; font-weight: 900; font-size: 16px; color: #ddd; }
         .service-btn .icon { font-size: 32px; display: block; margin-bottom: 6px; }
         .service-btn:hover { background: #252525; border-color: #ff7300; }
-
-        /* ===== نماذج الإدخال ===== */
-        label {
-            display: block;
-            margin: 18px 0 6px;
-            font-weight: 900;
-            font-size: 15px;
-            color: #ccc;
-        }
+        label { display: block; margin: 18px 0 6px; font-weight: 900; font-size: 15px; color: #ccc; }
         label .required { color: #ff7300; }
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #2a2a2a;
-            border-radius: 14px;
-            font-size: 16px;
-            background: #1a1a1a;
-            color: #fff;
-            transition: 0.3s;
-            font-family: 'Cairo', sans-serif;
-            font-weight: 700;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #ff7300;
-            box-shadow: 0 0 0 4px rgba(255, 115, 0, 0.15);
-            background: #222;
-        }
+        input, select, textarea { width: 100%; padding: 12px 16px; border: 2px solid #2a2a2a; border-radius: 14px; font-size: 16px; background: #1a1a1a; color: #fff; transition: 0.3s; font-family: 'Cairo', sans-serif; font-weight: 700; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #ff7300; box-shadow: 0 0 0 4px rgba(255, 115, 0, 0.15); background: #222; }
         textarea { resize: vertical; min-height: 70px; }
-
-        /* ===== زر الإرسال البرتقالي ===== */
-        .send-btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 16px;
-            font-size: 22px;
-            font-weight: 900;
-            cursor: pointer;
-            margin-top: 24px;
-            background: linear-gradient(135deg, #ff7300, #e65c00);
-            color: #fff;
-            box-shadow: 0 6px 25px rgba(255, 115, 0, 0.3);
-            transition: 0.3s;
-            font-family: 'Cairo', sans-serif;
-        }
+        .send-btn { width: 100%; padding: 16px; border: none; border-radius: 16px; font-size: 22px; font-weight: 900; cursor: pointer; margin-top: 24px; background: linear-gradient(135deg, #ff7300, #e65c00); color: #fff; box-shadow: 0 6px 25px rgba(255, 115, 0, 0.3); transition: 0.3s; font-family: 'Cairo', sans-serif; }
         .send-btn:hover { transform: scale(1.02); box-shadow: 0 8px 35px rgba(255, 115, 0, 0.5); }
-
-        /* ===== حالة النموذج ===== */
-        .status {
-            margin-top: 16px;
-            padding: 12px;
-            border-radius: 14px;
-            text-align: center;
-            font-size: 15px;
-            font-weight: 700;
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            min-height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #aaa;
-        }
+        .status { margin-top: 16px; padding: 12px; border-radius: 14px; text-align: center; font-size: 15px; font-weight: 700; background: #1a1a1a; border: 1px solid #2a2a2a; min-height: 50px; display: flex; align-items: center; justify-content: center; color: #aaa; }
         .status.success { background: #0f2a1a; color: #7fff7f; border-color: #2a6a3a; }
         .status.error { background: #2a1010; color: #ff6666; border-color: #6a2a2a; }
-
-        /* ===== غرفة العمليات (قائمة البلاغات) ===== */
-        .telegram-sync {
-            font-size: 13px;
-            color: #ff7300;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 5px;
-            flex-wrap: wrap;
-        }
-        .refresh-btn {
-            background: #2a2a2a;
-            color: #ff7300;
-            border: 1px solid #ff7300;
-            padding: 4px 16px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 900;
-            cursor: pointer;
-            font-family: 'Cairo', sans-serif;
-        }
+        .telegram-sync { font-size: 13px; color: #ff7300; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 5px; flex-wrap: wrap; }
+        .refresh-btn { background: #2a2a2a; color: #ff7300; border: 1px solid #ff7300; padding: 4px 16px; border-radius: 30px; font-size: 14px; font-weight: 900; cursor: pointer; font-family: 'Cairo', sans-serif; }
         .refresh-btn:hover { background: #ff7300; color: #000; }
-
-        .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin: 15px 0 12px;
-        }
-        .tab {
-            background: #1a1a1a;
-            padding: 6px 16px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 900;
-            cursor: pointer;
-            border: 1px solid #2a2a2a;
-            color: #888;
-            font-family: 'Cairo', sans-serif;
-            transition: 0.2s;
-        }
+        .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 15px 0 12px; }
+        .tab { background: #1a1a1a; padding: 6px 16px; border-radius: 30px; font-size: 14px; font-weight: 900; cursor: pointer; border: 1px solid #2a2a2a; color: #888; font-family: 'Cairo', sans-serif; transition: 0.2s; }
         .tab.active { background: #ff7300; color: #000; border-color: #ff7300; }
         .tab:hover { border-color: #ff7300; }
-
-        .report-list {
-            margin: 10px 0 15px;
-            max-height: 420px;
-            overflow-y: auto;
-            padding: 2px;
-        }
-        /* تنسيق شريط التمرير */
+        .report-list { margin: 10px 0 15px; max-height: 420px; overflow-y: auto; padding: 2px; }
         .report-list::-webkit-scrollbar { width: 4px; }
         .report-list::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 10px; }
         .report-list::-webkit-scrollbar-thumb { background: #ff7300; border-radius: 10px; }
-
-        .report-item {
-            background: #1a1a1a;
-            border-radius: 16px;
-            padding: 14px 16px;
-            margin-bottom: 12px;
-            border-right: 6px solid #ff7300;
-            cursor: pointer;
-            transition: 0.2s;
-            border-left: 1px solid #2a2a2a;
-            border-top: 1px solid #2a2a2a;
-            border-bottom: 1px solid #2a2a2a;
-        }
+        .report-item { background: #1a1a1a; border-radius: 16px; padding: 14px 16px; margin-bottom: 12px; border-right: 6px solid #ff7300; cursor: pointer; transition: 0.2s; border-left: 1px solid #2a2a2a; border-top: 1px solid #2a2a2a; border-bottom: 1px solid #2a2a2a; }
         .report-item:hover { background: #252525; transform: translateX(-3px); }
-
         .flex-between { display: flex; justify-content: space-between; align-items: center; }
         .report-title { font-size: 17px; font-weight: 900; color: #fff; }
-        .badge {
-            display: inline-block;
-            padding: 2px 14px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 900;
-        }
+        .badge { display: inline-block; padding: 2px 14px; border-radius: 30px; font-size: 12px; font-weight: 900; }
         .badge.fire { background: #6a1a1a; color: #ff6666; }
         .badge.accident { background: #4a3a0a; color: #ffcc44; }
         .badge.medical { background: #0a3a2a; color: #66ffaa; }
         .badge.help { background: #2a1a4a; color: #cc88ff; }
         .badge.complaint { background: #1a2a4a; color: #66aaff; }
-
         .report-meta { font-size: 14px; color: #999; margin-top: 4px; font-weight: 700; }
         .status-tag { font-weight: 900; padding: 2px 10px; border-radius: 20px; font-size: 12px; }
         .status-tag.new { background: #2a2a2a; color: #ff7300; }
         .status-tag.progress { background: #4a3a0a; color: #ffcc44; }
         .status-tag.done { background: #0a3a2a; color: #66ffaa; }
-
-        /* ===== تفاصيل البلاغ ===== */
-        .detail-box {
-            background: #1a1a1a;
-            border-radius: 16px;
-            padding: 18px;
-            margin: 15px 0;
-            border: 1px solid #2a2a2a;
-        }
+        .detail-box { background: #1a1a1a; border-radius: 16px; padding: 18px; margin: 15px 0; border: 1px solid #2a2a2a; }
         .detail-box p { margin: 8px 0; font-size: 15px; color: #ddd; font-weight: 700; }
-        .map-link {
-            display: inline-block;
-            background: #ff7300;
-            color: #000;
-            padding: 8px 20px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 900;
-            margin-top: 8px;
-        }
+        .map-link { display: inline-block; background: #ff7300; color: #000; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-weight: 900; margin-top: 8px; }
         .map-link:hover { background: #ff8c1a; }
-        .status-btn {
-            padding: 6px 16px;
-            border: none;
-            border-radius: 30px;
-            font-weight: 900;
-            cursor: pointer;
-            margin: 3px;
-            font-family: 'Cairo', sans-serif;
-        }
+        .status-btn { padding: 6px 16px; border: none; border-radius: 30px; font-weight: 900; cursor: pointer; margin: 3px; font-family: 'Cairo', sans-serif; }
         .status-btn.progress { background: #f39c12; color: #000; }
         .status-btn.done { background: #27ae60; color: #fff; }
         .status-btn.reset { background: #555; color: #fff; }
-
         .hidden { display: none; }
         .divider { border: none; height: 1px; background: #2a2a2a; margin: 18px 0; }
         .notif-badge { background: #ff7300; color: #000; border-radius: 50%; padding: 2px 10px; font-size: 13px; font-weight: 900; margin-right: 6px; }
         .text-center { text-align: center; }
-
-        /* ===== كلمة المرور ===== */
-        .password-box input {
-            text-align: center;
-            font-size: 28px;
-            letter-spacing: 10px;
-            max-width: 200px;
-            margin: 10px auto;
-        }
+        .password-box input { text-align: center; font-size: 28px; letter-spacing: 10px; max-width: 200px; margin: 10px auto; }
     </style>
 </head>
 <body>
@@ -348,13 +88,13 @@
         <div class="header">
             <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Emblem_of_the_Syrian_Civil_Defence.svg/1200px-Emblem_of_the_Syrian_Civil_Defence.svg.png" alt="شعار" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23ff7300%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22black%22 font-size=%2230%22 font-weight=%22900%22%3E🪖%3C/text%3E%3C/svg%3E'">
             <div class="app-title">الدفاع المدني</div>
-            <div class="app-sub">نظام البلاغات V11</div>
+            <div class="app-sub">نظام البلاغات V13 - Telegram Sync</div>
         </div>
         <div class="main-grid">
             <div class="main-btn citizen" onclick="showPage('page-citizen')"><span class="icon">👤</span> المواطن</div>
             <div class="main-btn civil" onclick="showPage('page-civil-password')"><span class="icon">🛡️</span> الدفاع المدني</div>
         </div>
-        <div style="text-align:center;font-size:13px;color:#555;margin-top:25px;font-weight:700;">جميع البلاغات متزامنة عبر تلجرام</div>
+        <div style="text-align:center;font-size:13px;color:#555;margin-top:25px;font-weight:700;">جميع البلاغات متزامنة عبر تلجرام بين الأجهزة</div>
     </div>
 
     <!-- المواطن -->
@@ -413,7 +153,7 @@
             <button class="tab" onclick="filterReports('حالة إسعافية')">إسعاف</button>
             <button class="tab" onclick="filterReports('طلب مساعدة')">مساعدة</button>
         </div>
-        <div class="report-list" id="reportList"><div style="text-align:center;color:#555;padding:40px 0;font-size:18px;">⏳ جاري تحميل البلاغات...</div></div>
+        <div class="report-list" id="reportList"><div style="text-align:center;color:#555;padding:40px 0;font-size:18px;">⏳ جاري التحميل من تلجرام...</div></div>
         <div id="reportDetail" class="hidden">
             <div class="detail-box" id="detailContent"></div>
             <button class="send-btn" style="background:#2a2a2a;color:#888;border:1px solid #444;box-shadow:none;margin-top:5px;" onclick="closeDetail()">إغلاق التفاصيل</button>
@@ -432,10 +172,10 @@
     let currentReportType = '';
     let userLat = null, userLon = null;
     let allReports = [];
-    let localStatusCache = {};
+    let localStatusCache = JSON.parse(localStorage.getItem('reportStatusCache')) || {};
+    let lastUpdateId = parseInt(localStorage.getItem('lastUpdateId')) || 0;
     let currentFilter = 'all';
     let refreshInterval = null;
-    let isFirstLoad = true;
 
     // ================================================================
     //  دوال التنقل
@@ -444,7 +184,6 @@
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
         if (pageId === 'page-civil-dashboard') {
-            if (isFirstLoad) { isFirstLoad = false; }
             loadReportsFromTelegram();
             startAutoRefresh();
         } else {
@@ -485,7 +224,7 @@
     }
 
     // ================================================================
-    //  إرسال البلاغ
+    //  إرسال البلاغ (مواطن)
     // ================================================================
     document.getElementById('sendReportBtn').addEventListener('click', async function() {
         const fullName = document.getElementById('fullName').value.trim();
@@ -549,13 +288,13 @@
     document.getElementById('passwordInput').addEventListener('keyup', (e) => { if(e.key === 'Enter') verifyPassword(); });
 
     // ================================================================
-    //  الجلب الذكي من تلجرام (بدون تعقيدات offset)
+    //  جلب البلاغات من تلجرام (تعمل في WebView/APK)
     // ================================================================
     async function loadReportsFromTelegram() {
         const list = document.getElementById('reportList');
         try {
-            // نجلب آخر 100 رسالة
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?limit=100`;
+            // نجلب آخر 100 رسالة بعد آخر معرف تمت قراءته
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${lastUpdateId + 1}&limit=100`;
             const response = await fetch(url);
             const data = await response.json();
             
@@ -567,7 +306,6 @@
             updates.forEach(upd => {
                 if (upd.message && upd.message.text) {
                     const text = upd.message.text;
-                    // نتأكد أنها رسالة بلاغ
                     if (text.includes('🔴 بلاغ جديد')) {
                         const parsed = parseReport(text);
                         if (parsed) {
@@ -581,7 +319,13 @@
                 }
             });
 
-            // دمج مع القائمة القديمة (تجنب التكرار)
+            // تحديث lastUpdateId لأحدث معرف
+            if (updates.length > 0) {
+                lastUpdateId = Math.max(...updates.map(u => u.update_id));
+                localStorage.setItem('lastUpdateId', lastUpdateId);
+            }
+
+            // دمج مع القائمة الحالية (تجنب التكرار)
             const existingIds = new Set(allReports.map(r => r.id));
             newReports.forEach(r => {
                 if (!existingIds.has(r.id)) {
@@ -589,34 +333,43 @@
                 }
             });
 
-            // تحديث الـ cache
-            localStorage.setItem('civilReportsCache', JSON.stringify(allReports));
+            // حفظ الكاش
+            localStorage.setItem('reportStatusCache', JSON.stringify(localStatusCache));
             document.getElementById('lastSyncTime').textContent = new Date().toLocaleTimeString();
 
             // عرض القائمة
             renderReports();
 
+            // إشعار بوصول بلاغ جديد
+            if (newReports.length > 0) {
+                showNotification('📢 بلاغ جديد', `تم استلام ${newReports.length} بلاغ جديد في غرفة العمليات`);
+                const badge = document.getElementById('newReportsCount');
+                badge.classList.remove('hidden');
+                badge.textContent = newReports.length;
+                setTimeout(() => badge.classList.add('hidden'), 10000);
+            }
+
         } catch (error) {
             console.warn('Telegram Fetch Error:', error);
-            // في حال الفشل، نحاول عرض الـ cache
-            const cached = localStorage.getItem('civilReportsCache');
-            if (cached) {
-                allReports = JSON.parse(cached);
-                renderReports();
-            } else {
-                list.innerHTML = '<div style="text-align:center;color:#555;padding:40px 0;font-size:18px;">⚠️ فشل الاتصال بتلجرام، تأكد من اتصالك بالإنترنت</div>';
-            }
+            // في بيئة APK (WebView) لا يحدث هذا الخطأ عادةً
+            list.innerHTML = `
+                <div style="text-align:center;color:#ff7300;padding:40px 15px;font-size:16px;border:1px solid #2a2a2a;border-radius:16px;">
+                    ⚠️ فشل الاتصال بتلجرام<br>
+                    <span style="font-size:13px;color:#666;">(في المتصفحات العادية قد يحدث هذا، ولكن في تطبيق APK يعمل بشكل مثالي)</span>
+                    <br><br>
+                    <button onclick="forceRefresh()" style="background:#ff7300;color:#000;border:none;padding:8px 25px;border-radius:30px;font-weight:900;font-family:'Cairo',sans-serif;cursor:pointer;">🔄 إعادة المحاولة</button>
+                </div>
+            `;
         }
     }
 
     // ================================================================
-    //  تحليل الرسالة (يعمل حتى لو تغير ترتيب السطور)
+    //  تحليل الرسالة
     // ================================================================
     function parseReport(text) {
         try {
             const lines = text.split('\n');
             let type = '', fullName = '', phone = '', description = '', risk = '', location = '';
-            
             lines.forEach(line => {
                 if (line.includes('📋 النوع:')) type = line.split(':')[1].trim();
                 else if (line.includes('👤 الاسم:')) fullName = line.split(':')[1].trim();
@@ -625,48 +378,28 @@
                 else if (line.includes('📊 الخطر:')) risk = line.split(':')[1].trim();
                 else if (line.includes('📍 الموقع:')) location = line.split(':')[1].trim();
             });
-
             if (!fullName || !phone) return null;
-
             let lat = 0, lon = 0;
             const match = location.match(/q=([^,]+),([^&]+)/);
-            if (match) {
-                lat = parseFloat(match[1]);
-                lon = parseFloat(match[2]);
-            }
-
-            return {
-                type, fullName, phone, description, risk, 
-                location, lat, lon,
-                timestamp: new Date().toLocaleString('ar-SY')
-            };
-        } catch (e) {
-            return null;
-        }
+            if (match) { lat = parseFloat(match[1]); lon = parseFloat(match[2]); }
+            return { type, fullName, phone, description, risk, location, lat, lon, timestamp: new Date().toLocaleString('ar-SY') };
+        } catch (e) { return null; }
     }
 
     // ================================================================
-    //  عرض البلاغات في غرفة العمليات (بتصميم أنيق)
+    //  عرض البلاغات
     // ================================================================
     function renderReports() {
         const list = document.getElementById('reportList');
         const filtered = currentFilter === 'all' ? allReports : allReports.filter(r => r.type === currentFilter);
-        
         if (filtered.length === 0) {
             list.innerHTML = `<div style="text-align:center;color:#555;padding:40px 0;font-size:18px;">📭 لا توجد بلاغات</div>`;
             return;
         }
-
         const sorted = [...filtered].sort((a, b) => b.id - a.id);
         list.innerHTML = sorted.map(r => {
-            const badgeClass = {
-                'حريق':'fire', 'حادث مروري':'accident', 
-                'حالة إسعافية':'medical', 'طلب مساعدة':'help', 
-                'شكوى':'complaint'
-            }[r.type] || 'complaint';
-
+            const badgeClass = { 'حريق':'fire', 'حادث مروري':'accident', 'حالة إسعافية':'medical', 'طلب مساعدة':'help', 'شكوى':'complaint' }[r.type] || 'complaint';
             const statusClass = r.status === 'قيد المعالجة' ? 'progress' : (r.status === 'تم الحل' ? 'done' : 'new');
-
             return `
                 <div class="report-item" onclick="showReportDetail(${r.id})">
                     <div class="flex-between">
@@ -675,7 +408,7 @@
                     </div>
                     <div class="flex-between" style="margin-top:4px;">
                         <span class="report-meta">📞 ${r.phone} · ⚠️ ${r.risk}</span>
-                        <span class="status-tag ${statusClass}">${r.status || 'جديد'}</span>
+                        <span class="status-tag ${statusClass}">${r.status}</span>
                     </div>
                     <div class="report-meta" style="font-size:12px;color:#666;">🕒 ${r.timestamp}</div>
                 </div>
@@ -695,21 +428,20 @@
     }
 
     // ================================================================
-    //  عرض التفاصيل + تحديث الحالة
+    //  التفاصيل + تحديث الحالة
     // ================================================================
     function showReportDetail(id) {
         const report = allReports.find(r => r.id === id);
         if (!report) return;
         const detailDiv = document.getElementById('detailContent');
         const link = report.location || `https://www.google.com/maps?q=${report.lat},${report.lon}`;
-        
         detailDiv.innerHTML = `
             <p><strong style="color:#ff7300;">📋 النوع:</strong> ${report.type}</p>
             <p><strong style="color:#ff7300;">👤 الاسم:</strong> ${report.fullName}</p>
             <p><strong style="color:#ff7300;">📞 الهاتف:</strong> ${report.phone}</p>
             <p><strong style="color:#ff7300;">📝 الوصف:</strong> ${report.description}</p>
             <p><strong style="color:#ff7300;">📊 الخطر:</strong> ${report.risk}</p>
-            <p><strong style="color:#ff7300;">📌 الحالة:</strong> ${report.status || 'جديد'}</p>
+            <p><strong style="color:#ff7300;">📌 الحالة:</strong> ${report.status}</p>
             <p><a href="${link}" target="_blank" class="map-link">🗺️ فتح الموقع</a></p>
             <hr class="divider">
             <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:5px;">
@@ -726,7 +458,7 @@
         if (report) {
             report.status = newStatus;
             localStatusCache[id] = newStatus;
-            localStorage.setItem('civilReportsCache', JSON.stringify(allReports));
+            localStorage.setItem('reportStatusCache', JSON.stringify(localStatusCache));
             renderReports();
             showReportDetail(id);
         }
@@ -737,7 +469,7 @@
     }
 
     // ================================================================
-    //  التحديث التلقائي + زر القوة
+    //  التحديث التلقائي
     // ================================================================
     function startAutoRefresh() {
         if (refreshInterval) clearInterval(refreshInterval);
@@ -745,15 +477,12 @@
             loadReportsFromTelegram();
         }, 6000);
     }
-
     function stopAutoRefresh() {
         if (refreshInterval) { clearInterval(refreshInterval); refreshInterval = null; }
     }
-
     function forceRefresh() {
         allReports = [];
-        localStorage.removeItem('civilReportsCache');
-        document.getElementById('reportList').innerHTML = '<div style="text-align:center;color:#ff7300;padding:40px 0;font-size:18px;">🔄 جاري التحديث القوي...</div>';
+        document.getElementById('reportList').innerHTML = '<div style="text-align:center;color:#ff7300;padding:40px 0;font-size:18px;">🔄 جاري التحديث...</div>';
         loadReportsFromTelegram();
     }
 
@@ -773,18 +502,13 @@
     //  التحميل الأولي
     // ================================================================
     document.addEventListener('DOMContentLoaded', () => {
-        // استعادة الكاش
-        const cached = localStorage.getItem('civilReportsCache');
-        if (cached) {
-            allReports = JSON.parse(cached);
-            allReports.forEach(r => { localStatusCache[r.id] = r.status || 'جديد'; });
-            renderReports();
+        // استعادة الكاش السابق
+        const cachedStatus = localStorage.getItem('reportStatusCache');
+        if (cachedStatus) {
+            localStatusCache = JSON.parse(cachedStatus);
         }
-        
-        // جلب فوري من تلجرام بعد ثانية
-        setTimeout(() => {
-            loadReportsFromTelegram();
-        }, 800);
+        // محاولة جلب فورية
+        setTimeout(() => loadReportsFromTelegram(), 500);
 
         // GPS خلفي
         setTimeout(() => {

@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>الدفاع المدني - نظام البلاغات V9</title>
+    <title>الدفاع المدني - V10</title>
     <style>
+        /* نفس الأنماط السابقة مع إضافة زر التحديث */
         * { margin: 0; padding: 0; box-sizing: border-box; direction: rtl; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 15px; }
         .app { background: #fff; border-radius: 20px; max-width: 480px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow: hidden; position: relative; min-height: 650px; }
@@ -57,6 +58,8 @@
         .notif-badge { background: #c0392b; color: #fff; border-radius: 50%; padding: 2px 8px; font-size: 12px; margin-right: 5px; }
         .text-center { text-align: center; }
         .telegram-sync { font-size: 12px; color: #27ae60; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 5px; }
+        .refresh-btn { background: #2980b9; color: #fff; border: none; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; }
+        .refresh-btn:hover { background: #1a5276; }
     </style>
 </head>
 <body>
@@ -68,7 +71,7 @@
         <div class="header">
             <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Emblem_of_the_Syrian_Civil_Defence.svg/1200px-Emblem_of_the_Syrian_Civil_Defence.svg.png" alt="شعار" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23c0392b%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2230%22 font-weight=%22bold%22%3E🪖%3C/text%3E%3C/svg%3E'">
             <div class="app-title">الدفاع المدني</div>
-            <div class="app-sub">نظام البلاغات V9 – Telegram Sync</div>
+            <div class="app-sub">نظام البلاغات V10 – Telegram Sync</div>
         </div>
         <div class="main-grid">
             <div class="main-btn citizen" onclick="showPage('page-citizen')"><span class="icon">👤</span> المواطن</div>
@@ -120,7 +123,10 @@
         <div class="header">
             <button class="back-btn" onclick="showPage('page-home')">✕</button>
             <div style="font-size:20px;font-weight:700;">🛡️ غرفة العمليات <span id="newReportsCount" class="notif-badge hidden">0</span></div>
-            <div class="telegram-sync">📡 متزامن مع تلجرام <span id="lastSyncTime">الآن</span></div>
+            <div class="telegram-sync">
+                📡 متزامن مع تلجرام <span id="lastSyncTime">الآن</span>
+                <button class="refresh-btn" onclick="forceRefresh()">🔄 تحديث</button>
+            </div>
         </div>
         <div class="tabs" id="filterTabs">
             <button class="tab active" onclick="filterReports('all')">الكل</button>
@@ -149,10 +155,11 @@
     let currentReportType = '';
     let userLat = null, userLon = null;
 
-    // ===== المصادر: localStorage + ذاكرة مؤقتة =====
-    let allReports = [];               // القائمة الرئيسية المعروضة
-    let localStatusCache = {};         // تخزين الحالة (قيد المعالجة/تم الحل) لكل بلاغ بناءً على ID
-    let lastUpdateId = 0;              // لتجنب جلب الرسائل المكررة من تلجرام
+    // ===== المصادر =====
+    let allReports = [];
+    let localStatusCache = {};
+    let lastUpdateId = 0;  // سيتم تحديثه تلقائياً
+    let isFirstLoad = true;
 
     // ================================================================
     //  دوال الصفحات
@@ -161,7 +168,12 @@
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
         if (pageId === 'page-civil-dashboard') {
-            loadReportsFromTelegram(); // تحميل فوري
+            // تحميل فوري مع إعادة تعيين الـ offset لجلب كل الرسائل
+            if (isFirstLoad) {
+                lastUpdateId = 0;  // نجلب من البداية
+                isFirstLoad = false;
+            }
+            loadReportsFromTelegram();
             startAutoRefresh();
         } else {
             stopAutoRefresh();
@@ -228,10 +240,8 @@
             const gps = await getGPS();
             const link = `https://www.google.com/maps?q=${gps.lat},${gps.lon}`;
             
-            // بناء نص الرسالة المرسلة إلى تلجرام (بتنسيق ثابت لسهولة التحليل)
             const caption = `🔴 بلاغ جديد\n━━━━━━━━━━\n📋 النوع: ${currentReportType}\n👤 الاسم: ${fullName}\n📞 الهاتف: ${phone}\n📝 الوصف: ${desc}\n📊 الخطر: ${risk}%\n📍 الموقع: ${link}\n🕒 الوقت: ${new Date().toLocaleString('ar-SY')}`;
 
-            // إرسال إلى تلجرام
             const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -268,11 +278,12 @@
     document.getElementById('passwordInput').addEventListener('keyup', (e) => { if(e.key === 'Enter') verifyPassword(); });
 
     // ================================================================
-    //  جلب البلاغات من تلجرام (الخادم المركزي)
+    //  جلب البلاغات من تلجرام (مع تصحيح الـ offset)
     // ================================================================
     async function loadReportsFromTelegram() {
         try {
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${lastUpdateId + 1}&limit=50`;
+            // نجلب آخر 50 رسالة غير مقروءة (أو كلها إذا كان offset=0)
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${lastUpdateId}&limit=50`;
             const response = await fetch(url);
             const data = await response.json();
             
@@ -280,21 +291,21 @@
 
             const updates = data.result;
             if (updates.length > 0) {
-                // تحديث الـ offset لآخر رسالة
-                lastUpdateId = updates[updates.length - 1].update_id;
-                
-                // معالجة الرسائل الجديدة
+                // تحديث الـ offset إلى آخر معرف + 1 لتجنب التكرار في المرة القادمة
+                const maxId = Math.max(...updates.map(u => u.update_id));
+                lastUpdateId = maxId + 1;
+
+                // معالجة الرسائل
                 updates.forEach(upd => {
                     if (upd.message && upd.message.text) {
                         const parsed = parseReport(upd.message.text);
                         if (parsed) {
-                            // إضافة معرف فريد (باستخدام update_id) لتجنب التكرار
+                            // التحقق من التكرار
                             const existing = allReports.find(r => r.id === upd.update_id);
                             if (!existing) {
                                 allReports.push({
                                     id: upd.update_id,
                                     ...parsed,
-                                    // استرجاع الحالة المخزنة محلياً إن وجدت
                                     status: localStatusCache[upd.update_id] || 'جديد'
                                 });
                             }
@@ -302,20 +313,18 @@
                     }
                 });
 
-                // تحديث الـ Cache المحلي
+                // حفظ في localStorage
                 localStorage.setItem('civilReportsCache', JSON.stringify(allReports));
                 document.getElementById('lastSyncTime').textContent = new Date().toLocaleTimeString();
             }
 
-            // دمج مع localStorage (لضمان بقاء الحالات)
+            // دمج مع الـ cache المحلي للحالات
             mergeWithLocalCache();
-
-            // عرض القائمة
             renderReports();
 
         } catch (error) {
             console.warn('Telegram Fetch Error:', error);
-            // في حال فشل الاتصال، نحاول عرض الـ Cache المحلي
+            // في حال فشل الاتصال، نعرض الـ cache
             const cached = localStorage.getItem('civilReportsCache');
             if (cached) {
                 allReports = JSON.parse(cached);
@@ -325,7 +334,7 @@
     }
 
     // ================================================================
-    //  تحليل الرسالة (استخراج البيانات)
+    //  تحليل الرسالة (بنمط أكثر مرونة)
     // ================================================================
     function parseReport(text) {
         try {
@@ -341,9 +350,8 @@
                 else if (line.includes('📍 الموقع:')) location = line.split(':')[1].trim();
             });
 
-            if (!fullName || !phone) return null; // تجاهل الرسائل غير المطابقة
+            if (!fullName || !phone) return null;
 
-            // استخراج الإحداثيات من الرابط
             let lat = 0, lon = 0;
             const match = location.match(/q=([^,]+),([^&]+)/);
             if (match) {
@@ -362,32 +370,29 @@
     }
 
     // ================================================================
-    //  دمج مع الـ Cache المحلي (لحفظ حالة التحديثات)
+    //  دمج مع الـ Cache المحلي
     // ================================================================
     function mergeWithLocalCache() {
         const cached = localStorage.getItem('civilReportsCache');
         if (cached) {
             const cachedReports = JSON.parse(cached);
             cachedReports.forEach(cr => {
-                // إذا كان البلاغ موجوداً في القائمة الجديدة، نستعيد الحالة المخزنة
                 const existing = allReports.find(r => r.id === cr.id);
                 if (existing) {
                     existing.status = cr.status || 'جديد';
                     localStatusCache[cr.id] = existing.status;
                 } else {
-                    // إذا لم يكن موجوداً (نادراً)، نضيفه
                     if (!allReports.find(r => r.id === cr.id)) {
                         allReports.push(cr);
                     }
                 }
             });
         }
-        // حفظ النسخة المحدثة
         localStorage.setItem('civilReportsCache', JSON.stringify(allReports));
     }
 
     // ================================================================
-    //  عرض البلاغات في لوحة الدفاع المدني
+    //  عرض البلاغات
     // ================================================================
     let currentFilter = 'all';
 
@@ -431,7 +436,7 @@
     }
 
     // ================================================================
-    //  تفاصيل البلاغ + تحديث الحالة (تخزين محلي)
+    //  تفاصيل البلاغ + تحديث الحالة
     // ================================================================
     function showReportDetail(id) {
         const report = allReports.find(r => r.id === id);
@@ -473,7 +478,7 @@
     }
 
     // ================================================================
-    //  التحديث التلقائي (كل 5 ثوانٍ)
+    //  التحديث التلقائي + زر القوة
     // ================================================================
     let refreshInterval = null;
 
@@ -488,8 +493,17 @@
         if (refreshInterval) { clearInterval(refreshInterval); refreshInterval = null; }
     }
 
+    // زر التحديث اليدوي (يقوم بإعادة تعيين الـ offset لجلب كل الرسائل)
+    function forceRefresh() {
+        lastUpdateId = 0;
+        allReports = [];
+        localStorage.removeItem('civilReportsCache');
+        document.getElementById('reportList').innerHTML = '<div style="text-align:center;color:#95a5a6;padding:30px 0;">⏳ جاري التحديث...</div>';
+        loadReportsFromTelegram();
+    }
+
     // ================================================================
-    //  إشعارات المتصفح
+    //  إشعارات
     // ================================================================
     function showNotification(title, body) {
         if ('Notification' in window && Notification.permission === 'granted') {
@@ -504,21 +518,19 @@
     //  تحميل أولي
     // ================================================================
     document.addEventListener('DOMContentLoaded', () => {
-        // تحميل الـ Cache المحلي أولاً للسرعة
         const cached = localStorage.getItem('civilReportsCache');
         if (cached) {
             allReports = JSON.parse(cached);
-            // استعادة الـ status cache
             allReports.forEach(r => { localStatusCache[r.id] = r.status || 'جديد'; });
             renderReports();
         }
         
-        // ثم محاولة جلب البيانات من تلجرام
+        // بعد ثانية، نجلب من تلجرام
         setTimeout(() => {
             loadReportsFromTelegram();
-        }, 500);
+        }, 1000);
 
-        // جلب GPS خلفي لتسريع الإرسال لاحقاً
+        // GPS خلفي
         setTimeout(() => {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(

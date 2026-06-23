@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>الدفاع المدني - V15</title>
+    <title>الدفاع المدني - V16</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; direction: rtl; }
@@ -88,13 +88,13 @@
         <div class="header">
             <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Emblem_of_the_Syrian_Civil_Defence.svg/1200px-Emblem_of_the_Syrian_Civil_Defence.svg.png" alt="شعار" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23ff7300%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22black%22 font-size=%2230%22 font-weight=%22900%22%3E🪖%3C/text%3E%3C/svg%3E'">
             <div class="app-title">الدفاع المدني</div>
-            <div class="app-sub">نظام البلاغات V15 - Google Sheets Sync</div>
+            <div class="app-sub">نظام البلاغات V16 - SheetDB</div>
         </div>
         <div class="main-grid">
             <div class="main-btn citizen" onclick="showPage('page-citizen')"><span class="icon">👤</span> المواطن</div>
             <div class="main-btn civil" onclick="showPage('page-civil-password')"><span class="icon">🛡️</span> الدفاع المدني</div>
         </div>
-        <div style="text-align:center;font-size:13px;color:#555;margin-top:25px;font-weight:700;">جميع البلاغات متزامنة عبر جوجل شيت</div>
+        <div style="text-align:center;font-size:13px;color:#555;margin-top:25px;font-weight:700;">جميع البلاغات متزامنة عبر SheetDB</div>
     </div>
 
     <!-- المواطن -->
@@ -141,7 +141,7 @@
             <button class="back-btn" onclick="showPage('page-home')">✕</button>
             <div style="font-size:24px;font-weight:900;color:#fff;">🛡️ غرفة العمليات <span id="newReportsCount" class="notif-badge hidden">0</span></div>
             <div class="telegram-sync">
-                📡 متزامن مع جوجل شيت <span id="lastSyncTime">الآن</span>
+                📡 متزامن مع SheetDB <span id="lastSyncTime">الآن</span>
                 <button class="refresh-btn" onclick="forceRefresh()">🔄 تحديث</button>
             </div>
         </div>
@@ -163,12 +163,12 @@
 
 <script>
     // ================================================================
-    //  الإعدادات الثابتة
+    //  الإعدادات الثابتة - استخدم رابط SheetDB الخاص بك هنا
     // ================================================================
     const BOT_TOKEN = "8564646143:AAEDmrL8HbdPESyY9iOJ0TXjEL4_bTSEaTs";
     const CHAT_ID = "8665747715";
     const CIVIL_PASSWORD = "1992";
-    const SHEET_API_URL = "https://api.sheetbest.com/sheets/df5f6247-d80d-49b3-8127-118852fc40fe";
+    const SHEET_API_URL = "https://sheetdb.io/api/v1/o7lnb7dlouvl9";
 
     let currentReportType = '';
     let userLat = null, userLon = null;
@@ -223,7 +223,7 @@
     }
 
     // ================================================================
-    //  إرسال البلاغ
+    //  إرسال البلاغ (يعمل مع SheetDB)
     // ================================================================
     document.getElementById('sendReportBtn').addEventListener('click', async function() {
         const fullName = document.getElementById('fullName').value.trim();
@@ -252,27 +252,33 @@
             const timestamp = new Date().toLocaleString('ar-SY');
             
             const reportData = {
-                id: Date.now(),
+                id: Date.now().toString(),
                 type: currentReportType,
                 fullName: fullName,
                 phone: phone,
                 description: desc,
                 risk: risk + '%',
-                lat: gps.lat,
-                lon: gps.lon,
+                lat: gps.lat.toString(),
+                lon: gps.lon.toString(),
                 location: link,
                 timestamp: timestamp,
                 status: 'جديد'
             };
 
-            // 1. الحفظ في جوجل شيت
+            // 1. الحفظ في SheetDB (بدون array)
             const response = await fetch(SHEET_API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify([reportData])
+                body: JSON.stringify(reportData)  // كائن واحد، وليس array
             });
 
-            if (!response.ok) throw new Error('فشل الحفظ في جوجل شيت');
+            const responseText = await response.text();
+            console.log('Response status:', response.status);
+            console.log('Response text:', responseText);
+
+            if (!response.ok) {
+                throw new Error(`فشل الحفظ (${response.status}): ${responseText}`);
+            }
 
             // 2. إرسال إلى تلجرام (نسخة احتياطية)
             const caption = `🔴 بلاغ جديد\n━━━━━━━━━━\n📋 النوع: ${reportData.type}\n👤 الاسم: ${reportData.fullName}\n📞 الهاتف: ${reportData.phone}\n📝 الوصف: ${reportData.description}\n📊 الخطر: ${reportData.risk}\n📍 الموقع: ${reportData.location}\n🕒 الوقت: ${reportData.timestamp}`;
@@ -290,7 +296,7 @@
         } catch (e) {
             statusDiv.textContent = '❌ ' + e.message;
             statusDiv.className = 'status error';
-            alert('⚠️ لا يمكن الإرسال بدون موقع.\n' + e.message);
+            alert('⚠️ خطأ في الإرسال:\n' + e.message);
         }
     });
 
@@ -312,7 +318,7 @@
     document.getElementById('passwordInput').addEventListener('keyup', (e) => { if(e.key === 'Enter') verifyPassword(); });
 
     // ================================================================
-    //  جلب البلاغات من جوجل شيت
+    //  جلب البلاغات من SheetDB
     // ================================================================
     async function loadReportsFromSheet() {
         const list = document.getElementById('reportList');
@@ -333,8 +339,8 @@
             console.warn('Sheet Fetch Error:', error);
             list.innerHTML = `
                 <div style="text-align:center;color:#ff7300;padding:40px 15px;font-size:16px;border:1px solid #2a2a2a;border-radius:16px;">
-                    ⚠️ فشل الاتصال بجوجل شيت<br>
-                    <span style="font-size:13px;color:#666;">تأكد من الرابط في الكود ومن اتصال الإنترنت</span>
+                    ⚠️ فشل الاتصال بـ SheetDB<br>
+                    <span style="font-size:13px;color:#666;">تأكد من الرابط ومن اتصال الإنترنت</span>
                     <br><br>
                     <button onclick="forceRefresh()" style="background:#ff7300;color:#000;border:none;padding:8px 25px;border-radius:30px;font-weight:900;font-family:'Cairo',sans-serif;cursor:pointer;">🔄 إعادة المحاولة</button>
                 </div>
@@ -352,12 +358,12 @@
             list.innerHTML = `<div style="text-align:center;color:#555;padding:40px 0;font-size:18px;">📭 لا توجد بلاغات</div>`;
             return;
         }
-        const sorted = [...filtered].sort((a, b) => b.id - a.id);
+        const sorted = [...filtered].sort((a, b) => parseInt(b.id) - parseInt(a.id));
         list.innerHTML = sorted.map(r => {
             const badgeClass = { 'حريق':'fire', 'حادث مروري':'accident', 'حالة إسعافية':'medical', 'طلب مساعدة':'help', 'شكوى':'complaint' }[r.type] || 'complaint';
             const statusClass = r.status === 'قيد المعالجة' ? 'progress' : (r.status === 'تم الحل' ? 'done' : 'new');
             return `
-                <div class="report-item" onclick="showReportDetail(${r.id})">
+                <div class="report-item" onclick="showReportDetail('${r.id}')">
                     <div class="flex-between">
                         <span class="report-title">${r.fullName}</span>
                         <span class="badge ${badgeClass}">${r.type}</span>
@@ -401,9 +407,9 @@
             <p><a href="${link}" target="_blank" class="map-link">🗺️ فتح الموقع</a></p>
             <hr class="divider">
             <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:5px;">
-                <button class="status-btn progress" onclick="updateStatus(${report.id}, 'قيد المعالجة')">⚙️ معالجة</button>
-                <button class="status-btn done" onclick="updateStatus(${report.id}, 'تم الحل')">✅ حل</button>
-                <button class="status-btn reset" onclick="updateStatus(${report.id}, 'جديد')">↩️ إعادة</button>
+                <button class="status-btn progress" onclick="updateStatus('${report.id}', 'قيد المعالجة')">⚙️ معالجة</button>
+                <button class="status-btn done" onclick="updateStatus('${report.id}', 'تم الحل')">✅ حل</button>
+                <button class="status-btn reset" onclick="updateStatus('${report.id}', 'جديد')">↩️ إعادة</button>
             </div>
         `;
         document.getElementById('reportDetail').classList.remove('hidden');
@@ -413,8 +419,8 @@
         const report = allReports.find(r => r.id === id);
         if (report) {
             report.status = newStatus;
-            // تحديث في جوجل شيت
-            fetch(`${SHEET_API_URL}/${id}`, {
+            // تحديث في SheetDB
+            fetch(`${SHEET_API_URL}/id/${id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: newStatus })

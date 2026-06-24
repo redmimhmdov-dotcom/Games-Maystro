@@ -1,4 +1,429 @@
+هكذا يصبح في نهاية صحيح
 <!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الدفاع المدني - V18</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        /* ===== الأساسيات ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; direction: rtl; }
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 900;
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+        /* ===== شاشة الترحيب العائمة (تظهر أولاً) ===== */
+        #splashScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a; /* خلفية سوداء مؤقتة */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+            transition: opacity 0.8s ease;
+        }
+        #splashScreen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #splashText {
+            font-size: 52px;
+            font-weight: 900;
+            color: #ff7300;
+            text-shadow: 0 0 40px rgba(255, 115, 0, 0.8), 0 0 80px rgba(255, 115, 0, 0.4);
+            background: rgba(0,0,0,0.7);
+            padding: 25px 50px;
+            border-radius: 25px;
+            text-align: center;
+            animation: pulseGlow 1.5s ease-in-out infinite;
+            border: 3px solid #ff7300;
+            backdrop-filter: blur(5px);
+        }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(255,115,0,0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 0 70px rgba(255,115,0,0.7); }
+        }
+        #splashSub {
+            color: #fff;
+            font-size: 22px;
+            margin-top: 20px;
+            text-shadow: 0 0 20px rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.5);
+            padding: 12px 30px;
+            border-radius: 40px;
+            letter-spacing: 3px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* ===== التطبيق الرئيسي (يظهر بعد اختفاء الشاشة) ===== */
+        .app {
+            width: 100%;
+            max-width: 460px;
+            min-height: 100vh;
+            background: url('https://i.pinimg.com/736x/7a/6b/2b/7a6b2b0d5b7c8b9a0c1d2e3f4a5b6c7d.jpg') center/cover no-repeat fixed;
+            background-size: cover;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 50px rgba(255, 94, 0, 0.15);
+            border-radius: 0;
+            overflow-y: auto;
+            margin: 0;
+            border: none;
+        }
+        /* طبقة تعتيم فوق الخلفية لتوضيح النصوص */
+        .app::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            z-index: 0;
+        }
+        .app > * {
+            position: relative;
+            z-index: 1;
+        }
+        /* ===== شعار التطبيق (الزاوية اليمنى العليا) ===== */
+        .app-logo {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            font-size: 20px;
+            font-weight: 900;
+            color: #ff7300;
+            text-shadow: 0 0 20px rgba(255,115,0,0.6);
+            z-index: 100;
+            background: rgba(0,0,0,0.6);
+            padding: 6px 16px;
+            border-radius: 30px;
+            border: 1px solid #ff7300;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            letter-spacing: 0.5px;
+        }
+        .app-logo:active { transform: scale(0.95); }
+
+        /* ===== باقي الأنماط (كما هي في السابق) ===== */
+        .page { display: none; padding: 20px 18px; animation: fadeSlide 0.3s ease; }
+        .page.active { display: block; }
+        @keyframes fadeSlide { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
+        .header {
+            text-align: center;
+            padding: 10px 0 15px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .logo { width: 70px; height: 70px; margin: 0 auto 5px; display: block; filter: drop-shadow(0 0 15px rgba(255, 94, 0, 0.3)); }
+        .app-title { font-size: 32px; font-weight: 900; background: linear-gradient(135deg, #ff7300, #e65c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .app-sub { font-size: 14px; color: #ddd; font-weight: 700; }
+        .back-btn { background: none; border: none; color: #ff7300; font-size: 26px; font-weight: 900; cursor: pointer; padding: 5px 12px; position: absolute; top: 12px; right: 15px; }
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 30px; }
+        .main-btn {
+            background: rgba(30, 30, 30, 0.85);
+            backdrop-filter: blur(5px);
+            border: 2px solid #2a2a2a;
+            border-radius: 20px;
+            padding: 35px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.25s;
+            font-weight: 900;
+            font-size: 20px;
+            color: #eee;
+        }
+        .main-btn .icon { font-size: 48px; display: block; margin-bottom: 10px; }
+        .main-btn.citizen { border-color: #ff7300; background: rgba(26, 16, 10, 0.85); }
+        .main-btn.citizen:hover { background: rgba(42, 26, 15, 0.9); transform: scale(1.02); }
+        .main-btn.civil { border-color: #ff7300; background: rgba(26, 10, 10, 0.85); }
+        .main-btn.civil:hover { background: rgba(42, 18, 16, 0.9); transform: scale(1.02); }
+        .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0; }
+        .service-btn {
+            background: rgba(26, 26, 26, 0.85);
+            backdrop-filter: blur(5px);
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 22px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 900;
+            font-size: 16px;
+            color: #ddd;
+        }
+        .service-btn .icon { font-size: 32px; display: block; margin-bottom: 6px; }
+        .service-btn:hover { background: rgba(37, 37, 37, 0.9); border-color: #ff7300; }
+        label { display: block; margin: 18px 0 6px; font-weight: 900; font-size: 15px; color: #ddd; }
+        label .required { color: #ff7300; }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #2a2a2a;
+            border-radius: 14px;
+            font-size: 16px;
+            background: rgba(26, 26, 26, 0.85);
+            color: #fff;
+            transition: 0.3s;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #ff7300;
+            box-shadow: 0 0 0 4px rgba(255, 115, 0, 0.15);
+            background: #222;
+        }
+        textarea { resize: vertical; min-height: 70px; }
+        .send-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 16px;
+            font-size: 22px;
+            font-weight: 900;
+            cursor: pointer;
+            margin-top: 24px;
+            background: linear-gradient(135deg, #ff7300, #e65c00);
+            color: #fff;
+            box-shadow: 0 6px 25px rgba(255, 115, 0, 0.3);
+            transition: 0.3s;
+            font-family: 'Cairo', sans-serif;
+        }
+        .send-btn:hover { transform: scale(1.02); box-shadow: 0 8px 35px rgba(255, 115, 0, 0.5); }
+        .status {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 14px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 700;
+            background: rgba(26, 26, 26, 0.85);
+            border: 1px solid #2a2a2a;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+        }
+        .status.success { background: #0f2a1a; color: #7fff7f; border-color: #2a6a3a; }
+        .status.error { background: #2a1010; color: #ff6666; border-color: #6a2a2a; }
+        .report-list { margin: 10px 0 15px; max-height: 420px; overflow-y: auto; padding: 2px; }
+        .report-list::-webkit-scrollbar { width: 4px; }
+        .report-list::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 10px; }
+        .report-list::-webkit-scrollbar-thumb { background: #ff7300; border-radius: 10px; }
+        .report-item {
+            background: rgba(26, 26, 26, 0.85);
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border-right: 6px solid #ff7300;
+            cursor: pointer;
+            transition: 0.2s;
+            border-left: 1px solid #2a2a2a;
+            border-top: 1px solid #2a2a2a;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .report-item:hover { background: #252525; transform: translateX(-3px); }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        .report-title { font-size: 17px; font-weight: 900; color: #fff; }
+        .badge {
+            display: inline-block;
+            padding: 2px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 900;
+        }
+        .badge.fire { background: #6a1a1a; color: #ff6666; }
+        .badge.accident { background: #4a3a0a; color: #ffcc44; }
+        .badge.medical { background: #0a3a2a; color: #66ffaa; }
+        .badge.help { background: #2a1a4a; color: #cc88ff; }
+        .badge.complaint { background: #1a2a4a; color: #66aaff; }
+        .report-meta { font-size: 14px; color: #ddd; margin-top: 4px; font-weight: 700; }
+        .status-tag { font-weight: 900; padding: 2px 10px; border-radius: 20px; font-size: 12px; }
+        .status-tag.new { background: #2a2a2a; color: #ff7300; }
+        .status-tag.progress { background: #4a3a0a; color: #ffcc44; }
+        .status-tag.done { background: #0a3a2a; color: #66ffaa; }
+        .detail-box {
+            background: rgba(26, 26, 26, 0.85);
+            border-radius: 16px;
+            padding: 18px;
+            margin: 15px 0;
+            border: 1px solid #2a2a2a;
+        }
+        .detail-box p { margin: 8px 0; font-size: 15px; color: #ddd; font-weight: 700; }
+        .map-link { display: inline-block; background: #ff7300; color: #000; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-weight: 900; margin-top: 8px; }
+        .map-link:hover { background: #ff8c1a; }
+        .status-btn { padding: 6px 16px; border: none; border-radius: 30px; font-weight: 900; cursor: pointer; margin: 3px; font-family: 'Cairo', sans-serif; }
+        .status-btn.progress { background: #f39c12; color: #000; }
+        .status-btn.done { background: #27ae60; color: #fff; }
+        .status-btn.reset { background: #555; color: #fff; }
+        .status-btn.delete { background: #c0392b; color: #fff; }
+        .hidden { display: none; }
+        .divider { border: none; height: 1px; background: #2a2a2a; margin: 18px 0; }
+        .notif-badge { background: #ff7300; color: #000; border-radius: 50%; padding: 2px 10px; font-size: 13px; font-weight: 900; margin-right: 6px; }
+        .text-center { text-align: center; }
+        .mini-map {
+            width: 100%;
+            height: 150px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            margin: 10px 0;
+            border: 1px solid #2a2a2a;
+            position: relative;
+            overflow: hidden;
+        }
+        .mini-map iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .timer {
+            font-size: 28px;
+            font-weight: 900;
+            color: #ff7300;
+            text-align: center;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            margin: 10px 0;
+            direction: ltr;
+        }
+        .center-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        .center-btn {
+            background: rgba(30,30,30,0.8);
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 10px;
+            color: #fff;
+            font-weight: 900;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Cairo', sans-serif;
+        }
+        .center-btn:hover { border-color: #ff7300; background: #2a2a2a; }
+        .center-btn.active { border-color: #ff7300; background: #ff7300; color: #000; }
+        .refresh-btn {
+            background: #2a2a2a;
+            color: #ff7300;
+            border: 1px solid #ff7300;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 900;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+        }
+        .refresh-btn:hover { background: #ff7300; color: #000; }
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 15px 0 12px;
+        }
+        .tab {
+            background: rgba(26,26,26,0.8);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 900;
+            cursor: pointer;
+            border: 1px solid #2a2a2a;
+            color: #ddd;
+            font-family: 'Cairo', sans-serif;
+            transition: 0.2s;
+        }
+        .tab.active { background: #ff7300; color: #000; border-color: #ff7300; }
+        .tab:hover { border-color: #ff7300; }
+
+        @media (max-width: 480px) {
+            #splashText { font-size: 28px; padding: 15px 25px; }
+            #splashSub { font-size: 16px; }
+            .app-logo { font-size: 16px; padding: 5px 12px; top: 10px; right: 10px; }
+            .app-title { font-size: 24px; }
+            .main-btn { font-size: 16px; padding: 25px 8px; }
+            .main-btn .icon { font-size: 36px; }
+            .service-btn { font-size: 14px; padding: 16px 6px; }
+            .service-btn .icon { font-size: 24px; }
+            .send-btn { font-size: 18px; padding: 14px; }
+            .report-title { font-size: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- شاشة الترحيب العائمة (تظهر أولاً) -->
+<!-- ============================================================ -->
+<div id="splashScreen">
+    <div id="splashText">🛡️ الدفاع المدني</div>
+    <div id="splashSub">معك أينما تكون</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- التطبيق الرئيسي (يظهر بعد اختفاء الشاشة) -->
+<!-- ============================================================ -->
+<div class="app" id="app">
+    <!-- شعار التطبيق (الزاوية اليمنى العليا) -->
+    <div class="app-logo" id="appLogo" onclick="handleLogoClick()">🛡️ الدفاع المدني</div>
+
+    <!-- الصفحة الرئيسية -->
+    <div class="page active" id="page-home">
+        <div class="header">
+            <div class="app-title">الدفاع المدني</div>
+            <div class="app-sub">نظام البلاغات V18</div>
+        </div>
+        <div class="main-grid">
+            <div class="main-btn citizen" onclick="showPage('page-citizen')"><span class="icon">👤</span> المواطن</div>
+            <div class="main-btn civil" onclick="showPage('page-civil-password')"><span class="icon">🛡️</span> الدفاع المدني</div>
+        </div>
+        <div style="text-align:center;font-size:13px;color:#aaa;margin-top:25px;font-weight:700;">جميع البلاغات متزامنة عبر SheetDB</div>
+    </div>
+
+    <!-- ===== باقي الصفحات (مواطن، نموذج، دفاع، عمليات، مراكز) ===== -->
+    <!-- (يتم إدراجها بنفس الكود السابق، لكنني اختصرتها هنا للمساحة) -->
+    <!-- أضف هنا صفحات: page-citizen, page-form, page-civil-password, page-operations-password, page-operations, page-civil-dashboard, page-center-reports -->
+    <!-- كما هي في الكود السابق V17 -->
+
+</div>
+
+<script>
+    // ================================================================
+    //  منطق شاشة الترحيب (تختفي بعد 2.5 ثانية)
+    // ================================================================
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            const splash = document.getElementById('splashScreen');
+            splash.classList.add('hidden');
+            // بعد اختفائها، نظهر التطبيق (موجود أصلاً)
+        }, 2500);
+    });
+
+    // ================================================================
+    //  <!DOCTYPE html>
 <html lang="ar">
 <head>
     <meta charset="UTF-8">

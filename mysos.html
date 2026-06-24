@@ -1,4 +1,3 @@
-هكذا يصبح في نهاية صحيح
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -29,7 +28,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #0a0a0a; /* خلفية سوداء مؤقتة */
+            background: #0a0a0a;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -71,7 +70,7 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* ===== التطبيق الرئيسي (يظهر بعد اختفاء الشاشة) ===== */
+        /* ===== التطبيق الرئيسي ===== */
         .app {
             width: 100%;
             max-width: 460px;
@@ -87,7 +86,6 @@
             margin: 0;
             border: none;
         }
-        /* طبقة تعتيم فوق الخلفية لتوضيح النصوص */
         .app::before {
             content: '';
             position: absolute;
@@ -98,11 +96,9 @@
             background: rgba(0, 0, 0, 0.72);
             z-index: 0;
         }
-        .app > * {
-            position: relative;
-            z-index: 1;
-        }
-        /* ===== شعار التطبيق (الزاوية اليمنى العليا) ===== */
+        .app > * { position: relative; z-index: 1; }
+
+        /* ===== شعار التطبيق ===== */
         .app-logo {
             position: fixed;
             top: 15px;
@@ -122,10 +118,11 @@
         }
         .app-logo:active { transform: scale(0.95); }
 
-        /* ===== باقي الأنماط (كما هي في السابق) ===== */
+        /* ===== الصفحات ===== */
         .page { display: none; padding: 20px 18px; animation: fadeSlide 0.3s ease; }
         .page.active { display: block; }
         @keyframes fadeSlide { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
+
         .header {
             text-align: center;
             padding: 10px 0 15px;
@@ -137,6 +134,7 @@
         .app-title { font-size: 32px; font-weight: 900; background: linear-gradient(135deg, #ff7300, #e65c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .app-sub { font-size: 14px; color: #ddd; font-weight: 700; }
         .back-btn { background: none; border: none; color: #ff7300; font-size: 26px; font-weight: 900; cursor: pointer; padding: 5px 12px; position: absolute; top: 12px; right: 15px; }
+
         .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 30px; }
         .main-btn {
             background: rgba(30, 30, 30, 0.85);
@@ -156,6 +154,7 @@
         .main-btn.citizen:hover { background: rgba(42, 26, 15, 0.9); transform: scale(1.02); }
         .main-btn.civil { border-color: #ff7300; background: rgba(26, 10, 10, 0.85); }
         .main-btn.civil:hover { background: rgba(42, 18, 16, 0.9); transform: scale(1.02); }
+
         .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0; }
         .service-btn {
             background: rgba(26, 26, 26, 0.85);
@@ -172,6 +171,7 @@
         }
         .service-btn .icon { font-size: 32px; display: block; margin-bottom: 6px; }
         .service-btn:hover { background: rgba(37, 37, 37, 0.9); border-color: #ff7300; }
+
         label { display: block; margin: 18px 0 6px; font-weight: 900; font-size: 15px; color: #ddd; }
         label .required { color: #ff7300; }
         input, select, textarea {
@@ -193,6 +193,7 @@
             background: #222;
         }
         textarea { resize: vertical; min-height: 70px; }
+
         .send-btn {
             width: 100%;
             padding: 16px;
@@ -209,6 +210,7 @@
             font-family: 'Cairo', sans-serif;
         }
         .send-btn:hover { transform: scale(1.02); box-shadow: 0 8px 35px rgba(255, 115, 0, 0.5); }
+
         .status {
             margin-top: 16px;
             padding: 12px;
@@ -226,10 +228,12 @@
         }
         .status.success { background: #0f2a1a; color: #7fff7f; border-color: #2a6a3a; }
         .status.error { background: #2a1010; color: #ff6666; border-color: #6a2a2a; }
+
         .report-list { margin: 10px 0 15px; max-height: 420px; overflow-y: auto; padding: 2px; }
         .report-list::-webkit-scrollbar { width: 4px; }
         .report-list::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 10px; }
         .report-list::-webkit-scrollbar-thumb { background: #ff7300; border-radius: 10px; }
+
         .report-item {
             background: rgba(26, 26, 26, 0.85);
             border-radius: 16px;
@@ -243,6 +247,7 @@
             border-bottom: 1px solid #2a2a2a;
         }
         .report-item:hover { background: #252525; transform: translateX(-3px); }
+
         .flex-between { display: flex; justify-content: space-between; align-items: center; }
         .report-title { font-size: 17px; font-weight: 900; color: #fff; }
         .badge {
@@ -257,11 +262,13 @@
         .badge.medical { background: #0a3a2a; color: #66ffaa; }
         .badge.help { background: #2a1a4a; color: #cc88ff; }
         .badge.complaint { background: #1a2a4a; color: #66aaff; }
+
         .report-meta { font-size: 14px; color: #ddd; margin-top: 4px; font-weight: 700; }
         .status-tag { font-weight: 900; padding: 2px 10px; border-radius: 20px; font-size: 12px; }
         .status-tag.new { background: #2a2a2a; color: #ff7300; }
         .status-tag.progress { background: #4a3a0a; color: #ffcc44; }
         .status-tag.done { background: #0a3a2a; color: #66ffaa; }
+
         .detail-box {
             background: rgba(26, 26, 26, 0.85);
             border-radius: 16px;
@@ -272,15 +279,18 @@
         .detail-box p { margin: 8px 0; font-size: 15px; color: #ddd; font-weight: 700; }
         .map-link { display: inline-block; background: #ff7300; color: #000; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-weight: 900; margin-top: 8px; }
         .map-link:hover { background: #ff8c1a; }
+
         .status-btn { padding: 6px 16px; border: none; border-radius: 30px; font-weight: 900; cursor: pointer; margin: 3px; font-family: 'Cairo', sans-serif; }
         .status-btn.progress { background: #f39c12; color: #000; }
         .status-btn.done { background: #27ae60; color: #fff; }
         .status-btn.reset { background: #555; color: #fff; }
         .status-btn.delete { background: #c0392b; color: #fff; }
+
         .hidden { display: none; }
         .divider { border: none; height: 1px; background: #2a2a2a; margin: 18px 0; }
         .notif-badge { background: #ff7300; color: #000; border-radius: 50%; padding: 2px 10px; font-size: 13px; font-weight: 900; margin-right: 6px; }
         .text-center { text-align: center; }
+
         .mini-map {
             width: 100%;
             height: 150px;
@@ -291,11 +301,8 @@
             position: relative;
             overflow: hidden;
         }
-        .mini-map iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+        .mini-map iframe { width: 100%; height: 100%; border: none; }
+
         .timer {
             font-size: 28px;
             font-weight: 900;
@@ -307,6 +314,7 @@
             margin: 10px 0;
             direction: ltr;
         }
+
         .center-selector {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -326,6 +334,7 @@
         }
         .center-btn:hover { border-color: #ff7300; background: #2a2a2a; }
         .center-btn.active { border-color: #ff7300; background: #ff7300; color: #000; }
+
         .refresh-btn {
             background: #2a2a2a;
             color: #ff7300;
@@ -338,6 +347,7 @@
             font-family: 'Cairo', sans-serif;
         }
         .refresh-btn:hover { background: #ff7300; color: #000; }
+
         .tabs {
             display: flex;
             flex-wrap: wrap;
@@ -376,7 +386,7 @@
 <body>
 
 <!-- ============================================================ -->
-<!-- شاشة الترحيب العائمة (تظهر أولاً) -->
+<!-- شاشة الترحيب -->
 <!-- ============================================================ -->
 <div id="splashScreen">
     <div id="splashText">🛡️ الدفاع المدني</div>
@@ -384,10 +394,9 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- التطبيق الرئيسي (يظهر بعد اختفاء الشاشة) -->
+<!-- التطبيق الرئيسي -->
 <!-- ============================================================ -->
 <div class="app" id="app">
-    <!-- شعار التطبيق (الزاوية اليمنى العليا) -->
     <div class="app-logo" id="appLogo" onclick="handleLogoClick()">🛡️ الدفاع المدني</div>
 
     <!-- الصفحة الرئيسية -->
@@ -403,408 +412,7 @@
         <div style="text-align:center;font-size:13px;color:#aaa;margin-top:25px;font-weight:700;">جميع البلاغات متزامنة عبر SheetDB</div>
     </div>
 
-    <!-- ===== باقي الصفحات (مواطن، نموذج، دفاع، عمليات، مراكز) ===== -->
-    <!-- (يتم إدراجها بنفس الكود السابق، لكنني اختصرتها هنا للمساحة) -->
-    <!-- أضف هنا صفحات: page-citizen, page-form, page-civil-password, page-operations-password, page-operations, page-civil-dashboard, page-center-reports -->
-    <!-- كما هي في الكود السابق V17 -->
-
-</div>
-
-<script>
-    // ================================================================
-    //  منطق شاشة الترحيب (تختفي بعد 2.5 ثانية)
-    // ================================================================
-    window.addEventListener('load', function() {
-        setTimeout(function() {
-            const splash = document.getElementById('splashScreen');
-            splash.classList.add('hidden');
-            // بعد اختفائها، نظهر التطبيق (موجود أصلاً)
-        }, 2500);
-    });
-
-    // ================================================================
-    //  <!DOCTYPE html>
-<html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>الدفاع المدني - V17</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
-    <style>
-        /* ===== الأساسيات ===== */
-        * { margin: 0; padding: 0; box-sizing: border-box; direction: rtl; }
-        body {
-            font-family: 'Cairo', sans-serif;
-            font-weight: 900;
-            background: #0a0a0a;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0;
-            margin: 0;
-            overflow: hidden;
-        }
-        /* ===== شاشة الترحيب العائمة ===== */
-        #splashScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://i.pinimg.com/736x/7a/6b/2b/7a6b2b0d5b7c8b9a0c1d2e3f4a5b6c7d.jpg') center/cover no-repeat;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.8s ease;
-            flex-direction: column;
-        }
-        #splashScreen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        #splashText {
-            font-size: 48px;
-            font-weight: 900;
-            color: #ff7300;
-            text-shadow: 0 0 30px rgba(255, 115, 0, 0.8), 0 0 60px rgba(255, 115, 0, 0.5);
-            background: rgba(0,0,0,0.6);
-            padding: 20px 40px;
-            border-radius: 20px;
-            text-align: center;
-            animation: pulseGlow 1.5s ease-in-out infinite;
-            border: 2px solid #ff7300;
-        }
-        @keyframes pulseGlow {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(255,115,0,0.3); }
-            50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(255,115,0,0.6); }
-        }
-        #splashSub {
-            color: #fff;
-            font-size: 20px;
-            margin-top: 15px;
-            text-shadow: 0 0 20px rgba(0,0,0,0.8);
-            background: rgba(0,0,0,0.4);
-            padding: 10px 25px;
-            border-radius: 30px;
-            letter-spacing: 2px;
-        }
-        /* ===== التطبيق الرئيسي ===== */
-        .app {
-            background: rgba(18, 18, 18, 0.92);
-            backdrop-filter: blur(10px);
-            border-radius: 28px;
-            max-width: 460px;
-            width: 100%;
-            box-shadow: 0 0 50px rgba(255, 94, 0, 0.15);
-            overflow: hidden;
-            border: 1px solid #2a2a2a;
-            min-height: 700px;
-            position: relative;
-            margin: 10px;
-            background-image: url('https://i.pinimg.com/736x/7a/6b/2b/7a6b2b0d5b7c8b9a0c1d2e3f4a5b6c7d.jpg');
-            background-size: cover;
-            background-position: center;
-            background-blend-mode: overlay;
-        }
-        .app::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.7);
-            z-index: 0;
-        }
-        .app > * { position: relative; z-index: 1; }
-        /* ===== شعار التطبيق (الزاوية اليمنى العليا) ===== */
-        .app-logo {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 22px;
-            font-weight: 900;
-            color: #ff7300;
-            text-shadow: 0 0 20px rgba(255,115,0,0.5);
-            z-index: 10;
-            background: rgba(0,0,0,0.5);
-            padding: 8px 18px;
-            border-radius: 30px;
-            border: 1px solid #ff7300;
-            cursor: pointer;
-            letter-spacing: 1px;
-        }
-        .app-logo:active { transform: scale(0.95); }
-        /* ===== الصفحات ===== */
-        .page { display: none; padding: 20px 18px; animation: fadeSlide 0.3s ease; }
-        .page.active { display: block; }
-        @keyframes fadeSlide { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
-        .header {
-            text-align: center;
-            padding: 10px 0 15px;
-            border-bottom: 2px solid rgba(255,255,255,0.1);
-            margin-bottom: 20px;
-            position: relative;
-        }
-        .logo { width: 70px; height: 70px; margin: 0 auto 5px; display: block; filter: drop-shadow(0 0 15px rgba(255, 94, 0, 0.3)); }
-        .app-title { font-size: 32px; font-weight: 900; background: linear-gradient(135deg, #ff7300, #e65c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .app-sub { font-size: 14px; color: #aaa; font-weight: 700; }
-        .back-btn { background: none; border: none; color: #ff7300; font-size: 26px; font-weight: 900; cursor: pointer; padding: 5px 12px; position: absolute; top: 12px; right: 15px; }
-        /* ===== الأزرار والخدمات ===== */
-        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 30px; }
-        .main-btn {
-            background: rgba(30, 30, 30, 0.85);
-            backdrop-filter: blur(5px);
-            border: 2px solid #2a2a2a;
-            border-radius: 20px;
-            padding: 35px 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.25s;
-            font-weight: 900;
-            font-size: 20px;
-            color: #eee;
-        }
-        .main-btn .icon { font-size: 48px; display: block; margin-bottom: 10px; }
-        .main-btn.citizen { border-color: #ff7300; background: rgba(26, 16, 10, 0.85); }
-        .main-btn.citizen:hover { background: rgba(42, 26, 15, 0.9); transform: scale(1.02); }
-        .main-btn.civil { border-color: #ff7300; background: rgba(26, 10, 10, 0.85); }
-        .main-btn.civil:hover { background: rgba(42, 18, 16, 0.9); transform: scale(1.02); }
-        .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0; }
-        .service-btn {
-            background: rgba(26, 26, 26, 0.85);
-            backdrop-filter: blur(5px);
-            border: 1px solid #2a2a2a;
-            border-radius: 16px;
-            padding: 22px 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-            font-weight: 900;
-            font-size: 16px;
-            color: #ddd;
-        }
-        .service-btn .icon { font-size: 32px; display: block; margin-bottom: 6px; }
-        .service-btn:hover { background: rgba(37, 37, 37, 0.9); border-color: #ff7300; }
-        /* ===== النماذج ===== */
-        label { display: block; margin: 18px 0 6px; font-weight: 900; font-size: 15px; color: #ddd; }
-        label .required { color: #ff7300; }
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #2a2a2a;
-            border-radius: 14px;
-            font-size: 16px;
-            background: rgba(26, 26, 26, 0.85);
-            color: #fff;
-            transition: 0.3s;
-            font-family: 'Cairo', sans-serif;
-            font-weight: 700;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #ff7300;
-            box-shadow: 0 0 0 4px rgba(255, 115, 0, 0.15);
-            background: #222;
-        }
-        textarea { resize: vertical; min-height: 70px; }
-        .send-btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 16px;
-            font-size: 22px;
-            font-weight: 900;
-            cursor: pointer;
-            margin-top: 24px;
-            background: linear-gradient(135deg, #ff7300, #e65c00);
-            color: #fff;
-            box-shadow: 0 6px 25px rgba(255, 115, 0, 0.3);
-            transition: 0.3s;
-            font-family: 'Cairo', sans-serif;
-        }
-        .send-btn:hover { transform: scale(1.02); box-shadow: 0 8px 35px rgba(255, 115, 0, 0.5); }
-        .status {
-            margin-top: 16px;
-            padding: 12px;
-            border-radius: 14px;
-            text-align: center;
-            font-size: 15px;
-            font-weight: 700;
-            background: rgba(26, 26, 26, 0.85);
-            border: 1px solid #2a2a2a;
-            min-height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #aaa;
-        }
-        .status.success { background: #0f2a1a; color: #7fff7f; border-color: #2a6a3a; }
-        .status.error { background: #2a1010; color: #ff6666; border-color: #6a2a2a; }
-        /* ===== غرفة العمليات ===== */
-        .report-list { margin: 10px 0 15px; max-height: 420px; overflow-y: auto; padding: 2px; }
-        .report-list::-webkit-scrollbar { width: 4px; }
-        .report-list::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 10px; }
-        .report-list::-webkit-scrollbar-thumb { background: #ff7300; border-radius: 10px; }
-        .report-item {
-            background: rgba(26, 26, 26, 0.85);
-            border-radius: 16px;
-            padding: 14px 16px;
-            margin-bottom: 12px;
-            border-right: 6px solid #ff7300;
-            cursor: pointer;
-            transition: 0.2s;
-            border-left: 1px solid #2a2a2a;
-            border-top: 1px solid #2a2a2a;
-            border-bottom: 1px solid #2a2a2a;
-        }
-        .report-item:hover { background: #252525; transform: translateX(-3px); }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; }
-        .report-title { font-size: 17px; font-weight: 900; color: #fff; }
-        .badge {
-            display: inline-block;
-            padding: 2px 14px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 900;
-        }
-        .badge.fire { background: #6a1a1a; color: #ff6666; }
-        .badge.accident { background: #4a3a0a; color: #ffcc44; }
-        .badge.medical { background: #0a3a2a; color: #66ffaa; }
-        .badge.help { background: #2a1a4a; color: #cc88ff; }
-        .badge.complaint { background: #1a2a4a; color: #66aaff; }
-        .report-meta { font-size: 14px; color: #999; margin-top: 4px; font-weight: 700; }
-        .status-tag { font-weight: 900; padding: 2px 10px; border-radius: 20px; font-size: 12px; }
-        .status-tag.new { background: #2a2a2a; color: #ff7300; }
-        .status-tag.progress { background: #4a3a0a; color: #ffcc44; }
-        .status-tag.done { background: #0a3a2a; color: #66ffaa; }
-        /* ===== التفاصيل ===== */
-        .detail-box {
-            background: rgba(26, 26, 26, 0.85);
-            border-radius: 16px;
-            padding: 18px;
-            margin: 15px 0;
-            border: 1px solid #2a2a2a;
-        }
-        .detail-box p { margin: 8px 0; font-size: 15px; color: #ddd; font-weight: 700; }
-        .map-link { display: inline-block; background: #ff7300; color: #000; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-weight: 900; margin-top: 8px; }
-        .map-link:hover { background: #ff8c1a; }
-        .status-btn { padding: 6px 16px; border: none; border-radius: 30px; font-weight: 900; cursor: pointer; margin: 3px; font-family: 'Cairo', sans-serif; }
-        .status-btn.progress { background: #f39c12; color: #000; }
-        .status-btn.done { background: #27ae60; color: #fff; }
-        .status-btn.reset { background: #555; color: #fff; }
-        .status-btn.delete { background: #c0392b; color: #fff; }
-        .hidden { display: none; }
-        .divider { border: none; height: 1px; background: #2a2a2a; margin: 18px 0; }
-        .notif-badge { background: #ff7300; color: #000; border-radius: 50%; padding: 2px 10px; font-size: 13px; font-weight: 900; margin-right: 6px; }
-        .text-center { text-align: center; }
-        /* ===== خريطة مصغرة ===== */
-        .mini-map {
-            width: 100%;
-            height: 150px;
-            background: #1a1a1a;
-            border-radius: 12px;
-            margin: 10px 0;
-            border: 1px solid #2a2a2a;
-            position: relative;
-            overflow: hidden;
-        }
-        .mini-map iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        /* ===== عداد الوقت ===== */
-        .timer {
-            font-size: 28px;
-            font-weight: 900;
-            color: #ff7300;
-            text-align: center;
-            padding: 10px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 12px;
-            margin: 10px 0;
-            direction: ltr;
-        }
-        /* ===== قسم ربط العمليات (مخفي) ===== */
-        .operations-section {
-            display: none;
-            background: rgba(0,0,0,0.5);
-            border-radius: 16px;
-            padding: 15px;
-            margin: 10px 0;
-            border: 2px solid #ff7300;
-        }
-        .operations-section.active { display: block; }
-        .center-selector {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin: 10px 0;
-        }
-        .center-btn {
-            background: rgba(30,30,30,0.8);
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            padding: 10px;
-            color: #fff;
-            font-weight: 900;
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: 'Cairo', sans-serif;
-        }
-        .center-btn:hover { border-color: #ff7300; background: #2a2a2a; }
-        .center-btn.active { border-color: #ff7300; background: #ff7300; color: #000; }
-        /* ===== توافق مع الشاشات الصغيرة ===== */
-        @media (max-width: 480px) {
-            #splashText { font-size: 28px; padding: 15px 25px; }
-            #splashSub { font-size: 16px; }
-            .app-logo { font-size: 16px; padding: 5px 12px; top: 10px; right: 10px; }
-            .app-title { font-size: 24px; }
-            .main-btn { font-size: 16px; padding: 25px 8px; }
-            .main-btn .icon { font-size: 36px; }
-            .service-btn { font-size: 14px; padding: 16px 6px; }
-            .service-btn .icon { font-size: 24px; }
-            .send-btn { font-size: 18px; padding: 14px; }
-            .report-title { font-size: 15px; }
-        }
-    </style>
-</head>
-<body>
-
-<!-- ============================================================ -->
-<!-- شاشة الترحيب العائمة -->
-<!-- ============================================================ -->
-<div id="splashScreen">
-    <div id="splashText">🛡️ الدفاع المدني</div>
-    <div id="splashSub">معك أينما تكون</div>
-</div>
-
-<!-- ============================================================ -->
-<!-- التطبيق الرئيسي -->
-<!-- ============================================================ -->
-<div class="app" id="app">
-    <!-- شعار التطبيق (الزاوية اليمنى العليا) -->
-    <div class="app-logo" id="appLogo" onclick="handleLogoClick()">🛡️ الدفاع المدني</div>
-
-    <!-- الصفحة الرئيسية -->
-    <div class="page active" id="page-home">
-        <div class="header">
-            <div class="app-title">الدفاع المدني</div>
-            <div class="app-sub">نظام البلاغات V17</div>
-        </div>
-        <div class="main-grid">
-            <div class="main-btn citizen" onclick="showPage('page-citizen')"><span class="icon">👤</span> المواطن</div>
-            <div class="main-btn civil" onclick="showPage('page-civil-password')"><span class="icon">🛡️</span> الدفاع المدني</div>
-        </div>
-        <div style="text-align:center;font-size:13px;color:#555;margin-top:25px;font-weight:700;">جميع البلاغات متزامنة عبر SheetDB</div>
-    </div>
-
-    <!-- ============================================================ -->
     <!-- صفحة المواطن -->
-    <!-- ============================================================ -->
     <div class="page" id="page-citizen">
         <div class="header"><button class="back-btn" onclick="showPage('page-home')">✕</button><div style="font-size:22px;font-weight:900;color:#fff;">قسم المواطن</div></div>
         <div class="service-grid">
@@ -816,9 +424,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- صفحة النموذج -->
-    <!-- ============================================================ -->
     <div class="page" id="page-form">
         <div class="header"><button class="back-btn" onclick="showPage('page-citizen')">✕</button><div style="font-size:20px;font-weight:900;color:#ff7300;" id="form-title">نموذج البلاغ</div></div>
         <label>الاسم الثلاثي <span class="required">*</span></label>
@@ -833,9 +439,7 @@
         <div class="status" id="formStatus">⏳ جاهز للإرسال</div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- صفحة كلمة المرور (الدفاع المدني) -->
-    <!-- ============================================================ -->
     <div class="page" id="page-civil-password">
         <div class="header"><button class="back-btn" onclick="showPage('page-home')">✕</button><div style="font-size:22px;font-weight:900;color:#fff;">الدخول للدفاع</div></div>
         <div class="text-center" style="padding:30px 0;">
@@ -846,9 +450,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- صفحة كلمة المرور (ربط العمليات) -->
-    <!-- ============================================================ -->
     <div class="page" id="page-operations-password">
         <div class="header"><button class="back-btn" onclick="showPage('page-home')">✕</button><div style="font-size:22px;font-weight:900;color:#ff7300;">🔗 ربط العمليات</div></div>
         <div class="text-center" style="padding:30px 0;">
@@ -859,9 +461,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- صفحة ربط العمليات -->
-    <!-- ============================================================ -->
     <div class="page" id="page-operations">
         <div class="header"><button class="back-btn" onclick="showPage('page-home')">✕</button><div style="font-size:20px;font-weight:900;color:#ff7300;">🔗 ربط العمليات</div></div>
         
@@ -898,9 +498,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- صفحة غرفة العمليات (الدفاع المدني) -->
-    <!-- ============================================================ -->
+    <!-- صفحة غرفة العمليات -->
     <div class="page" id="page-civil-dashboard">
         <div class="header">
             <button class="back-btn" onclick="showPage('page-home')">✕</button>
@@ -926,9 +524,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
     <!-- صفحة بلاغات المراكز -->
-    <!-- ============================================================ -->
     <div class="page" id="page-center-reports">
         <div class="header"><button class="back-btn" onclick="showPage('page-civil-dashboard')">✕</button><div style="font-size:20px;font-weight:900;color:#ff7300;" id="centerReportTitle">بلاغات المراكز</div></div>
         <div class="report-list" id="centerReportList"><div style="text-align:center;color:#555;padding:40px 0;font-size:18px;">📭 لا توجد بلاغات للمراكز</div></div>
@@ -941,7 +537,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- الجافا سكريبت (المنطق والتشغيل) -->
+<!-- الجافا سكريبت -->
 <!-- ============================================================ -->
 <script>
     // ================================================================
@@ -953,7 +549,6 @@
     const OP_PASSWORD = "1990";
     const SHEET_API_URL = "https://sheetdb.io/api/v1/o7lnb7dlouvl9";
 
-    // ===== المراكز المعتمدة (مع إحداثيات تقريبية) =====
     const CENTERS = [
         { name: 'الشدادي', lat: 36.195, lon: 40.68 },
         { name: 'اليعربية', lat: 36.395, lon: 40.88 },
@@ -971,7 +566,7 @@
     let timers = {};
 
     // ================================================================
-    //  دوال شاشة الترحيب
+    //  شاشة الترحيب
     // ================================================================
     window.addEventListener('load', function() {
         setTimeout(function() {
@@ -980,7 +575,7 @@
     });
 
     // ================================================================
-    //  دوال الشعار (ضغط 5 مرات)
+    //  شعار التطبيق (ضغط 5 مرات)
     // ================================================================
     let logoClickCount = 0;
     let logoClickTimer = null;
@@ -996,7 +591,7 @@
     }
 
     // ================================================================
-    //  دوال التنقل
+    //  التنقل بين الصفحات
     // ================================================================
     function showPage(pageId) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1029,7 +624,7 @@
     }
 
     // ================================================================
-    //  جلب الموقع (إجباري)
+    //  جلب الموقع
     // ================================================================
     function getGPS() {
         return new Promise((resolve, reject) => {
@@ -1046,10 +641,10 @@
     }
 
     // ================================================================
-    //  حساب المسافة بين نقطتين (Haversine)
+    //  حساب المسافة (Haversine)
     // ================================================================
     function calculateDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371; // نصف قطر الأرض بالكيلومتر
+        const R = 6371;
         const dLat = (lat2 - lat1) * Math.PI / 180;
         const dLon = (lon2 - lon1) * Math.PI / 180;
         const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -1088,7 +683,6 @@
             const link = `https://www.google.com/maps?q=${gps.lat},${gps.lon}`;
             const timestamp = new Date().toLocaleString('ar-SY');
             
-            // تحديد أقرب مركز
             let nearestCenter = null;
             let minDistance = Infinity;
             CENTERS.forEach(center => {
@@ -1120,7 +714,6 @@
                 events: []
             };
 
-            // حفظ في SheetDB
             const response = await fetch(SHEET_API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1129,7 +722,6 @@
 
             if (!response.ok) throw new Error('فشل الحفظ');
 
-            // إرسال إلى تلجرام
             const caption = `🔴 بلاغ جديد\n━━━━━━━━━━\n📋 النوع: ${reportData.type}\n👤 الاسم: ${reportData.fullName}\n📞 الهاتف: ${reportData.phone}\n📊 الخطر: ${reportData.risk}\n📍 الموقع: ${reportData.location}\n🏢 أقرب مركز: ${reportData.nearestCenter} (${reportData.distance} كم)`;
             try {
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -1211,13 +803,12 @@
     }
 
     // ================================================================
-    //  عرض البلاغات في غرفة العمليات
+    //  عرض البلاغات
     // ================================================================
     function renderReports() {
         const list = document.getElementById('reportList');
         let filtered = currentFilter === 'all' ? allReports : allReports.filter(r => r.type === currentFilter);
         
-        // إذا كان الفلتر "مركز" نعرض بلاغات المراكز
         if (currentFilter === 'مركز') {
             renderCenterReports();
             return;
@@ -1250,7 +841,7 @@
     }
 
     // ================================================================
-    //  عرض تفاصيل البلاغ مع خريطة وعداد
+    //  تفاصيل البلاغ
     // ================================================================
     function showReportDetail(id) {
         const report = allReports.find(r => r.id === id);
@@ -1259,7 +850,6 @@
         const link = report.location || `https://www.google.com/maps?q=${report.lat},${report.lon}`;
         const centerLink = report.centerLat ? `https://www.google.com/maps?q=${report.centerLat},${report.centerLon}` : '#';
         
-        // بدء عداد الوقت إذا لم يكن قد بدأ
         if (!report.timerStart && report.status !== 'تم الحل') {
             report.timerStart = Date.now();
             updateReportInSheet(report);
@@ -1297,7 +887,6 @@
         `;
         document.getElementById('reportDetail').classList.remove('hidden');
 
-        // تحديث العداد كل ثانية
         if (report.timerStart && report.status !== 'تم الحل') {
             if (timers[report.id]) clearInterval(timers[report.id]);
             timers[report.id] = setInterval(() => {
@@ -1308,7 +897,6 @@
             }, 1000);
         }
 
-        // عرض الأحداث
         const eventsDiv = document.getElementById(`events_${report.id}`);
         if (report.events && report.events.length > 0) {
             eventsDiv.innerHTML = `<strong style="color:#ff7300;">📋 سجل الأحداث:</strong><br>` + 
@@ -1352,12 +940,11 @@
     }
 
     // ================================================================
-    //  حذف البلاغ (لربط العمليات فقط)
+    //  حذف البلاغ
     // ================================================================
     function deleteReport(id) {
         if (confirm('⚠️ هل أنت متأكد من حذف هذا البلاغ؟')) {
             allReports = allReports.filter(r => r.id !== id);
-            // حذف من SheetDB
             fetch(`${SHEET_API_URL}/id/${id}`, {
                 method: 'DELETE'
             }).catch(e => console.warn('Delete error:', e));
@@ -1374,7 +961,6 @@
         const report = allReports.find(r => r.id === id);
         if (!report) return;
         
-        // إضافة إلى بلاغات المراكز
         const centerReport = {
             ...report,
             centerName: report.nearestCenter || 'مركز غير محدد',
@@ -1415,7 +1001,7 @@
     }
 
     // ================================================================
-    //  تفاصيل بلاغ المركز مع عداد
+    //  تفاصيل بلاغ المركز
     // ================================================================
     function showCenterDetail(id) {
         const report = centerReports.find(r => r.id === id);
@@ -1423,7 +1009,6 @@
         const detailDiv = document.getElementById('centerDetailContent');
         const link = report.location || `https://www.google.com/maps?q=${report.lat},${report.lon}`;
         
-        // بدء عداد خاص ببلاغ المركز
         if (!report.timerStart) {
             report.timerStart = Date.now();
             localStorage.setItem('centerReports', JSON.stringify(centerReports));
@@ -1449,7 +1034,6 @@
         `;
         document.getElementById('centerReportDetail').classList.remove('hidden');
 
-        // تحديث العداد
         if (timers[`center_${report.id}`]) clearInterval(timers[`center_${report.id}`]);
         timers[`center_${report.id}`] = setInterval(() => {
             const timerEl = document.getElementById(`centerTimer_${report.id}`);
@@ -1458,7 +1042,6 @@
             }
         }, 1000);
 
-        // عرض الأحداث
         const eventsDiv = document.getElementById(`centerEvents_${report.id}`);
         if (report.events && report.events.length > 0) {
             eventsDiv.innerHTML = `<strong style="color:#ff7300;">📋 سجل الأحداث:</strong><br>` + 
@@ -1519,7 +1102,7 @@
     }
 
     // ================================================================
-    //  تحليل وتوجيه البلاغات (ربط العمليات)
+    //  تحليل وتوجيه البلاغات
     // ================================================================
     function analyzeAndRouteReports() {
         const results = document.getElementById('routingResults');
@@ -1558,7 +1141,7 @@
     }
 
     // ================================================================
-    //  تحميل بيانات المراكز (ربط العمليات)
+    //  تحميل بيانات المراكز
     // ================================================================
     function loadCentersData() {
         const container = document.getElementById('carLocation');

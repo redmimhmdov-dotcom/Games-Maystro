@@ -89,7 +89,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.78);
+            background: rgba(0, 0, 0, 0.40);
             z-index: 0;
         }
         .app > * { position: relative; z-index: 1; }
@@ -418,7 +418,7 @@
             <div class="main-btn citizen" onclick="showPage('page-citizen')"><span class="icon">👤</span> المواطن</div>
             <div class="main-btn civil" onclick="showPage('page-civil-password')"><span class="icon">🛡️</span> الدفاع المدني</div>
         </div>
-        <div style="text-align:center;font-size:13px;color:#aaa;margin-top:25px;font-weight:700;">جميع البلاغات متزامنة عبر SheetDB</div>
+        <div style="text-align:center;font-size:13px;color:#aaa;margin-top:25px;font-weight:700;">by muhammad </div>
     </div>
 
     <!-- صفحة المواطن -->
@@ -513,7 +513,7 @@
             <button class="back-btn" onclick="showPage('page-home')">✕</button>
             <div style="font-size:24px;font-weight:900;color:#fff;">🛡️ غرفة العمليات <span id="newReportsCount" class="notif-badge hidden">0</span></div>
             <div style="font-size:13px;color:#ffaa44;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:5px;flex-wrap:wrap;">
-                📡 متزامن مع SheetDB <span id="lastSyncTime">الآن</span>
+                📡  <span id="lastSyncTime"></span>
                 <button class="refresh-btn" onclick="forceRefresh()">🔄 تحديث</button>
             </div>
         </div>

@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>الدفاع المدني - V18</title>
+    <title>الدفاع المدني - V19</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* ===== الأساسيات ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; direction: rtl; }
         html, body {
             width: 100%;
@@ -21,7 +20,7 @@
             margin: 0;
             overflow: hidden;
         }
-        /* ===== شاشة الترحيب العائمة (تظهر أولاً) ===== */
+        /* ===== شاشة الترحيب ===== */
         #splashScreen {
             position: fixed;
             top: 0;
@@ -36,10 +35,7 @@
             z-index: 9999;
             transition: opacity 0.8s ease;
         }
-        #splashScreen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
+        #splashScreen.hidden { opacity: 0; pointer-events: none; }
         #splashText {
             font-size: 52px;
             font-weight: 900;
@@ -93,7 +89,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.72);
+            background: rgba(0, 0, 0, 0.78);
             z-index: 0;
         }
         .app > * { position: relative; z-index: 1; }
@@ -105,16 +101,17 @@
             right: 15px;
             font-size: 20px;
             font-weight: 900;
-            color: #ff7300;
-            text-shadow: 0 0 20px rgba(255,115,0,0.6);
+            color: #ffaa44;
+            text-shadow: 0 0 20px rgba(255,170,68,0.6);
             z-index: 100;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.7);
             padding: 6px 16px;
             border-radius: 30px;
-            border: 1px solid #ff7300;
+            border: 2px solid #ffaa44;
             cursor: pointer;
             backdrop-filter: blur(4px);
             letter-spacing: 0.5px;
+            box-shadow: 0 0 30px rgba(255,170,68,0.2);
         }
         .app-logo:active { transform: scale(0.95); }
 
@@ -126,71 +123,84 @@
         .header {
             text-align: center;
             padding: 10px 0 15px;
-            border-bottom: 2px solid rgba(255,255,255,0.1);
+            border-bottom: 2px solid rgba(255,170,68,0.2);
             margin-bottom: 20px;
             position: relative;
         }
-        .logo { width: 70px; height: 70px; margin: 0 auto 5px; display: block; filter: drop-shadow(0 0 15px rgba(255, 94, 0, 0.3)); }
-        .app-title { font-size: 32px; font-weight: 900; background: linear-gradient(135deg, #ff7300, #e65c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .app-sub { font-size: 14px; color: #ddd; font-weight: 700; }
-        .back-btn { background: none; border: none; color: #ff7300; font-size: 26px; font-weight: 900; cursor: pointer; padding: 5px 12px; position: absolute; top: 12px; right: 15px; }
+        .logo { width: 70px; height: 70px; margin: 0 auto 5px; display: block; filter: drop-shadow(0 0 15px rgba(255, 170, 68, 0.3)); }
+        .app-title {
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffaa44, #ff8800);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(255,170,68,0.2);
+        }
+        .app-sub { font-size: 14px; color: #ddd; font-weight: 700; opacity: 0.9; }
+        .back-btn { background: none; border: none; color: #ffaa44; font-size: 26px; font-weight: 900; cursor: pointer; padding: 5px 12px; position: absolute; top: 12px; right: 15px; }
 
+        /* ===== الأزرار ===== */
         .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 30px; }
         .main-btn {
-            background: rgba(30, 30, 30, 0.85);
-            backdrop-filter: blur(5px);
-            border: 2px solid #2a2a2a;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(255,170,68,0.4);
             border-radius: 20px;
             padding: 35px 10px;
             text-align: center;
             cursor: pointer;
-            transition: 0.25s;
+            transition: 0.3s;
             font-weight: 900;
             font-size: 20px;
-            color: #eee;
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
         .main-btn .icon { font-size: 48px; display: block; margin-bottom: 10px; }
-        .main-btn.citizen { border-color: #ff7300; background: rgba(26, 16, 10, 0.85); }
-        .main-btn.citizen:hover { background: rgba(42, 26, 15, 0.9); transform: scale(1.02); }
-        .main-btn.civil { border-color: #ff7300; background: rgba(26, 10, 10, 0.85); }
-        .main-btn.civil:hover { background: rgba(42, 18, 16, 0.9); transform: scale(1.02); }
+        .main-btn:hover {
+            transform: scale(1.03);
+            border-color: #ffaa44;
+            background: rgba(255,170,68,0.15);
+            box-shadow: 0 0 40px rgba(255,170,68,0.15);
+        }
 
         .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0; }
         .service-btn {
-            background: rgba(26, 26, 26, 0.85);
-            backdrop-filter: blur(5px);
-            border: 1px solid #2a2a2a;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255,170,68,0.3);
             border-radius: 16px;
             padding: 22px 8px;
             text-align: center;
             cursor: pointer;
-            transition: 0.2s;
+            transition: 0.3s;
             font-weight: 900;
             font-size: 16px;
-            color: #ddd;
+            color: #eee;
         }
         .service-btn .icon { font-size: 32px; display: block; margin-bottom: 6px; }
-        .service-btn:hover { background: rgba(37, 37, 37, 0.9); border-color: #ff7300; }
+        .service-btn:hover { background: rgba(255,170,68,0.12); border-color: #ffaa44; transform: scale(1.02); }
 
-        label { display: block; margin: 18px 0 6px; font-weight: 900; font-size: 15px; color: #ddd; }
-        label .required { color: #ff7300; }
+        /* ===== النماذج ===== */
+        label { display: block; margin: 18px 0 6px; font-weight: 900; font-size: 15px; color: #eee; }
+        label .required { color: #ffaa44; }
         input, select, textarea {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid #2a2a2a;
+            border: 2px solid rgba(255,170,68,0.25);
             border-radius: 14px;
             font-size: 16px;
-            background: rgba(26, 26, 26, 0.85);
+            background: rgba(0, 0, 0, 0.6);
             color: #fff;
             transition: 0.3s;
             font-family: 'Cairo', sans-serif;
             font-weight: 700;
+            backdrop-filter: blur(4px);
         }
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #ff7300;
-            box-shadow: 0 0 0 4px rgba(255, 115, 0, 0.15);
-            background: #222;
+            border-color: #ffaa44;
+            box-shadow: 0 0 0 4px rgba(255,170,68,0.15);
+            background: rgba(0, 0, 0, 0.8);
         }
         textarea { resize: vertical; min-height: 70px; }
 
@@ -203,13 +213,13 @@
             font-weight: 900;
             cursor: pointer;
             margin-top: 24px;
-            background: linear-gradient(135deg, #ff7300, #e65c00);
-            color: #fff;
-            box-shadow: 0 6px 25px rgba(255, 115, 0, 0.3);
+            background: linear-gradient(135deg, #ffaa44, #e68a00);
+            color: #000;
+            box-shadow: 0 6px 25px rgba(255,170,68,0.3);
             transition: 0.3s;
             font-family: 'Cairo', sans-serif;
         }
-        .send-btn:hover { transform: scale(1.02); box-shadow: 0 8px 35px rgba(255, 115, 0, 0.5); }
+        .send-btn:hover { transform: scale(1.02); box-shadow: 0 8px 35px rgba(255,170,68,0.5); }
 
         .status {
             margin-top: 16px;
@@ -218,35 +228,37 @@
             text-align: center;
             font-size: 15px;
             font-weight: 700;
-            background: rgba(26, 26, 26, 0.85);
-            border: 1px solid #2a2a2a;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255,170,68,0.2);
             min-height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #aaa;
+            color: #ddd;
         }
-        .status.success { background: #0f2a1a; color: #7fff7f; border-color: #2a6a3a; }
-        .status.error { background: #2a1010; color: #ff6666; border-color: #6a2a2a; }
+        .status.success { background: rgba(0, 40, 20, 0.7); color: #7fff7f; border-color: #2a6a3a; }
+        .status.error { background: rgba(40, 0, 0, 0.7); color: #ff6666; border-color: #6a2a2a; }
 
+        /* ===== غرفة العمليات ===== */
         .report-list { margin: 10px 0 15px; max-height: 420px; overflow-y: auto; padding: 2px; }
         .report-list::-webkit-scrollbar { width: 4px; }
-        .report-list::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 10px; }
-        .report-list::-webkit-scrollbar-thumb { background: #ff7300; border-radius: 10px; }
+        .report-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); border-radius: 10px; }
+        .report-list::-webkit-scrollbar-thumb { background: #ffaa44; border-radius: 10px; }
 
         .report-item {
-            background: rgba(26, 26, 26, 0.85);
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(6px);
             border-radius: 16px;
             padding: 14px 16px;
             margin-bottom: 12px;
-            border-right: 6px solid #ff7300;
+            border-right: 6px solid #ffaa44;
             cursor: pointer;
-            transition: 0.2s;
-            border-left: 1px solid #2a2a2a;
-            border-top: 1px solid #2a2a2a;
-            border-bottom: 1px solid #2a2a2a;
+            transition: 0.3s;
+            border-left: 1px solid rgba(255,170,68,0.15);
+            border-top: 1px solid rgba(255,170,68,0.15);
+            border-bottom: 1px solid rgba(255,170,68,0.15);
         }
-        .report-item:hover { background: #252525; transform: translateX(-3px); }
+        .report-item:hover { background: rgba(255,170,68,0.08); transform: translateX(-3px); }
 
         .flex-between { display: flex; justify-content: space-between; align-items: center; }
         .report-title { font-size: 17px; font-weight: 900; color: #fff; }
@@ -257,28 +269,29 @@
             font-size: 12px;
             font-weight: 900;
         }
-        .badge.fire { background: #6a1a1a; color: #ff6666; }
-        .badge.accident { background: #4a3a0a; color: #ffcc44; }
-        .badge.medical { background: #0a3a2a; color: #66ffaa; }
-        .badge.help { background: #2a1a4a; color: #cc88ff; }
-        .badge.complaint { background: #1a2a4a; color: #66aaff; }
+        .badge.fire { background: rgba(200, 50, 50, 0.7); color: #ff8888; }
+        .badge.accident { background: rgba(200, 180, 50, 0.7); color: #ffdd66; }
+        .badge.medical { background: rgba(50, 200, 100, 0.7); color: #66ffaa; }
+        .badge.help { background: rgba(150, 50, 200, 0.7); color: #cc88ff; }
+        .badge.complaint { background: rgba(50, 100, 200, 0.7); color: #66aaff; }
 
-        .report-meta { font-size: 14px; color: #ddd; margin-top: 4px; font-weight: 700; }
+        .report-meta { font-size: 14px; color: #ccc; margin-top: 4px; font-weight: 700; }
         .status-tag { font-weight: 900; padding: 2px 10px; border-radius: 20px; font-size: 12px; }
-        .status-tag.new { background: #2a2a2a; color: #ff7300; }
-        .status-tag.progress { background: #4a3a0a; color: #ffcc44; }
-        .status-tag.done { background: #0a3a2a; color: #66ffaa; }
+        .status-tag.new { background: rgba(255,170,68,0.2); color: #ffaa44; }
+        .status-tag.progress { background: rgba(255,200,50,0.2); color: #ffcc44; }
+        .status-tag.done { background: rgba(50,255,100,0.15); color: #66ffaa; }
 
         .detail-box {
-            background: rgba(26, 26, 26, 0.85);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
             border-radius: 16px;
             padding: 18px;
             margin: 15px 0;
-            border: 1px solid #2a2a2a;
+            border: 1px solid rgba(255,170,68,0.2);
         }
-        .detail-box p { margin: 8px 0; font-size: 15px; color: #ddd; font-weight: 700; }
-        .map-link { display: inline-block; background: #ff7300; color: #000; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-weight: 900; margin-top: 8px; }
-        .map-link:hover { background: #ff8c1a; }
+        .detail-box p { margin: 8px 0; font-size: 15px; color: #eee; font-weight: 700; }
+        .map-link { display: inline-block; background: #ffaa44; color: #000; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-weight: 900; margin-top: 8px; }
+        .map-link:hover { background: #ffbb55; }
 
         .status-btn { padding: 6px 16px; border: none; border-radius: 30px; font-weight: 900; cursor: pointer; margin: 3px; font-family: 'Cairo', sans-serif; }
         .status-btn.progress { background: #f39c12; color: #000; }
@@ -287,17 +300,17 @@
         .status-btn.delete { background: #c0392b; color: #fff; }
 
         .hidden { display: none; }
-        .divider { border: none; height: 1px; background: #2a2a2a; margin: 18px 0; }
-        .notif-badge { background: #ff7300; color: #000; border-radius: 50%; padding: 2px 10px; font-size: 13px; font-weight: 900; margin-right: 6px; }
+        .divider { border: none; height: 1px; background: rgba(255,170,68,0.15); margin: 18px 0; }
+        .notif-badge { background: #ffaa44; color: #000; border-radius: 50%; padding: 2px 10px; font-size: 13px; font-weight: 900; margin-right: 6px; }
         .text-center { text-align: center; }
 
         .mini-map {
             width: 100%;
             height: 150px;
-            background: #1a1a1a;
+            background: rgba(0,0,0,0.4);
             border-radius: 12px;
             margin: 10px 0;
-            border: 1px solid #2a2a2a;
+            border: 1px solid rgba(255,170,68,0.15);
             position: relative;
             overflow: hidden;
         }
@@ -306,10 +319,10 @@
         .timer {
             font-size: 28px;
             font-weight: 900;
-            color: #ff7300;
+            color: #ffaa44;
             text-align: center;
             padding: 10px;
-            background: rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.4);
             border-radius: 12px;
             margin: 10px 0;
             direction: ltr;
@@ -322,8 +335,8 @@
             margin: 10px 0;
         }
         .center-btn {
-            background: rgba(30,30,30,0.8);
-            border: 1px solid #2a2a2a;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,170,68,0.25);
             border-radius: 12px;
             padding: 10px;
             color: #fff;
@@ -332,13 +345,13 @@
             transition: 0.2s;
             font-family: 'Cairo', sans-serif;
         }
-        .center-btn:hover { border-color: #ff7300; background: #2a2a2a; }
-        .center-btn.active { border-color: #ff7300; background: #ff7300; color: #000; }
+        .center-btn:hover { border-color: #ffaa44; background: rgba(255,170,68,0.1); }
+        .center-btn.active { border-color: #ffaa44; background: #ffaa44; color: #000; }
 
         .refresh-btn {
-            background: #2a2a2a;
-            color: #ff7300;
-            border: 1px solid #ff7300;
+            background: rgba(0,0,0,0.5);
+            color: #ffaa44;
+            border: 1px solid #ffaa44;
             padding: 4px 16px;
             border-radius: 30px;
             font-size: 14px;
@@ -346,7 +359,7 @@
             cursor: pointer;
             font-family: 'Cairo', sans-serif;
         }
-        .refresh-btn:hover { background: #ff7300; color: #000; }
+        .refresh-btn:hover { background: #ffaa44; color: #000; }
 
         .tabs {
             display: flex;
@@ -355,19 +368,19 @@
             margin: 15px 0 12px;
         }
         .tab {
-            background: rgba(26,26,26,0.8);
+            background: rgba(0,0,0,0.4);
             padding: 6px 16px;
             border-radius: 30px;
             font-size: 14px;
             font-weight: 900;
             cursor: pointer;
-            border: 1px solid #2a2a2a;
+            border: 1px solid rgba(255,170,68,0.15);
             color: #ddd;
             font-family: 'Cairo', sans-serif;
             transition: 0.2s;
         }
-        .tab.active { background: #ff7300; color: #000; border-color: #ff7300; }
-        .tab:hover { border-color: #ff7300; }
+        .tab.active { background: #ffaa44; color: #000; border-color: #ffaa44; }
+        .tab:hover { border-color: #ffaa44; }
 
         @media (max-width: 480px) {
             #splashText { font-size: 28px; padding: 15px 25px; }
@@ -385,17 +398,13 @@
 </head>
 <body>
 
-<!-- ============================================================ -->
-<!-- شاشة الترحيب -->
-<!-- ============================================================ -->
+<!-- ===== شاشة الترحيب ===== -->
 <div id="splashScreen">
     <div id="splashText">🛡️ الدفاع المدني</div>
     <div id="splashSub">معك أينما تكون</div>
 </div>
 
-<!-- ============================================================ -->
-<!-- التطبيق الرئيسي -->
-<!-- ============================================================ -->
+<!-- ===== التطبيق الرئيسي ===== -->
 <div class="app" id="app">
     <div class="app-logo" id="appLogo" onclick="handleLogoClick()">🛡️ الدفاع المدني</div>
 
@@ -403,7 +412,7 @@
     <div class="page active" id="page-home">
         <div class="header">
             <div class="app-title">الدفاع المدني</div>
-            <div class="app-sub">نظام البلاغات V18</div>
+            <div class="app-sub">نظام البلاغات V19</div>
         </div>
         <div class="main-grid">
             <div class="main-btn citizen" onclick="showPage('page-citizen')"><span class="icon">👤</span> المواطن</div>
@@ -426,7 +435,7 @@
 
     <!-- صفحة النموذج -->
     <div class="page" id="page-form">
-        <div class="header"><button class="back-btn" onclick="showPage('page-citizen')">✕</button><div style="font-size:20px;font-weight:900;color:#ff7300;" id="form-title">نموذج البلاغ</div></div>
+        <div class="header"><button class="back-btn" onclick="showPage('page-citizen')">✕</button><div style="font-size:20px;font-weight:900;color:#ffaa44;" id="form-title">نموذج البلاغ</div></div>
         <label>الاسم الثلاثي <span class="required">*</span></label>
         <input type="text" id="fullName" placeholder="أحمد محمد علي">
         <label>رقم الهاتف <span class="required">*</span></label>
@@ -443,30 +452,30 @@
     <div class="page" id="page-civil-password">
         <div class="header"><button class="back-btn" onclick="showPage('page-home')">✕</button><div style="font-size:22px;font-weight:900;color:#fff;">الدخول للدفاع</div></div>
         <div class="text-center" style="padding:30px 0;">
-            <div style="font-size:70px;color:#ff7300;">🔐</div>
+            <div style="font-size:70px;color:#ffaa44;">🔐</div>
             <input type="password" id="passwordInput" placeholder="••••" style="text-align:center;font-size:28px;letter-spacing:8px;max-width:200px;margin:15px auto;">
-            <button class="send-btn" style="background:#2a2a2a;color:#ff7300;border:2px solid #ff7300;box-shadow:none;" onclick="verifyPassword()">تأكيد</button>
+            <button class="send-btn" style="background:rgba(0,0,0,0.6);color:#ffaa44;border:2px solid #ffaa44;box-shadow:none;" onclick="verifyPassword()">تأكيد</button>
             <div class="status" id="passwordStatus">أدخل الرمز السري</div>
         </div>
     </div>
 
     <!-- صفحة كلمة المرور (ربط العمليات) -->
     <div class="page" id="page-operations-password">
-        <div class="header"><button class="back-btn" onclick="showPage('page-home')">✕</button><div style="font-size:22px;font-weight:900;color:#ff7300;">🔗 ربط العمليات</div></div>
+        <div class="header"><button class="back-btn" onclick="showPage('page-home')">✕</button><div style="font-size:22px;font-weight:900;color:#ffaa44;">🔗 ربط العمليات</div></div>
         <div class="text-center" style="padding:30px 0;">
-            <div style="font-size:70px;color:#ff7300;">⚙️</div>
+            <div style="font-size:70px;color:#ffaa44;">⚙️</div>
             <input type="password" id="opPasswordInput" placeholder="••••" style="text-align:center;font-size:28px;letter-spacing:8px;max-width:200px;margin:15px auto;">
-            <button class="send-btn" style="background:#2a2a2a;color:#ff7300;border:2px solid #ff7300;box-shadow:none;" onclick="verifyOpPassword()">تأكيد</button>
+            <button class="send-btn" style="background:rgba(0,0,0,0.6);color:#ffaa44;border:2px solid #ffaa44;box-shadow:none;" onclick="verifyOpPassword()">تأكيد</button>
             <div class="status" id="opPasswordStatus">أدخل الرمز السري</div>
         </div>
     </div>
 
     <!-- صفحة ربط العمليات -->
     <div class="page" id="page-operations">
-        <div class="header"><button class="back-btn" onclick="showPage('page-home')">✕</button><div style="font-size:20px;font-weight:900;color:#ff7300;">🔗 ربط العمليات</div></div>
+        <div class="header"><button class="back-btn" onclick="showPage('page-home')">✕</button><div style="font-size:20px;font-weight:900;color:#ffaa44;">🔗 ربط العمليات</div></div>
         
-        <div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:15px;margin-bottom:15px;">
-            <h3 style="color:#ff7300;margin-bottom:10px;">📍 المراكز المعتمدة</h3>
+        <div style="background:rgba(0,0,0,0.4);border-radius:12px;padding:15px;margin-bottom:15px;">
+            <h3 style="color:#ffaa44;margin-bottom:10px;">📍 المراكز المعتمدة</h3>
             <div class="center-selector" id="centersList">
                 <button class="center-btn" data-center="الشدادي">الشدادي</button>
                 <button class="center-btn" data-center="اليعربية">اليعربية</button>
@@ -476,22 +485,22 @@
             </div>
         </div>
 
-        <div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:15px;margin-bottom:15px;">
-            <h3 style="color:#ff7300;margin-bottom:10px;">🚗 تتبع السيارات</h3>
+        <div style="background:rgba(0,0,0,0.4);border-radius:12px;padding:15px;margin-bottom:15px;">
+            <h3 style="color:#ffaa44;margin-bottom:10px;">🚗 تتبع السيارات</h3>
             <div id="carTracking">
                 <p style="color:#aaa;font-size:14px;">اختر مركزاً لعرض موقع سيارته</p>
                 <div id="carLocation" style="margin-top:10px;"></div>
             </div>
         </div>
 
-        <div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:15px;margin-bottom:15px;">
-            <h3 style="color:#ff7300;margin-bottom:10px;">📊 تحليل البلاغات وتوجيهها</h3>
+        <div style="background:rgba(0,0,0,0.4);border-radius:12px;padding:15px;margin-bottom:15px;">
+            <h3 style="color:#ffaa44;margin-bottom:10px;">📊 تحليل البلاغات وتوجيهها</h3>
             <button class="send-btn" style="font-size:16px;padding:12px;margin-top:5px;" onclick="analyzeAndRouteReports()">🔄 تحليل وتوجيه البلاغات</button>
             <div id="routingResults" style="margin-top:10px;"></div>
         </div>
 
-        <div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:15px;">
-            <h3 style="color:#ff7300;margin-bottom:10px;">🗺️ خريطة المراكز</h3>
+        <div style="background:rgba(0,0,0,0.4);border-radius:12px;padding:15px;">
+            <h3 style="color:#ffaa44;margin-bottom:10px;">🗺️ خريطة المراكز</h3>
             <div class="mini-map">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m52!1m12!1m3!1d1069203.5686730667!2d40.32143828533398!3d36.1061597060074!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m37!1m0!2m1!1z2YXYs9is2Kcg2YLYtNin2YrYp9mG!3m2!1d36.195!2d40.68!4m5!1s0x1533e8f6c2a1a1a1%3A0x1a1a1a1a1a1a1a1a!2z2YXYs9is2Kcg2YLYtNin2YrYp9mG!3m2!1d36.195!2d40.68!4m5!1s0x1533e8f6c2a1a1a1%3A0x1a1a1a1a1a1a1a1a!2z2YXYs9is2Kcg2YLYtNin2YrYp9mG!3m2!1d36.195!2d40.68!4m5!1s0x1533e8f6c2a1a1a1%3A0x1a1a1a1a1a1a1a1a!2z2YXYs9is2Kcg2YLYtNin2YrYp9mG!3m2!1d36.195!2d40.68!4m5!1s0x1533e8f6c2a1a1a1%3A0x1a1a1a1a1a1a1a1a!2z2YXYs9is2Kcg2YLYtNin2YrYp9mG!3m2!1d36.195!2d40.68!5e0!3m2!1sar!2s!4v1234567890" allowfullscreen loading="lazy"></iframe>
             </div>
@@ -503,7 +512,7 @@
         <div class="header">
             <button class="back-btn" onclick="showPage('page-home')">✕</button>
             <div style="font-size:24px;font-weight:900;color:#fff;">🛡️ غرفة العمليات <span id="newReportsCount" class="notif-badge hidden">0</span></div>
-            <div style="font-size:13px;color:#ff7300;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:5px;flex-wrap:wrap;">
+            <div style="font-size:13px;color:#ffaa44;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:5px;flex-wrap:wrap;">
                 📡 متزامن مع SheetDB <span id="lastSyncTime">الآن</span>
                 <button class="refresh-btn" onclick="forceRefresh()">🔄 تحديث</button>
             </div>
@@ -520,25 +529,23 @@
         <div class="report-list" id="reportList"><div style="text-align:center;color:#555;padding:40px 0;font-size:18px;">⏳ جاري تحميل البلاغات...</div></div>
         <div id="reportDetail" class="hidden">
             <div class="detail-box" id="detailContent"></div>
-            <button class="send-btn" style="background:#2a2a2a;color:#888;border:1px solid #444;box-shadow:none;margin-top:5px;" onclick="closeDetail()">إغلاق التفاصيل</button>
+            <button class="send-btn" style="background:rgba(0,0,0,0.6);color:#888;border:1px solid #444;box-shadow:none;margin-top:5px;" onclick="closeDetail()">إغلاق التفاصيل</button>
         </div>
     </div>
 
     <!-- صفحة بلاغات المراكز -->
     <div class="page" id="page-center-reports">
-        <div class="header"><button class="back-btn" onclick="showPage('page-civil-dashboard')">✕</button><div style="font-size:20px;font-weight:900;color:#ff7300;" id="centerReportTitle">بلاغات المراكز</div></div>
+        <div class="header"><button class="back-btn" onclick="showPage('page-civil-dashboard')">✕</button><div style="font-size:20px;font-weight:900;color:#ffaa44;" id="centerReportTitle">بلاغات المراكز</div></div>
         <div class="report-list" id="centerReportList"><div style="text-align:center;color:#555;padding:40px 0;font-size:18px;">📭 لا توجد بلاغات للمراكز</div></div>
         <div id="centerReportDetail" class="hidden">
             <div class="detail-box" id="centerDetailContent"></div>
-            <button class="send-btn" style="background:#2a2a2a;color:#888;border:1px solid #444;box-shadow:none;margin-top:5px;" onclick="closeCenterDetail()">إغلاق</button>
+            <button class="send-btn" style="background:rgba(0,0,0,0.6);color:#888;border:1px solid #444;box-shadow:none;margin-top:5px;" onclick="closeCenterDetail()">إغلاق</button>
         </div>
     </div>
 
 </div>
 
-<!-- ============================================================ -->
-<!-- الجافا سكريبت -->
-<!-- ============================================================ -->
+<!-- ===== الجافا سكريبت ===== -->
 <script>
     // ================================================================
     //  الإعدادات الثابتة
@@ -565,18 +572,14 @@
     let refreshInterval = null;
     let timers = {};
 
-    // ================================================================
-    //  شاشة الترحيب
-    // ================================================================
+    // ===== شاشة الترحيب =====
     window.addEventListener('load', function() {
         setTimeout(function() {
             document.getElementById('splashScreen').classList.add('hidden');
         }, 2500);
     });
 
-    // ================================================================
-    //  شعار التطبيق (ضغط 5 مرات)
-    // ================================================================
+    // ===== شعار التطبيق =====
     let logoClickCount = 0;
     let logoClickTimer = null;
 
@@ -590,9 +593,7 @@
         }
     }
 
-    // ================================================================
-    //  التنقل بين الصفحات
-    // ================================================================
+    // ===== التنقل بين الصفحات =====
     function showPage(pageId) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         const target = document.getElementById(pageId);
@@ -608,9 +609,7 @@
         }
     }
 
-    // ================================================================
-    //  فتح النموذج
-    // ================================================================
+    // ===== فتح النموذج =====
     function openReportForm(type) {
         currentReportType = type;
         document.getElementById('form-title').textContent = `📋 بلاغ: ${type}`;
@@ -623,9 +622,7 @@
         showPage('page-form');
     }
 
-    // ================================================================
-    //  جلب الموقع
-    // ================================================================
+    // ===== جلب الموقع =====
     function getGPS() {
         return new Promise((resolve, reject) => {
             if (!navigator.geolocation) reject("المتصفح لا يدعم الموقع");
@@ -640,9 +637,7 @@
         });
     }
 
-    // ================================================================
-    //  حساب المسافة (Haversine)
-    // ================================================================
+    // ===== حساب المسافة =====
     function calculateDistance(lat1, lon1, lat2, lon2) {
         const R = 6371;
         const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -654,9 +649,7 @@
         return R * c;
     }
 
-    // ================================================================
-    //  إرسال البلاغ
-    // ================================================================
+    // ===== إرسال البلاغ =====
     document.getElementById('sendReportBtn').addEventListener('click', async function() {
         const fullName = document.getElementById('fullName').value.trim();
         const phone = document.getElementById('phoneNumber').value.trim();
@@ -741,9 +734,7 @@
         }
     });
 
-    // ================================================================
-    //  كلمات المرور
-    // ================================================================
+    // ===== كلمات المرور =====
     function verifyPassword() {
         const input = document.getElementById('passwordInput').value;
         const status = document.getElementById('passwordStatus');
@@ -773,9 +764,7 @@
     }
     document.getElementById('opPasswordInput').addEventListener('keyup', (e) => { if(e.key === 'Enter') verifyOpPassword(); });
 
-    // ================================================================
-    //  جلب البلاغات من SheetDB
-    // ================================================================
+    // ===== جلب البلاغات من SheetDB =====
     async function loadReportsFromSheet() {
         const list = document.getElementById('reportList');
         try {
@@ -794,17 +783,15 @@
         } catch (error) {
             console.warn('Sheet Fetch Error:', error);
             list.innerHTML = `
-                <div style="text-align:center;color:#ff7300;padding:40px 15px;font-size:16px;border:1px solid #2a2a2a;border-radius:16px;">
+                <div style="text-align:center;color:#ffaa44;padding:40px 15px;font-size:16px;border:1px solid rgba(255,170,68,0.2);border-radius:16px;background:rgba(0,0,0,0.4);">
                     ⚠️ فشل الاتصال<br>
-                    <button onclick="forceRefresh()" style="background:#ff7300;color:#000;border:none;padding:8px 25px;border-radius:30px;font-weight:900;font-family:'Cairo',sans-serif;cursor:pointer;margin-top:10px;">🔄 إعادة المحاولة</button>
+                    <button onclick="forceRefresh()" style="background:#ffaa44;color:#000;border:none;padding:8px 25px;border-radius:30px;font-weight:900;font-family:'Cairo',sans-serif;cursor:pointer;margin-top:10px;">🔄 إعادة المحاولة</button>
                 </div>
             `;
         }
     }
 
-    // ================================================================
-    //  عرض البلاغات
-    // ================================================================
+    // ===== عرض البلاغات =====
     function renderReports() {
         const list = document.getElementById('reportList');
         let filtered = currentFilter === 'all' ? allReports : allReports.filter(r => r.type === currentFilter);
@@ -840,9 +827,7 @@
         }).join('');
     }
 
-    // ================================================================
-    //  تفاصيل البلاغ
-    // ================================================================
+    // ===== تفاصيل البلاغ =====
     function showReportDetail(id) {
         const report = allReports.find(r => r.id === id);
         if (!report) return;
@@ -860,13 +845,13 @@
         ` : '';
 
         detailDiv.innerHTML = `
-            <p><strong style="color:#ff7300;">📋 النوع:</strong> ${report.type}</p>
-            <p><strong style="color:#ff7300;">👤 الاسم:</strong> ${report.fullName}</p>
-            <p><strong style="color:#ff7300;">📞 الهاتف:</strong> ${report.phone}</p>
-            <p><strong style="color:#ff7300;">📝 الوصف:</strong> ${report.description}</p>
-            <p><strong style="color:#ff7300;">📊 الخطر:</strong> ${report.risk}</p>
-            <p><strong style="color:#ff7300;">🏢 أقرب مركز:</strong> ${report.nearestCenter || 'غير محدد'} (${report.distance || '?'} كم)</p>
-            <p><strong style="color:#ff7300;">📌 الحالة:</strong> ${report.status}</p>
+            <p><strong style="color:#ffaa44;">📋 النوع:</strong> ${report.type}</p>
+            <p><strong style="color:#ffaa44;">👤 الاسم:</strong> ${report.fullName}</p>
+            <p><strong style="color:#ffaa44;">📞 الهاتف:</strong> ${report.phone}</p>
+            <p><strong style="color:#ffaa44;">📝 الوصف:</strong> ${report.description}</p>
+            <p><strong style="color:#ffaa44;">📊 الخطر:</strong> ${report.risk}</p>
+            <p><strong style="color:#ffaa44;">🏢 أقرب مركز:</strong> ${report.nearestCenter || 'غير محدد'} (${report.distance || '?'} كم)</p>
+            <p><strong style="color:#ffaa44;">📌 الحالة:</strong> ${report.status}</p>
             ${timerDisplay}
             <div class="mini-map">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d${Math.abs(report.lat - (report.centerLat || report.lat)) * 100000}!2d${report.lon}!3d${report.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!1m0!2m1!1z2KfZhNin2YbYqtiuINin2YTYs9in2YbbjCDYp9mE2YLYtdmKINin2YTYqti02KfbjA!3m2!1d${report.centerLat || report.lat}!2d${report.centerLon || report.lon}!4m5!1s0x0%3A0x0!2z2KfZhNin2YbYqtiuINin2YTYs9in2YbbjCDYp9mE2YLYtdmKINin2YTYqti02KfbjA!3m2!1d${report.lat}!2d${report.lon}!5e0!3m2!1sar!2s!4v1234567890" allowfullscreen loading="lazy"></iframe>
@@ -899,14 +884,12 @@
 
         const eventsDiv = document.getElementById(`events_${report.id}`);
         if (report.events && report.events.length > 0) {
-            eventsDiv.innerHTML = `<strong style="color:#ff7300;">📋 سجل الأحداث:</strong><br>` + 
+            eventsDiv.innerHTML = `<strong style="color:#ffaa44;">📋 سجل الأحداث:</strong><br>` + 
                 report.events.map(e => `• ${e}`).join('<br>');
         }
     }
 
-    // ================================================================
-    //  تنسيق الوقت
-    // ================================================================
+    // ===== تنسيق الوقت =====
     function formatTime(start, end) {
         if (!start) return 'لم يبدأ';
         const now = end || Date.now();
@@ -917,9 +900,7 @@
         return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
 
-    // ================================================================
-    //  تحديث الحالة
-    // ================================================================
+    // ===== تحديث الحالة =====
     function updateStatus(id, newStatus) {
         const report = allReports.find(r => r.id === id);
         if (report) {
@@ -939,9 +920,7 @@
         }
     }
 
-    // ================================================================
-    //  حذف البلاغ
-    // ================================================================
+    // ===== حذف البلاغ =====
     function deleteReport(id) {
         if (confirm('⚠️ هل أنت متأكد من حذف هذا البلاغ؟')) {
             allReports = allReports.filter(r => r.id !== id);
@@ -954,9 +933,7 @@
         }
     }
 
-    // ================================================================
-    //  إرسال البلاغ للمركز
-    // ================================================================
+    // ===== إرسال البلاغ للمركز =====
     function sendToCenter(id) {
         const report = allReports.find(r => r.id === id);
         if (!report) return;
@@ -978,9 +955,7 @@
         alert(`✅ تم إرسال البلاغ إلى مركز ${report.nearestCenter}`);
     }
 
-    // ================================================================
-    //  عرض بلاغات المراكز
-    // ================================================================
+    // ===== عرض بلاغات المراكز =====
     function renderCenterReports() {
         const list = document.getElementById('centerReportList') || document.getElementById('reportList');
         if (centerReports.length === 0) {
@@ -1000,9 +975,7 @@
         `).join('');
     }
 
-    // ================================================================
-    //  تفاصيل بلاغ المركز
-    // ================================================================
+    // ===== تفاصيل بلاغ المركز =====
     function showCenterDetail(id) {
         const report = centerReports.find(r => r.id === id);
         if (!report) return;
@@ -1015,12 +988,12 @@
         }
 
         detailDiv.innerHTML = `
-            <p><strong style="color:#ff7300;">🏢 المركز:</strong> ${report.centerName}</p>
-            <p><strong style="color:#ff7300;">📋 النوع:</strong> ${report.type}</p>
-            <p><strong style="color:#ff7300;">👤 المبلغ:</strong> ${report.fullName}</p>
-            <p><strong style="color:#ff7300;">📞 الهاتف:</strong> ${report.phone}</p>
-            <p><strong style="color:#ff7300;">📝 الوصف:</strong> ${report.description}</p>
-            <p><strong style="color:#ff7300;">📊 الخطر:</strong> ${report.risk}</p>
+            <p><strong style="color:#ffaa44;">🏢 المركز:</strong> ${report.centerName}</p>
+            <p><strong style="color:#ffaa44;">📋 النوع:</strong> ${report.type}</p>
+            <p><strong style="color:#ffaa44;">👤 المبلغ:</strong> ${report.fullName}</p>
+            <p><strong style="color:#ffaa44;">📞 الهاتف:</strong> ${report.phone}</p>
+            <p><strong style="color:#ffaa44;">📝 الوصف:</strong> ${report.description}</p>
+            <p><strong style="color:#ffaa44;">📊 الخطر:</strong> ${report.risk}</p>
             <div class="timer" id="centerTimer_${report.id}">⏱️ ${formatTime(report.timerStart, report.timerEnd)}</div>
             <div class="mini-map">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d${Math.abs(report.lat - (report.centerLat || report.lat)) * 100000}!2d${report.lon}!3d${report.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!1m0!2m1!1z2KfZhNin2YbYqtiuINin2YTYs9in2YbbjCDYp9mE2YLYtdmKINin2YTYqti02KfbjA!3m2!1d${report.centerLat || report.lat}!2d${report.centerLon || report.lon}!4m5!1s0x0%3A0x0!2z2KfZhNin2YbYqtiuINin2YTYs9in2YbbjCDYp9mE2YLYtdmKINin2YTYqti02KfbjA!3m2!1d${report.lat}!2d${report.lon}!5e0!3m2!1sar!2s!4v1234567890" allowfullscreen loading="lazy"></iframe>
@@ -1044,14 +1017,12 @@
 
         const eventsDiv = document.getElementById(`centerEvents_${report.id}`);
         if (report.events && report.events.length > 0) {
-            eventsDiv.innerHTML = `<strong style="color:#ff7300;">📋 سجل الأحداث:</strong><br>` + 
+            eventsDiv.innerHTML = `<strong style="color:#ffaa44;">📋 سجل الأحداث:</strong><br>` + 
                 report.events.map(e => `• ${e}`).join('<br>');
         }
     }
 
-    // ================================================================
-    //  إكمال بلاغ المركز
-    // ================================================================
+    // ===== إكمال بلاغ المركز =====
     function completeCenterReport(id) {
         const report = centerReports.find(r => r.id === id);
         if (report) {
@@ -1065,9 +1036,7 @@
         }
     }
 
-    // ================================================================
-    //  إغلاق التفاصيل
-    // ================================================================
+    // ===== إغلاق التفاصيل =====
     function closeDetail() {
         document.getElementById('reportDetail').classList.add('hidden');
     }
@@ -1075,9 +1044,7 @@
         document.getElementById('centerReportDetail').classList.add('hidden');
     }
 
-    // ================================================================
-    //  تحديث بلاغ في SheetDB
-    // ================================================================
+    // ===== تحديث بلاغ في SheetDB =====
     function updateReportInSheet(report) {
         fetch(`${SHEET_API_URL}/id/${report.id}`, {
             method: 'PATCH',
@@ -1086,9 +1053,7 @@
         }).catch(e => console.warn('Update error:', e));
     }
 
-    // ================================================================
-    //  فلترة البلاغات
-    // ================================================================
+    // ===== فلترة البلاغات =====
     function filterReports(type) {
         currentFilter = type;
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1101,27 +1066,25 @@
         document.getElementById('reportDetail').classList.add('hidden');
     }
 
-    // ================================================================
-    //  تحليل وتوجيه البلاغات
-    // ================================================================
+    // ===== تحليل وتوجيه البلاغات =====
     function analyzeAndRouteReports() {
         const results = document.getElementById('routingResults');
         if (allReports.length === 0) {
-            results.innerHTML = '<p style="color:#ff7300;">📭 لا توجد بلاغات للتحليل</p>';
+            results.innerHTML = '<p style="color:#ffaa44;">📭 لا توجد بلاغات للتحليل</p>';
             return;
         }
 
         let html = '<div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:10px;">';
-        html += '<h4 style="color:#ff7300;">📊 نتائج التحليل</h4>';
+        html += '<h4 style="color:#ffaa44;">📊 نتائج التحليل</h4>';
         
         allReports.forEach(r => {
             if (r.status !== 'تم الحل') {
                 const center = CENTERS.find(c => c.name === r.nearestCenter);
                 const dist = r.distance ? parseFloat(r.distance) : '?';
                 html += `
-                    <div style="border-bottom:1px solid #2a2a2a;padding:8px 0;">
+                    <div style="border-bottom:1px solid rgba(255,170,68,0.1);padding:8px 0;">
                         <div style="display:flex;justify-content:space-between;">
-                            <span>${r.fullName}</span>
+                            <span style="color:#fff;">${r.fullName}</span>
                             <span class="badge ${r.type === 'حريق'?'fire':r.type === 'حادث مروري'?'accident':r.type === 'حالة إسعافية'?'medical':'complaint'}">${r.type}</span>
                         </div>
                         <div style="font-size:13px;color:#aaa;">
@@ -1129,7 +1092,7 @@
                             ${center ? `📍 ${center.lat}, ${center.lon}` : ''}
                         </div>
                         <div style="font-size:12px;color:#666;margin-top:3px;">
-                            🗺️ <a href="${r.location}" target="_blank" style="color:#ff7300;">فتح الموقع</a>
+                            🗺️ <a href="${r.location}" target="_blank" style="color:#ffaa44;">فتح الموقع</a>
                         </div>
                     </div>
                 `;
@@ -1140,20 +1103,18 @@
         results.innerHTML = html;
     }
 
-    // ================================================================
-    //  تحميل بيانات المراكز
-    // ================================================================
+    // ===== تحميل بيانات المراكز =====
     function loadCentersData() {
         const container = document.getElementById('carLocation');
         container.innerHTML = CENTERS.map(c => `
-            <div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:10px;margin-bottom:8px;border-right:4px solid #ff7300;">
+            <div style="background:rgba(0,0,0,0.4);border-radius:12px;padding:10px;margin-bottom:8px;border-right:4px solid #ffaa44;">
                 <div style="display:flex;justify-content:space-between;">
                     <span style="color:#fff;font-weight:900;">🏢 ${c.name}</span>
-                    <span style="color:#ff7300;">📍 ${c.lat}, ${c.lon}</span>
+                    <span style="color:#ffaa44;">📍 ${c.lat}, ${c.lon}</span>
                 </div>
                 <div style="font-size:12px;color:#aaa;margin-top:3px;">
                     🚗 الحالة: <span style="color:#7fff7f;">جاهز</span>
-                    <button onclick="showCenterOnMap('${c.name}')" style="background:#2a2a2a;color:#ff7300;border:1px solid #ff7300;border-radius:20px;padding:2px 12px;font-family:'Cairo',sans-serif;font-weight:900;cursor:pointer;float:left;">🗺️ عرض</button>
+                    <button onclick="showCenterOnMap('${c.name}')" style="background:rgba(0,0,0,0.5);color:#ffaa44;border:1px solid #ffaa44;border-radius:20px;padding:2px 12px;font-family:'Cairo',sans-serif;font-weight:900;cursor:pointer;float:left;">🗺️ عرض</button>
                 </div>
             </div>
         `).join('');
@@ -1166,9 +1127,7 @@
         }
     }
 
-    // ================================================================
-    //  التحديث التلقائي
-    // ================================================================
+    // ===== التحديث التلقائي =====
     function startAutoRefresh() {
         if (refreshInterval) clearInterval(refreshInterval);
         refreshInterval = setInterval(() => {
@@ -1180,25 +1139,21 @@
     }
     function forceRefresh() {
         allReports = [];
-        document.getElementById('reportList').innerHTML = '<div style="text-align:center;color:#ff7300;padding:40px 0;font-size:18px;">🔄 جاري التحديث...</div>';
+        document.getElementById('reportList').innerHTML = '<div style="text-align:center;color:#ffaa44;padding:40px 0;font-size:18px;">🔄 جاري التحديث...</div>';
         loadReportsFromSheet();
     }
 
-    // ================================================================
-    //  إشعارات
-    // ================================================================
+    // ===== إشعارات =====
     function showNotification(title, body) {
         if ('Notification' in window && Notification.permission === 'granted') {
-            new Notification(title, { body, icon: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23ff7300%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22black%22 font-size=%2230%22 font-weight=%22900%22%3E🪖%3C/text%3E%3C/svg%3E' });
+            new Notification(title, { body, icon: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23ffaa44%22/%3E%3Ctext x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22black%22 font-size=%2230%22 font-weight=%22900%22%3E🪖%3C/text%3E%3C/svg%3E' });
         }
     }
     if ('Notification' in window && Notification.permission === 'default') {
         Notification.requestPermission();
     }
 
-    // ================================================================
-    //  التحميل الأولي
-    // ================================================================
+    // ===== التحميل الأولي =====
     document.addEventListener('DOMContentLoaded', () => {
         centerReports = JSON.parse(localStorage.getItem('centerReports')) || [];
         setTimeout(() => {

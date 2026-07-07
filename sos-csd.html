@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الدفاع المدني | بوابة البلاغات الفورية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #f5b41a;
+            --primary-hover: #d99e12;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --bg-dark: #0f111a;
+            --card-bg: #1a1d29;
+            --input-bg: #11131c;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 16px; overflow-x: hidden; }
+
+        #splashScreen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-dark); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+        }
+        .splash-logo { width: 120px; height: 120px; margin-bottom: 25px; animation: pulseLogo 1.5s infinite ease-in-out; }
+        .splash-title { font-size: 26px; font-weight: 900; color: var(--primary); text-shadow: 0 0 20px rgba(245, 180, 26, 0.25); margin-bottom: 8px; }
+        .splash-slogan { font-size: 16px; font-weight: 700; color: #ffffff; letter-spacing: 0.5px; }
+        @keyframes pulseLogo { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(245,180,26,0.2)); } 50% { transform: scale(1.06); filter: drop-shadow(0 0 25px rgba(245, 180, 26, 0.5)); } }
+
+        .container { 
+            background: var(--card-bg); border-radius: 28px; padding: 24px 20px; max-width: 460px; width: 100%; 
+            border: 1px solid rgba(245, 180, 26, 0.15); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            display: none; animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .header { text-align: center; margin-bottom: 22px; }
+        .header h1 { font-size: 22px; font-weight: 900; color: var(--primary); margin-bottom: 6px; }
+        .header p { color: var(--text-muted); font-size: 13px; line-height: 1.5; }
+
+        .status-panel { background: var(--input-bg); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 12px 14px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 12.5px; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--danger); }
+        .status-dot.active { background: var(--success); box-shadow: 0 0 12px var(--success); animation: pulseDot 1.5s infinite; }
+        @keyframes pulseDot { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; color: #e2e8f0; font-size: 13.5px; font-weight: 700; margin-bottom: 6px; }
+        .form-group input, .form-group select, .form-group textarea { 
+            width: 100%; padding: 12px 14px; border-radius: 14px; border: 1.5px solid rgba(255,255,255,0.08); 
+            background: var(--input-bg); color: #fff; font-size: 14.5px; outline: none; transition: all 0.2s ease;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(245, 180, 26, 0.1); }
+        .form-group textarea { height: 85px; resize: none; }
+        
+        .btn-submit { width: 100%; padding: 14px; background: var(--primary); color: #000; font-weight: 900; font-size: 15.5px; border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(245, 180, 26, 0.2); }
+        .btn-submit:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        .btn-submit:disabled { background: #2a2d3a; color: #575c70; cursor: not-allowed; box-shadow: none; transform: none; }
+    </style>
+</head>
+<body>
+
+    <div id="splashScreen">
+        <svg class="splash-logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L3 7V12C3 16.5222 6.8436 20.3541 12 22C17.1564 20.3541 21 16.5222 21 12V7L12 2Z" fill="#f5b41a"/>
+            <path d="M12 6V18M6 12H18" stroke="#0f111a" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div class="splash-title">الدفاع المدني</div>
+        <div class="splash-slogan">معك أينما تكون</div>
+    </div>
+
+    <div class="container" id="mainContainer">
+        <div class="header">
+            <h1>بوابة الاستجابة العاجلة</h1>
+            <p>بلاغك يصل فوراً وبشكل آمن للعمليات المركزية</p>
+        </div>
+
+        <div class="status-panel">
+            <div class="status-dot" id="gpsDot"></div>
+            <span id="gpsText" style="color: var(--danger);">بانتظار السماح بصلاحية الـ GPS...</span>
+        </div>
+
+        <form id="reportForm">
+            <div class="form-group">
+                <label>نوع الحالة الطارئة <span style="color:var(--danger)">*</span></label>
+                <select id="reportType" required>
+                    <option value="" disabled selected>اختر نوع الحادث</option>
+                    <option value="حريق">🚨 بلاغ حريق واشتعال</option>
+                    <option value="حادث سير">🚗 حادث سير واصطدام</option>
+                    <option value="طلب مساعدة">🤝 طلب مساعدة وإسعاف فردي</option>
+                    <option value="تقديم شكوى">📝 تقديم شكوى رسمية</option>
+                    <option value="شخص مطلوب">⚠️ إبلاغ عن شخص مطلوب وخطر</option>
+                    <option value="عناصر فلول">🔍 إبلاغ عن عنصر متخفي من الفلول</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>رقم الهاتف للتواصل <span style="color:var(--danger)">*</span></label>
+                <input type="tel" id="senderPhone" placeholder="09xxxxxxxx" required>
+            </div>
+
+            <div class="form-group">
+                <label>تفاصيل الموقع أو الحادث <span style="color:var(--danger)">*</span></label>
+                <textarea id="reportDetails" placeholder="اكتب معالم قريبة أو وصفاً مختصراً..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn" disabled>بانتظار تحديد موقعك الجغرافي...</button>
+        </form>
+    </div>
+
+<script>
+    // تم إدراج الرابط الخاص بك هنا
+    const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbx3Sa2RdpAiwXsYyTXsOCYnPlFzbu_bETxvXh1PAYO77p6IgXEISQaTjd8Jo7KVWCEN/exec";
+    
+    let locData = { lat: null, lng: null, accuracy: null };
+
+    window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            const splash = document.getElementById('splashScreen');
+            const container = document.getElementById('mainContainer');
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.style.visibility = 'hidden';
+                container.style.display = 'block';
+                initGpsTracking();
+            }, 400);
+        }, 2000);
+    });
+
+    function initGpsTracking() {
+        if (!navigator.geolocation) {
+            document.getElementById('gpsText').textContent = "⚠️ الـ GPS غير مدعوم على هذا الجهاز.";
+            return;
+        }
+        navigator.geolocation.watchPosition(
+            (pos) => {
+                locData.lat = pos.coords.latitude;
+                locData.lng = pos.coords.longitude;
+                locData.accuracy = Math.round(pos.coords.accuracy);
+                
+                document.getElementById('gpsDot').classList.add('active');
+                document.getElementById('gpsText').textContent = `تم قفل الإحداثيات بنجاح (دقة الإشارة ±${locData.accuracy} م)`;
+                document.getElementById('gpsText').style.color = "var(--success)";
+                
+                const btn = document.getElementById('submitBtn');
+                btn.disabled = false;
+                btn.textContent = "إرسال البلاغ فوراً إلى العمليات";
+            },
+            (err) => {
+                document.getElementById('gpsDot').classList.remove('active');
+                document.getElementById('gpsText').textContent = "❌ خطأ: يرجى تفعيل الـ GPS بالهاتف والموافقة على الصلاحية.";
+                document.getElementById('gpsText').style.color = "var(--danger)";
+                document.getElementById('submitBtn').disabled = true;
+            },
+            { enableHighAccuracy: true, maximumAge: 0 }
+        );
+    }
+
+    document.getElementById('reportForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.textContent = "جاري الإرسال عبر الخوادم الآمنة...";
+
+        const payload = {
+            type: document.getElementById('reportType').value,
+            phone: document.getElementById('senderPhone').value.trim(),
+            details: document.getElementById('reportDetails').value.trim(),
+            lat: locData.lat,
+            lng: locData.lng,
+            accuracy: locData.accuracy
+        };
+
+        try {
+            const response = await fetch(GOOGLE_API_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
+            const result = await response.json();
+
+            if (result.status === "success") {
+                alert("✅ تم إرسال البلاغ بنجاح! تم رصد موقعك تلقائياً في غرفة العمليات.");
+                this.reset();
+            } else {
+                alert("❌ حدث خطأ داخلي في الخادم، يرجى المحاولة لاحقاً.");
+            }
+        } catch (err) {
+            if(confirm("⚠️ فشل الاتصال بالإنترنت. هل تريد إرسال البلاغ كرسالة طوارئ SMS؟")) {
+                const smsBody = `طوارئ: ${payload.type} | هاتف: ${payload.phone} | إحداثيات: ${payload.lat},${payload.lng} | الوصف: ${payload.details}`;
+                window.location.href = `sms:113?body=${encodeURIComponent(smsBody)}`;
+            }
+        } finally {
+            btn.disabled = false;
+            btn.textContent = "إرسال البلاغ فوراً إلى العمليات";
+        }
+    });
+</script>
+</body>
+</html>

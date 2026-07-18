@@ -1,0 +1,399 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="theme-color" content="#0078D4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="كشك">
+    
+    <link rel="manifest" href='data:application/json,{"name":"كشك السجائر","short_name":"كشك","start_url":".","display":"standalone","background_color":"#f0f2f5","theme_color":"#0078D4","orientation":"portrait","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22%3E%3Crect width=%22512%22 height=%22512%22 fill=%22%230078D4%22/%3E%3Ctext x=%22256%22 y=%22340%22 text-anchor=%22middle%22 font-size=%22300%22 fill=%22white%22%3E%F0%9F%9A%AC%3C/text%3E%3C/svg%3E","sizes":"512x512","type":"image/svg+xml","purpose":"any maskable"},{"src":"data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 192 192%22%3E%3Crect width=%22192%22 height=%22192%22 fill=%22%230078D4%22/%3E%3Ctext x=%2296%22 y=%22130%22 text-anchor=%22middle%22 font-size=%22100%22 fill=%22white%22%3E%F0%9F%9A%AC%3C/text%3E%3C/svg%3E","sizes":"192x192","type":"image/svg+xml","purpose":"any maskable"}]}'>
+    
+    <title>🚭 كشك السجائر</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,system-ui,sans-serif}body{background:#f0f2f5;color:#1a1a1a;padding:16px;max-width:800px;margin:0 auto;padding-bottom:100px;min-height:100vh}.app-header{background:linear-gradient(135deg,#0078D4,#106EBE);color:#fff;padding:20px 24px;border-radius:12px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,120,212,0.3);position:sticky;top:0;z-index:100}.header-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}.app-title{font-size:22px;font-weight:600;display:flex;align-items:center;gap:8px}.app-title span{font-weight:300;opacity:.8}.clock-area{text-align:left;background:rgba(255,255,255,0.15);padding:8px 16px;border-radius:8px;backdrop-filter:blur(4px)}.clock-area .time{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}.clock-area .date{font-size:14px;opacity:.85;font-weight:300}
+        .install-btn{background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.3);padding:8px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;backdrop-filter:blur(4px);transition:all .3s;display:none;align-items:center;gap:6px}.install-btn.show{display:inline-flex!important}.install-btn:hover{background:rgba(255,255,255,0.3);transform:scale(1.05)}
+        .stats-card{background:#fff;border-radius:12px;padding:16px 20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;justify-content:space-around;flex-wrap:wrap;gap:12px;border:1px solid rgba(0,0,0,0.04)}.stat-item{text-align:center}.stat-item .number{font-size:26px;font-weight:700;color:#0078D4}.stat-item .label{font-size:13px;color:#6c6c6c;font-weight:500}
+        .form-card{background:#fff;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.04)}.form-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}.form-row input{flex:1;min-width:120px;padding:12px 16px;border:2px solid #e1e5eb;border-radius:8px;font-size:16px;background:#fafbfc;transition:border-color .2s,box-shadow .2s;outline:none}.form-row input:focus{border-color:#0078D4;box-shadow:0 0 0 3px rgba(0,120,212,0.15);background:#fff}.form-row input::placeholder{color:#a0a0a0;font-weight:300}
+        .btn{padding:12px 28px;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;touch-action:manipulation;user-select:none}.btn-primary{background:#0078D4;color:#fff;box-shadow:0 2px 8px rgba(0,120,212,0.3)}.btn-primary:hover{background:#106EBE;transform:scale(1.02)}.btn-primary:active{transform:scale(.96)}.btn-success{background:#0F7B3E;color:#fff;box-shadow:0 2px 8px rgba(15,123,62,0.25)}.btn-success:hover{background:#0D6A34}.btn-danger{background:#D13438;color:#fff}.btn-danger:hover{background:#BA2B2F}.btn-outline{background:transparent;color:#0078D4;border:2px solid #0078D4}.btn-outline:hover{background:#e6f2fb}.btn-sm{padding:8px 16px;font-size:14px;min-height:36px}.btn-xs{padding:4px 12px;font-size:12px;min-height:28px;border-radius:6px}
+        .client-list{display:flex;flex-direction:column;gap:12px}.client-card{background:#fff;border-radius:12px;padding:16px 18px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.04);animation:slideIn .3s ease}@keyframes slideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}.client-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px}.client-name{font-size:18px;font-weight:600;color:#1a1a1a}.client-amount{font-size:20px;font-weight:700;color:#D13438}.client-amount.paid{color:#0F7B3E;text-decoration:line-through;opacity:.6}.client-meta{font-size:13px;color:#6c6c6c;display:flex;gap:16px;flex-wrap:wrap;align-items:center}.client-meta .badge{background:#f0f0f0;padding:2px 12px;border-radius:20px;font-size:12px;font-weight:500}.client-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;border-top:1px solid #f0f0f0;padding-top:10px}.client-details{background:#f8f9fb;border-radius:8px;padding:12px 16px;margin-top:10px;font-size:14px;color:#3a3a3a;display:none;border-right:3px solid #0078D4}.client-details.open{display:block;animation:slideIn .25s ease}.client-details .detail-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed #e1e5eb}.client-details .detail-row:last-child{border-bottom:none}
+        .toast-container{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;align-items:center;gap:10px;width:90%;max-width:400px;pointer-events:none}.toast{background:#1a1a1a;color:#fff;padding:14px 24px;border-radius:12px;font-size:16px;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,0.3);animation:toastIn .4s ease,toastOut .4s ease 2.6s forwards;width:100%;text-align:center;pointer-events:auto;backdrop-filter:blur(10px);background:rgba(30,30,30,0.92);border:1px solid rgba(255,255,255,0.08)}.toast.success{border-right:4px solid #0F7B3E}.toast.warning{border-right:4px solid #FFB900}@keyframes toastIn{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes toastOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(-20px) scale(.95)}}
+        .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:200;justify-content:center;align-items:center;padding:20px}.modal-overlay.active{display:flex;animation:fadeIn .25s ease}@keyframes fadeIn{from{opacity:0}to{opacity:1}}.modal-box{background:#fff;border-radius:16px;padding:28px;max-width:480px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,0.3);animation:slideUp .3s ease}@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}.modal-box h3{font-size:22px;margin-bottom:16px;color:#1a1a1a}.modal-box input{width:100%;padding:12px 16px;border:2px solid #e1e5eb;border-radius:8px;font-size:16px;margin-bottom:12px;outline:none}.modal-box input:focus{border-color:#0078D4;box-shadow:0 0 0 3px rgba(0,120,212,0.15)}.modal-actions{display:flex;gap:12px;margin-top:8px}.modal-actions .btn{flex:1}
+        .empty-state{text-align:center;padding:48px 20px;color:#8c8c8c}.empty-state .icon{font-size:56px;margin-bottom:12px;opacity:.5}.empty-state p{font-size:16px;font-weight:400}
+        @media(max-width:480px){.header-row{flex-direction:column;align-items:stretch;text-align:center}.clock-area{text-align:center}.form-row input{min-width:100%}.btn{padding:12px 18px;font-size:15px}.client-header{flex-direction:column;align-items:stretch}.stats-card{gap:8px}.stat-item .number{font-size:22px}}
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#f0f2f5}::-webkit-scrollbar-thumb{background:#c0c8d4;border-radius:10px}::-webkit-scrollbar-thumb:hover{background:#a0aab8}
+        @media print{.btn,.client-actions,.install-btn{display:none!important}body{padding:10px;background:#fff}.app-header{background:#0078D4!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.client-card{break-inside:avoid;border:1px solid #ddd}}
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="header-row">
+            <div class="app-title">🚭 كشك <span>السجائر</span></div>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                <button class="install-btn show" id="installBtn" style="display:inline-flex!important;">📲 تثبيت</button>
+                <div class="clock-area" id="clockDisplay">
+                    <div class="time" id="timeDisplay">00:00:00</div>
+                    <div class="date" id="dateDisplay">--/--/----</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="stats-card" id="statsCard">
+        <div class="stat-item"><div class="number" id="totalDebts">0</div><div class="label">إجمالي الديون</div></div>
+        <div class="stat-item"><div class="number" id="totalClients">0</div><div class="label">عدد العملاء</div></div>
+        <div class="stat-item"><div class="number" id="totalPaid">0</div><div class="label">تم سداده</div></div>
+    </div>
+
+    <div class="form-card">
+        <div class="form-row">
+            <input type="text" id="clientName" placeholder="👤 اسم العميل" autocomplete="off">
+            <input type="number" id="clientAmount" placeholder="💰 المبلغ (ل.س)" step="0.01" min="0">
+        </div>
+        <button class="btn btn-primary" id="addBtn" style="width:100%;">➕ إضافة عميل جديد</button>
+    </div>
+
+    <div id="clientListContainer"></div>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-box">
+            <h3>✏️ تعديل العميل</h3>
+            <input type="text" id="editName" placeholder="اسم العميل">
+            <input type="number" id="editAmount" placeholder="المبلغ" step="0.01" min="0">
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="editCancelBtn">إلغاء</button>
+                <button class="btn btn-primary" id="editSaveBtn">💾 حفظ</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ---------- البيانات ----------
+        let clients = [];
+        let editingIndex = -1;
+        let deferredPrompt = null;
+
+        // ---------- PWA: زر التثبيت ----------
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const btn = document.getElementById('installBtn');
+            btn.classList.add('show');
+            btn.style.display = 'inline-flex !important';
+            console.log('✅ زر التثبيت جاهز');
+        });
+
+        document.getElementById('installBtn').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const result = await deferredPrompt.userChoice;
+                if (result.outcome === 'accepted') {
+                    showToast('✅ تم تثبيت التطبيق بنجاح!', 'success');
+                } else {
+                    showToast('❌ تم إلغاء التثبيت', 'warning');
+                }
+                deferredPrompt = null;
+                document.getElementById('installBtn').classList.remove('show');
+            } else {
+                // إذا لم يعمل الزر، نوجه المستخدم للطريقة اليدوية
+                showToast('📲 استخدم "إضافة إلى الشاشة الرئيسية" من المتصفح', 'warning');
+            }
+        });
+
+        // ---------- تحميل وحفظ ----------
+        function loadData() {
+            try {
+                const saved = localStorage.getItem('cigarette_kiosk_data');
+                if (saved) {
+                    clients = JSON.parse(saved);
+                } else {
+                    clients = [
+                        { id: Date.now() + 1, name: 'أحمد', amount: 150000, paid: 0, history: [] },
+                        { id: Date.now() + 2, name: 'محمد', amount: 75000, paid: 25000, history: [{ date: '2026-07-15',
+                                amount: 25000 }] }
+                    ];
+                }
+            } catch (e) { clients = []; }
+        }
+
+        function saveData() {
+            localStorage.setItem('cigarette_kiosk_data', JSON.stringify(clients));
+        }
+
+        // ---------- الساعة ----------
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('timeDisplay').textContent = now.toLocaleTimeString('ar-SY', { hour: '2-digit',
+                minute: '2-digit', second: '2-digit' });
+            document.getElementById('dateDisplay').textContent = now.toLocaleDateString('ar-SY', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'long'
+            });
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // ---------- الإحصائيات ----------
+        function updateStats() {
+            const totalDebt = clients.reduce((sum, c) => sum + (c.amount - (c.paid || 0)), 0);
+            const totalPaid = clients.reduce((sum, c) => sum + (c.paid || 0), 0);
+            document.getElementById('totalDebts').textContent = totalDebt.toLocaleString();
+            document.getElementById('totalClients').textContent = clients.length;
+            document.getElementById('totalPaid').textContent = totalPaid.toLocaleString();
+        }
+
+        // ---------- عرض العملاء ----------
+        function renderClients() {
+            const container = document.getElementById('clientListContainer');
+            if (clients.length === 0) {
+                container.innerHTML =
+                    `<div class="empty-state"><div class="icon">📭</div><p>لا يوجد عملاء بعد<br>أضف عميلاً جديداً من الأعلى</p></div>`;
+                updateStats();
+                return;
+            }
+
+            let html = '<div class="client-list">';
+            clients.forEach((client, index) => {
+                const remaining = client.amount - (client.paid || 0);
+                const isPaid = remaining <= 0;
+                const historyHtml = client.history && client.history.length > 0 ?
+                    client.history.map(h =>
+                        `<div class="detail-row"><span>📅 ${h.date}</span><span>${h.amount.toLocaleString()} ل.س</span></div>`
+                    ).join('') :
+                    '<div class="detail-row"><span style="color:#888;">لا يوجد سجلات</span></div>';
+
+                html += `
+                    <div class="client-card" data-index="${index}">
+                        <div class="client-header">
+                            <span class="client-name">${client.name}</span>
+                            <span class="client-amount ${isPaid ? 'paid' : ''}">
+                                ${isPaid ? '✅ مدفوع' : remaining.toLocaleString() + ' ل.س'}
+                            </span>
+                        </div>
+                        <div class="client-meta">
+                            <span>💰 المبلغ: ${client.amount.toLocaleString()} ل.س</span>
+                            <span>📌 مدفوع: ${(client.paid || 0).toLocaleString()} ل.س</span>
+                            <span class="badge">${isPaid ? '✅ مكتمل' : '⏳ متبقي'}</span>
+                            <button class="btn btn-xs btn-outline" onclick="toggleDetails(${index})">📋 التفاصيل</button>
+                        </div>
+                        <div class="client-details" id="details-${index}">
+                            <div style="font-weight:600;margin-bottom:6px;">📜 سجل المدفوعات:</div>
+                            ${historyHtml}
+                            <div class="detail-row" style="font-weight:600;border-top:2px solid #ddd;margin-top:6px;padding-top:6px;">
+                                <span>المتبقي</span>
+                                <span>${remaining > 0 ? remaining.toLocaleString() + ' ل.س' : '✅ صفر'}</span>
+                            </div>
+                        </div>
+                        <div class="client-actions">
+                            <button class="btn btn-sm btn-success" onclick="payDebt(${index})">💰 سداد</button>
+                            <button class="btn btn-sm btn-outline" onclick="openEditModal(${index})">✏️ تعديل</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteClient(${index})">🗑️ حذف</button>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+            updateStats();
+        }
+
+        // ---------- التفاصيل ----------
+        function toggleDetails(index) {
+            const el = document.getElementById(`details-${index}`);
+            if (el) el.classList.toggle('open');
+        }
+
+        // ---------- إضافة عميل ----------
+        function addClient() {
+            const nameInput = document.getElementById('clientName');
+            const amountInput = document.getElementById('clientAmount');
+            const name = nameInput.value.trim();
+            const amount = parseFloat(amountInput.value);
+
+            if (!name) { showToast('⚠️ الرجاء إدخال اسم العميل', 'warning'); return; }
+            if (!amount || amount <= 0) { showToast('⚠️ الرجاء إدخال مبلغ صحيح', 'warning'); return; }
+
+            clients.push({
+                id: Date.now(),
+                name: name,
+                amount: amount,
+                paid: 0,
+                history: []
+            });
+
+            saveData();
+            renderClients();
+            nameInput.value = '';
+            amountInput.value = '';
+            showToast(`✅ تم إضافة ${name} بمبلغ ${amount.toLocaleString()} ل.س`, 'success');
+            nameInput.focus();
+        }
+
+        // ---------- سداد دين ----------
+        function payDebt(index) {
+            const client = clients[index];
+            const remaining = client.amount - (client.paid || 0);
+
+            if (remaining <= 0) {
+                showToast(`✅ ${client.name} مدفوع بالكامل بالفعل`, 'success');
+                return;
+            }
+
+            const choice = confirm(
+                `🔔 ${client.name}\nالمتبقي: ${remaining.toLocaleString()} ل.س\n\nاضغط "موافق" لتسديد كامل المبلغ\nاضغط "إلغاء" لإدخال مبلغ جزئي`
+                );
+
+            if (choice) {
+                const paidAmount = remaining;
+                client.paid = (client.paid || 0) + paidAmount;
+                client.history.push({
+                    date: new Date().toLocaleDateString('ar-SY'),
+                    amount: paidAmount
+                });
+                saveData();
+                renderClients();
+                showToast(`✅ تم سداد كامل مبلغ ${client.name} (${paidAmount.toLocaleString()} ل.س)`, 'success');
+            } else {
+                const partial = prompt(
+                    `💰 أدخل المبلغ الذي تريد سداده من ${client.name}:\n(المتبقي: ${remaining.toLocaleString()} ل.س)`
+                    );
+                if (partial !== null) {
+                    const val = parseFloat(partial);
+                    if (!val || val <= 0) {
+                        showToast('⚠️ المبلغ غير صحيح', 'warning');
+                        return;
+                    }
+                    if (val > remaining) {
+                        showToast(`⚠️ المبلغ أكبر من المتبقي (${remaining.toLocaleString()})`, 'warning');
+                        return;
+                    }
+                    client.paid = (client.paid || 0) + val;
+                    client.history.push({
+                        date: new Date().toLocaleDateString('ar-SY'),
+                        amount: val
+                    });
+                    saveData();
+                    renderClients();
+                    const newRemaining = client.amount - client.paid;
+                    if (newRemaining <= 0) {
+                        showToast(`✅ ${client.name} مكتمل السداد!`, 'success');
+                    } else {
+                        showToast(`✅ تم سداد ${val.toLocaleString()} ل.س، المتبقي ${newRemaining.toLocaleString()}`,
+                        'success');
+                    }
+                }
+            }
+        }
+
+        // ---------- حذف عميل ----------
+        function deleteClient(index) {
+            const name = clients[index].name;
+            if (confirm(`🗑️ هل أنت متأكد من حذف "${name}"؟`)) {
+                clients.splice(index, 1);
+                saveData();
+                renderClients();
+                showToast(`🗑️ تم حذف ${name}`, 'warning');
+            }
+        }
+
+        // ---------- تعديل ----------
+        function openEditModal(index) {
+            editingIndex = index;
+            const client = clients[index];
+            document.getElementById('editName').value = client.name;
+            document.getElementById('editAmount').value = client.amount;
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('active');
+            editingIndex = -1;
+        }
+
+        function saveEdit() {
+            if (editingIndex === -1) return;
+            const name = document.getElementById('editName').value.trim();
+            const amount = parseFloat(document.getElementById('editAmount').value);
+            if (!name) { showToast('⚠️ الاسم مطلوب', 'warning'); return; }
+            if (!amount || amount <= 0) { showToast('⚠️ مبلغ صحيح مطلوب', 'warning'); return; }
+
+            const client = clients[editingIndex];
+            client.name = name;
+            client.amount = amount;
+            if (client.paid > amount) client.paid = amount;
+
+            saveData();
+            renderClients();
+            closeEditModal();
+            showToast(`✅ تم تعديل ${name}`, 'success');
+        }
+
+        // ---------- Toast ----------
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                if (toast.parentNode) toast.remove();
+            }, 3000);
+        }
+
+        // ---------- أحداث ----------
+        document.getElementById('addBtn').addEventListener('click', addClient);
+        document.getElementById('clientName').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') document.getElementById('clientAmount').focus();
+        });
+        document.getElementById('clientAmount').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') addClient();
+        });
+        document.getElementById('editCancelBtn').addEventListener('click', closeEditModal);
+        document.getElementById('editSaveBtn').addEventListener('click', saveEdit);
+        document.getElementById('editModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeEditModal();
+        });
+
+        // منع الإغلاق عند الرجوع
+        window.addEventListener('load', () => {
+            window.history.pushState(null, null, window.location.href);
+            window.addEventListener('popstate', () => {
+                window.history.pushState(null, null, window.location.href);
+            });
+        });
+
+        // حفظ تلقائي
+        window.addEventListener('beforeunload', saveData);
+        setInterval(saveData, 5000);
+
+        // ---------- تشغيل ----------
+        loadData();
+        renderClients();
+
+        // ---------- ظهور زر التثبيت تلقائياً ----------
+        setTimeout(() => {
+            const btn = document.getElementById('installBtn');
+            if (btn) {
+                btn.style.display = 'inline-flex !important';
+                btn.classList.add('show');
+                console.log('✅ زر التثبيت ظهر تلقائياً');
+            }
+        }, 500);
+
+        // ---------- مراقبة التثبيت ----------
+        window.addEventListener('appinstalled', () => {
+            showToast('✅ تم تثبيت التطبيق بنجاح!', 'success');
+            document.getElementById('installBtn').classList.remove('show');
+        });
+
+        console.log('🚭 كشك السجائر - جاهز!');
+        console.log('🚀 PWA جاهز للتثبيت - اضغط على زر "تثبيت"');
+    </script>
+</body>
+</html>

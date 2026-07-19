@@ -3,32 +3,675 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <meta name="theme-color" content="#0078D4">
+    <meta name="theme-color" content="#6C63FF">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="كشك">
     <link rel="manifest" href="/manifest.json">
     <title>🚭 كشك السجائر</title>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,system-ui,sans-serif}body{background:#f0f2f5;color:#1a1a1a;padding:16px;max-width:800px;margin:0 auto;padding-bottom:100px;min-height:100vh}.app-header{background:linear-gradient(135deg,#0078D4,#106EBE);color:#fff;padding:20px 24px;border-radius:12px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,120,212,0.3);position:sticky;top:0;z-index:100}.header-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}.app-title{font-size:22px;font-weight:600;display:flex;align-items:center;gap:8px}.app-title span{font-weight:300;opacity:.8}.clock-area{text-align:left;background:rgba(255,255,255,0.15);padding:8px 16px;border-radius:8px;backdrop-filter:blur(4px)}.clock-area .time{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}.clock-area .date{font-size:14px;opacity:.85;font-weight:300}
-        .install-btn{background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.3);padding:8px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;backdrop-filter:blur(4px);transition:all .3s;display:none;align-items:center;gap:6px}.install-btn.show{display:inline-flex!important}.install-btn:hover{background:rgba(255,255,255,0.3);transform:scale(1.05)}
-        .stats-card{background:#fff;border-radius:12px;padding:16px 20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;justify-content:space-around;flex-wrap:wrap;gap:12px;border:1px solid rgba(0,0,0,0.04)}.stat-item{text-align:center}.stat-item .number{font-size:26px;font-weight:700;color:#0078D4}.stat-item .label{font-size:13px;color:#6c6c6c;font-weight:500}
-        .form-card{background:#fff;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.04)}.form-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}.form-row input{flex:1;min-width:120px;padding:12px 16px;border:2px solid #e1e5eb;border-radius:8px;font-size:16px;background:#fafbfc;transition:border-color .2s,box-shadow .2s;outline:none}.form-row input:focus{border-color:#0078D4;box-shadow:0 0 0 3px rgba(0,120,212,0.15);background:#fff}.form-row input::placeholder{color:#a0a0a0;font-weight:300}
-        .btn{padding:12px 28px;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;touch-action:manipulation;user-select:none}.btn-primary{background:#0078D4;color:#fff;box-shadow:0 2px 8px rgba(0,120,212,0.3)}.btn-primary:hover{background:#106EBE;transform:scale(1.02)}.btn-primary:active{transform:scale(.96)}.btn-success{background:#0F7B3E;color:#fff;box-shadow:0 2px 8px rgba(15,123,62,0.25)}.btn-success:hover{background:#0D6A34}.btn-danger{background:#D13438;color:#fff}.btn-danger:hover{background:#BA2B2F}.btn-outline{background:transparent;color:#0078D4;border:2px solid #0078D4}.btn-outline:hover{background:#e6f2fb}.btn-sm{padding:8px 16px;font-size:14px;min-height:36px}.btn-xs{padding:4px 12px;font-size:12px;min-height:28px;border-radius:6px}
-        .client-list{display:flex;flex-direction:column;gap:12px}.client-card{background:#fff;border-radius:12px;padding:16px 18px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.04);animation:slideIn .3s ease}@keyframes slideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}.client-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px}.client-name{font-size:18px;font-weight:600;color:#1a1a1a}.client-amount{font-size:20px;font-weight:700;color:#D13438}.client-amount.paid{color:#0F7B3E;text-decoration:line-through;opacity:.6}.client-meta{font-size:13px;color:#6c6c6c;display:flex;gap:16px;flex-wrap:wrap;align-items:center}.client-meta .badge{background:#f0f0f0;padding:2px 12px;border-radius:20px;font-size:12px;font-weight:500}.client-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;border-top:1px solid #f0f0f0;padding-top:10px}.client-details{background:#f8f9fb;border-radius:8px;padding:12px 16px;margin-top:10px;font-size:14px;color:#3a3a3a;display:none;border-right:3px solid #0078D4}.client-details.open{display:block;animation:slideIn .25s ease}.client-details .detail-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed #e1e5eb}.client-details .detail-row:last-child{border-bottom:none}
-        .toast-container{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;align-items:center;gap:10px;width:90%;max-width:400px;pointer-events:none}.toast{background:#1a1a1a;color:#fff;padding:14px 24px;border-radius:12px;font-size:16px;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,0.3);animation:toastIn .4s ease,toastOut .4s ease 2.6s forwards;width:100%;text-align:center;pointer-events:auto;backdrop-filter:blur(10px);background:rgba(30,30,30,0.92);border:1px solid rgba(255,255,255,0.08)}.toast.success{border-right:4px solid #0F7B3E}.toast.warning{border-right:4px solid #FFB900}@keyframes toastIn{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes toastOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(-20px) scale(.95)}}
-        .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:200;justify-content:center;align-items:center;padding:20px}.modal-overlay.active{display:flex;animation:fadeIn .25s ease}@keyframes fadeIn{from{opacity:0}to{opacity:1}}.modal-box{background:#fff;border-radius:16px;padding:28px;max-width:480px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,0.3);animation:slideUp .3s ease}@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}.modal-box h3{font-size:22px;margin-bottom:16px;color:#1a1a1a}.modal-box input{width:100%;padding:12px 16px;border:2px solid #e1e5eb;border-radius:8px;font-size:16px;margin-bottom:12px;outline:none}.modal-box input:focus{border-color:#0078D4;box-shadow:0 0 0 3px rgba(0,120,212,0.15)}.modal-actions{display:flex;gap:12px;margin-top:8px}.modal-actions .btn{flex:1}
-        .empty-state{text-align:center;padding:48px 20px;color:#8c8c8c}.empty-state .icon{font-size:56px;margin-bottom:12px;opacity:.5}.empty-state p{font-size:16px;font-weight:400}
-        @media(max-width:480px){.header-row{flex-direction:column;align-items:stretch;text-align:center}.clock-area{text-align:center}.form-row input{min-width:100%}.btn{padding:12px 18px;font-size:15px}.client-header{flex-direction:column;align-items:stretch}.stats-card{gap:8px}.stat-item .number{font-size:22px}}
-        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#f0f2f5}::-webkit-scrollbar-thumb{background:#c0c8d4;border-radius:10px}::-webkit-scrollbar-thumb:hover{background:#a0aab8}
-        @media print{.btn,.client-actions,.install-btn{display:none!important}body{padding:10px;background:#fff}.app-header{background:#0078D4!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.client-card{break-inside:avoid;border:1px solid #ddd}}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Tahoma', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f6f8fc 0%, #e9edf4 100%);
+            color: #1a1a2e;
+            padding: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 100px;
+            min-height: 100vh;
+        }
+
+        /* رأس التطبيق - تصميم عصري */
+        .app-header {
+            background: linear-gradient(135deg, #6C63FF, #5A52D5);
+            color: #fff;
+            padding: 22px 24px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(108, 99, 255, 0.35);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .app-title {
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .app-title span {
+            font-weight: 300;
+            opacity: 0.85;
+        }
+
+        .app-title .icon-bg {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-size: 20px;
+        }
+
+        .clock-area {
+            text-align: left;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 8px 18px;
+            border-radius: 14px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .clock-area .time {
+            font-size: 26px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            line-height: 1.2;
+            letter-spacing: 1px;
+        }
+
+        .clock-area .date {
+            font-size: 13px;
+            opacity: 0.85;
+            font-weight: 300;
+        }
+
+        /* زر التثبيت */
+        .install-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 8px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .install-btn.show {
+            display: inline-flex !important;
+        }
+
+        .install-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+        }
+
+        /* بطاقات الإحصائيات - تصميم زجاجي */
+        .stats-card {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 16px 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(108, 99, 255, 0.12);
+        }
+
+        .stat-item .number {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6C63FF, #3F3D9E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-item .label {
+            font-size: 13px;
+            color: #5a5a7a;
+            font-weight: 500;
+            margin-top: 4px;
+            display: block;
+        }
+
+        /* نموذج الإضافة */
+        .form-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .form-row input {
+            flex: 1;
+            min-width: 120px;
+            padding: 14px 18px;
+            border: 2px solid rgba(108, 99, 255, 0.15);
+            border-radius: 14px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+            outline: none;
+            color: #1a1a2e;
+        }
+
+        .form-row input:focus {
+            border-color: #6C63FF;
+            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
+            background: #fff;
+        }
+
+        .form-row input::placeholder {
+            color: #9a9ab0;
+            font-weight: 400;
+        }
+
+        /* أزرار - تصميم عصري */
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 50px;
+            touch-action: manipulation;
+            user-select: none;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6C63FF, #5A52D5);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(108, 99, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(108, 99, 255, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #00C9A7, #00B894);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(0, 201, 167, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(0, 201, 167, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #FF6B6B, #E74C6F);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #6C63FF;
+            border: 2px solid #6C63FF;
+        }
+
+        .btn-outline:hover {
+            background: rgba(108, 99, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+            min-height: 38px;
+            border-radius: 10px;
+        }
+
+        .btn-xs {
+            padding: 4px 12px;
+            font-size: 11px;
+            min-height: 28px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        /* قائمة العملاء */
+        .client-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .client-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 18px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .client-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(108, 99, 255, 0.08);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px) scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .client-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .client-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .client-name .avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #6C63FF, #3F3D9E);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .client-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: #FF6B6B;
+            padding: 4px 14px;
+            background: rgba(255, 107, 107, 0.08);
+            border-radius: 12px;
+        }
+
+        .client-amount.paid {
+            color: #00C9A7;
+            background: rgba(0, 201, 167, 0.1);
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .client-meta {
+            font-size: 13px;
+            color: #6a6a8a;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .client-meta .badge {
+            background: rgba(108, 99, 255, 0.08);
+            padding: 2px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6C63FF;
+        }
+
+        .client-meta .badge.paid-badge {
+            background: rgba(0, 201, 167, 0.1);
+            color: #00B894;
+        }
+
+        .client-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .client-details {
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-top: 12px;
+            font-size: 14px;
+            color: #3a3a5a;
+            display: none;
+            border-right: 3px solid #6C63FF;
+        }
+
+        .client-details.open {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .client-details .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.04);
+        }
+
+        .client-details .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        /* Toast - رسائل منبثقة */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 90%;
+            max-width: 400px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: rgba(26, 26, 46, 0.92);
+            backdrop-filter: blur(16px);
+            color: #fff;
+            padding: 16px 28px;
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 500;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.25);
+            animation: toastIn 0.5s cubic-bezier(0.4, 0, 0.2, 1), toastOut 0.5s ease 2.8s forwards;
+            width: 100%;
+            text-align: center;
+            pointer-events: auto;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .toast.success {
+            border-right: 4px solid #00C9A7;
+        }
+
+        .toast.warning {
+            border-right: 4px solid #FFB900;
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.92);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes toastOut {
+            from {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.92);
+            }
+        }
+
+        /* Modal - نافذة التعديل */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-box {
+            background: #fff;
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px) scale(0.96);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-box h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a1a2e;
+        }
+
+        .modal-box input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid rgba(108, 99, 255, 0.15);
+            border-radius: 14px;
+            font-size: 16px;
+            margin-bottom: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .modal-box input:focus {
+            border-color: #6C63FF;
+            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.08);
+            background: #fff;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+        }
+
+        /* حالة فارغة */
+        .empty-state {
+            text-align: center;
+            padding: 56px 20px;
+            color: #8a8aaa;
+        }
+
+        .empty-state .icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.6;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        /* استجابة */
+        @media (max-width: 480px) {
+            .header-row {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .clock-area {
+                text-align: center;
+            }
+            .form-row input {
+                min-width: 100%;
+            }
+            .btn {
+                padding: 12px 18px;
+                font-size: 15px;
+                min-height: 44px;
+            }
+            .client-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .stats-card {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            .stat-item .number {
+                font-size: 22px;
+            }
+            .stat-item .label {
+                font-size: 11px;
+            }
+        }
+
+        /* شريط التمرير */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e9edf4;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c0c8d4;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0aab8;
+        }
+
+        /* طباعة */
+        @media print {
+            .btn,
+            .client-actions,
+            .install-btn {
+                display: none !important;
+            }
+            body {
+                padding: 10px;
+                background: #fff;
+            }
+            .app-header {
+                background: #6C63FF !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .client-card {
+                break-inside: avoid;
+                border: 1px solid #ddd;
+            }
+        }
     </style>
 </head>
 <body>
 
     <header class="app-header">
         <div class="header-row">
-            <div class="app-title">🚭 كشك <span>السجائر</span></div>
+            <div class="app-title">
+                <span class="icon-bg">🚭</span>
+                كشك <span>السجائر</span>
+            </div>
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
                 <button class="install-btn show" id="installBtn" style="display:inline-flex!important;">📲 تثبيت</button>
                 <div class="clock-area" id="clockDisplay">
@@ -39,23 +682,40 @@
         </div>
     </header>
 
+    <!-- إحصائيات -->
     <div class="stats-card" id="statsCard">
-        <div class="stat-item"><div class="number" id="totalDebts">0</div><div class="label">إجمالي الديون</div></div>
-        <div class="stat-item"><div class="number" id="totalClients">0</div><div class="label">عدد العملاء</div></div>
-        <div class="stat-item"><div class="number" id="totalPaid">0</div><div class="label">تم سداده</div></div>
+        <div class="stat-item">
+            <div class="number" id="totalDebts">0</div>
+            <span class="label">إجمالي الديون</span>
+        </div>
+        <div class="stat-item">
+            <div class="number" id="totalClients">0</div>
+            <span class="label">عدد العملاء</span>
+        </div>
+        <div class="stat-item">
+            <div class="number" id="totalPaid">0</div>
+            <span class="label">تم سداده</span>
+        </div>
     </div>
 
+    <!-- نموذج الإضافة -->
     <div class="form-card">
         <div class="form-row">
             <input type="text" id="clientName" placeholder="👤 اسم العميل" autocomplete="off">
             <input type="number" id="clientAmount" placeholder="💰 المبلغ (ل.س)" step="0.01" min="0">
         </div>
-        <button class="btn btn-primary" id="addBtn" style="width:100%;">➕ إضافة عميل جديد</button>
+        <button class="btn btn-primary" id="addBtn" style="width:100%;">
+            ✚ إضافة عميل جديد
+        </button>
     </div>
 
+    <!-- قائمة العملاء -->
     <div id="clientListContainer"></div>
+
+    <!-- Toast -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- Modal التعديل -->
     <div class="modal-overlay" id="editModal">
         <div class="modal-box">
             <h3>✏️ تعديل العميل</h3>
@@ -107,11 +767,7 @@
                 if (saved) {
                     clients = JSON.parse(saved);
                 } else {
-                    clients = [
-                        { id: Date.now() + 1, name: 'أحمد', amount: 150000, paid: 0, history: [] },
-                        { id: Date.now() + 2, name: 'محمد', amount: 75000, paid: 25000, history: [{ date: '2026-07-15',
-                                amount: 25000 }] }
-                    ];
+                    clients = []; // ✅ بدون أسماء وهمية
                 }
             } catch (e) { clients = []; }
         }
@@ -144,12 +800,30 @@
             document.getElementById('totalPaid').textContent = totalPaid.toLocaleString();
         }
 
+        // ---------- الحصول على الحرف الأول للصورة الرمزية ----------
+        function getAvatarLetter(name) {
+            return name ? name.charAt(0).toUpperCase() : '?';
+        }
+
+        function getColorFromName(name) {
+            const colors = ['#6C63FF', '#00C9A7', '#FF6B6B', '#FFB900', '#4ECDC4', '#FF6B9D', '#845EC2'];
+            let hash = 0;
+            for (let i = 0; i < name.length; i++) {
+                hash = name.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            return colors[Math.abs(hash) % colors.length];
+        }
+
         // ---------- عرض العملاء ----------
         function renderClients() {
             const container = document.getElementById('clientListContainer');
             if (clients.length === 0) {
-                container.innerHTML =
-                    `<div class="empty-state"><div class="icon">📭</div><p>لا يوجد عملاء بعد<br>أضف عميلاً جديداً من الأعلى</p></div>`;
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📭</div>
+                        <p>لا يوجد عملاء بعد<br>أضف عميلاً جديداً من الأعلى</p>
+                    </div>
+                `;
                 updateStats();
                 return;
             }
@@ -158,30 +832,35 @@
             clients.forEach((client, index) => {
                 const remaining = client.amount - (client.paid || 0);
                 const isPaid = remaining <= 0;
+                const initial = getAvatarLetter(client.name);
+                const color = getColorFromName(client.name);
                 const historyHtml = client.history && client.history.length > 0 ?
                     client.history.map(h =>
                         `<div class="detail-row"><span>📅 ${h.date}</span><span>${h.amount.toLocaleString()} ل.س</span></div>`
                     ).join('') :
-                    '<div class="detail-row"><span style="color:#888;">لا يوجد سجلات</span></div>';
+                    '<div class="detail-row"><span style="color:#8a8aaa;">لا يوجد سجلات</span></div>';
 
                 html += `
                     <div class="client-card" data-index="${index}">
                         <div class="client-header">
-                            <span class="client-name">${client.name}</span>
+                            <span class="client-name">
+                                <span class="avatar" style="background:${color};">${initial}</span>
+                                ${client.name}
+                            </span>
                             <span class="client-amount ${isPaid ? 'paid' : ''}">
                                 ${isPaid ? '✅ مدفوع' : remaining.toLocaleString() + ' ل.س'}
                             </span>
                         </div>
                         <div class="client-meta">
-                            <span>💰 المبلغ: ${client.amount.toLocaleString()} ل.س</span>
+                            <span>💰 ${client.amount.toLocaleString()} ل.س</span>
                             <span>📌 مدفوع: ${(client.paid || 0).toLocaleString()} ل.س</span>
-                            <span class="badge">${isPaid ? '✅ مكتمل' : '⏳ متبقي'}</span>
+                            <span class="badge ${isPaid ? 'paid-badge' : ''}">${isPaid ? '✅ مكتمل' : '⏳ متبقي'}</span>
                             <button class="btn btn-xs btn-outline" onclick="toggleDetails(${index})">📋 التفاصيل</button>
                         </div>
                         <div class="client-details" id="details-${index}">
-                            <div style="font-weight:600;margin-bottom:6px;">📜 سجل المدفوعات:</div>
+                            <div style="font-weight:600;margin-bottom:6px;color:#1a1a2e;">📜 سجل المدفوعات:</div>
                             ${historyHtml}
-                            <div class="detail-row" style="font-weight:600;border-top:2px solid #ddd;margin-top:6px;padding-top:6px;">
+                            <div class="detail-row" style="font-weight:600;border-top:2px solid rgba(0,0,0,0.06);margin-top:6px;padding-top:6px;color:#1a1a2e;">
                                 <span>المتبقي</span>
                                 <span>${remaining > 0 ? remaining.toLocaleString() + ' ل.س' : '✅ صفر'}</span>
                             </div>
@@ -243,7 +922,7 @@
 
             const choice = confirm(
                 `🔔 ${client.name}\nالمتبقي: ${remaining.toLocaleString()} ل.س\n\nاضغط "موافق" لتسديد كامل المبلغ\nاضغط "إلغاء" لإدخال مبلغ جزئي`
-                );
+            );
 
             if (choice) {
                 const paidAmount = remaining;
@@ -258,7 +937,7 @@
             } else {
                 const partial = prompt(
                     `💰 أدخل المبلغ الذي تريد سداده من ${client.name}:\n(المتبقي: ${remaining.toLocaleString()} ل.س)`
-                    );
+                );
                 if (partial !== null) {
                     const val = parseFloat(partial);
                     if (!val || val <= 0) {
@@ -281,7 +960,7 @@
                         showToast(`✅ ${client.name} مكتمل السداد!`, 'success');
                     } else {
                         showToast(`✅ تم سداد ${val.toLocaleString()} ل.س، المتبقي ${newRemaining.toLocaleString()}`,
-                        'success');
+                            'success');
                     }
                 }
             }
@@ -388,15 +1067,15 @@
             document.getElementById('installBtn').classList.remove('show');
         });
 
-        console.log('🚭 كشك السجائر - جاهز!');
-        console.log('🚀 PWA جاهز للتثبيت - اضغط على زر "تثبيت"');
-
-        // ---------- تسجيل Service Worker (تم الإصلاح) ----------
+        // ---------- تسجيل Service Worker ----------
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js')
                 .then(() => console.log('✅ Service Worker مسجل بنجاح'))
                 .catch(err => console.log('❌ خطأ في تسجيل Service Worker:', err));
         }
+
+        console.log('🚭 كشك السجائر - جاهز!');
+        console.log('🚀 PWA جاهز للتثبيت - اضغط على زر "تثبيت"');
     </script>
 </body>
 </html>

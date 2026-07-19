@@ -96,7 +96,6 @@
                 deferredPrompt = null;
                 document.getElementById('installBtn').classList.remove('show');
             } else {
-                // إذا لم يعمل الزر، نوجه المستخدم للطريقة اليدوية
                 showToast('📲 استخدم "إضافة إلى الشاشة الرئيسية" من المتصفح', 'warning');
             }
         });
@@ -391,6 +390,13 @@
 
         console.log('🚭 كشك السجائر - جاهز!');
         console.log('🚀 PWA جاهز للتثبيت - اضغط على زر "تثبيت"');
+
+        // ---------- تسجيل Service Worker (تم الإصلاح) ----------
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(() => console.log('✅ Service Worker مسجل بنجاح'))
+                .catch(err => console.log('❌ خطأ في تسجيل Service Worker:', err));
+        }
     </script>
 </body>
 </html>

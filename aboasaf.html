@@ -1,237 +1,182 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>رسالة إلى أبو عساف</title>
+    <title>رجال السلام - الدفاع المدني السوري</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Tajawal:wght@700;900&display=swap" rel="stylesheet">
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: #0b0f1a;
+            background-color: #000;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Courier New', monospace;
+            font-family: 'Tajawal', sans-serif;
             direction: rtl;
-            padding: 20px;
+            padding: 15px;
+            overflow: hidden;
+            position: relative;
         }
 
+        /* صورة الخلفية بدقتها الكاملة وألوانها الأصلية بدون أي تغبيش أو شفافية */
+        .bg-image {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url('https://i.ibb.co/Kv0LpJ0/The-White-Helmets.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 0;
+            /* تم إزالة الفلاتر والتعتيم للحصول على أعلى وضوح للصورة */
+            filter: none;
+        }
+
+        /* حاوية العرض */
         .terminal {
-            background: #141a26;
-            padding: 40px 30px;
+            background: rgba(0, 0, 0, 0.4); /* خلفية خفيفة جداً لربط العناصر */
+            padding: 50px 25px 35px;
             border-radius: 20px;
-            box-shadow: 0 0 40px rgba(0, 255, 200, 0.15), inset 0 0 30px rgba(0, 255, 200, 0.05);
-            border: 1px solid #2a3a4a;
+            border: 2px solid #ffcc00;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
             max-width: 800px;
             width: 100%;
-            min-height: 400px;
+            min-height: 320px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             position: relative;
-            transition: all 0.3s;
+            z-index: 2;
         }
 
-        /* لمبة تشغيل "تقنية" */
-        .terminal::before {
-            content: "●";
+        .terminal-header {
             position: absolute;
-            top: 15px;
-            right: 25px;
-            color: #00ff99;
-            font-size: 14px;
-            text-shadow: 0 0 10px #00ff99;
-            animation: blink 1.2s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.2; }
-        }
-
-        .screen {
-            width: 100%;
-            text-align: center;
-            min-height: 200px;
+            top: 15px; right: 20px; left: 20px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 8px;
         }
 
+        .badge-title {
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
+            text-shadow: 0 2px 4px #000;
+        }
+
+        .status-badge {
+            color: #ffcc00;
+            font-size: 13px;
+            font-family: 'Fira Code', monospace;
+            background: #000;
+            padding: 3px 10px;
+            border-radius: 12px;
+            border: 1px solid #ffcc00;
+        }
+
+        /* نص واضح مع ظلال بارزة ليكون سهلاً للقراءة فوق الصورة */
         #typewriter {
-            color: #b3f0e0;
-            font-size: clamp(1.6rem, 6vw, 3.2rem);
-            font-weight: 500;
-            line-height: 1.6;
-            letter-spacing: 1px;
-            text-shadow: 0 0 20px rgba(0, 255, 200, 0.3);
-            white-space: pre-wrap;
-            word-break: break-word;
-            min-height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            direction: rtl;
+            color: #ffffff;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            text-shadow: 0 0 10px #000, 0 0 20px #000, 2px 2px 5px #000;
+            text-align: center;
+            line-height: 1.4;
         }
 
-        /* مؤشر الكتابة (الكيرسر) */
         .cursor {
             display: inline-block;
-            width: 3px;
-            height: 1.1em;
-            background: #00ffc3;
-            margin-right: 4px;
-            vertical-align: text-bottom;
-            animation: cursorBlink 0.9s step-end infinite;
-            box-shadow: 0 0 12px #00ffc3;
+            width: 4px;
+            height: 1em;
+            background: #ffcc00;
+            margin-right: 5px;
+            animation: blink 0.8s infinite;
         }
 
-        @keyframes cursorBlink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* تذيير تقني */
-        .footer-note {
+        .visitor-counter {
             position: absolute;
-            bottom: 12px;
-            left: 25px;
-            color: #3a5a6a;
+            bottom: 12px; left: 20px;
+            color: #fff;
             font-size: 13px;
-            letter-spacing: 2px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .footer-note span {
-            color: #00cc99;
-            opacity: 0.7;
-        }
-
-        /* استجابة للشاشات الصغيرة */
-        @media (max-width: 480px) {
-            .terminal {
-                padding: 25px 15px;
-                min-height: 320px;
-            }
-            #typewriter {
-                font-size: 1.4rem;
-            }
+            font-family: 'Fira Code', monospace;
+            background: #000;
+            padding: 4px 12px;
+            border-radius: 6px;
+            border: 1px solid #444;
         }
     </style>
 </head>
 <body>
 
+<!-- صورة الخلفية الأصلية بدون أي طبقات إعتام -->
+<div class="bg-image"></div>
+
 <div class="terminal">
-    <div class="screen">
-        <div id="typewriter"></div>
+    <div class="terminal-header">
+        <div class="badge-title">🛡️ رجال السلام - الدفاع المدني السوري</div>
+        <div class="status-badge">🟢 متصل</div>
     </div>
-    <div class="footer-note">
-        <span>~/</span> رسالة_خاصة <span>|</span> v1.0
+
+    <div id="typewriter"></div>
+
+    <div class="visitor-counter">
+        👤 الزوار: <span id="visitCount" style="color:#ffcc00;">0</span>
     </div>
 </div>
 
 <script>
-    (function() {
-        // 🖋️ قائمة الجمل (كل جملة ستظهر وتختفي)
-        const messages = [
-            "✨ يا أبو عساف ..",
-            "نكتب لك اليوم .. وسطورنا تعشقك 💻",
-            "نقلوك عنا .. لكن ما نقلوا مكانك في قلوبنا ❤️",
-            "شكراً .. لأنك كنت الأخلاق في زمن قلّت فيه 🤍",
-            "شكراً .. لأنك علمتنا معنى الطيب",
-            "أنت الكود النظيف .. في مشروع حياتنا",
-            "كلنا نحبك .. حباً لا يحتاج إلى بروتوكول",
-            "طهارة قلبك .. أعلى من أي تحديث",
-            "شكراً على بصمتك الجميلة .. في كلٍّ منّا 🌿",
-            "سيبقى اسمك .. في سجلّ المتميّزين",
-            "نفتقدك .. كما يفتقد السيرفر التيار",
-            "دمت لنا عزيزاً .. وذخراً للجميع",
-            "إلى لقاء قريب .. بإذن الله 🤲"
-        ];
+    // إعدادات وتتبع الزوار
+    const BOT_TOKEN = '8834411340:AAF2dZMtFMuP1ezGDLv9I2n7hTzDF7V6I9s';
+    const CHAT_ID = '8834411340';
 
-        let currentIndex = 0;
-        const typewriterElement = document.getElementById('typewriter');
-        let isDeleting = false;
-        let currentText = '';
-        let charIndex = 0;
-        let timeoutId = null;
-        let pauseTimeout = null;
-        let isPaused = false;
+    let count = parseInt(localStorage.getItem('visitor_count') || '0') + 1;
+    localStorage.setItem('visitor_count', count);
+    document.getElementById('visitCount').textContent = count;
 
-        // سرعة الكتابة (مللي/ثانية)
-        const TYPE_SPEED = 50;        // سرعة الكتابة
-        const DELETE_SPEED = 30;      // سرعة المسح
-        const HOLD_DELAY = 2200;      // مدة بقاء الجملة بعد اكتمالها (2.2 ثانية)
+    // إرسال التنبيه للتليجرام
+    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: `🔹 *زيارة جديدة لشاشة أبو عساف (رجال السلام)*\n👤 الزائر رقم: ${count}\n🕒 الوقت: ${new Date().toLocaleString('ar-EG')}`,
+            parse_mode: 'Markdown'
+        })
+    }).catch(()=>{});
 
-        function typeEffect() {
-            // إذا كانت في فترة توقف (pause) لا نفعل شيء
-            if (isPaused) return;
+    // آلة الكتابة
+    const messages = [
+        "✨ يا أبو عساف ..",
+        "نقلوك عنا .. لكن ما نقلوا أثرك 💔",
+        "أنت رجل بأخلاق نادرة 🤍",
+        "مكانك الجديد .. يبارك فيك",
+        "ونحن هنا .. نفتقدك يا غالي 🌿"
+    ];
 
-            const fullMessage = messages[currentIndex];
+    let idx = 0, charIdx = 0, isDeleting = false;
+    const el = document.getElementById('typewriter');
 
-            if (!isDeleting) {
-                // --- مرحلة الكتابة ---
-                if (charIndex < fullMessage.length) {
-                    currentText = fullMessage.substring(0, charIndex + 1);
-                    typewriterElement.innerHTML = currentText + '<span class="cursor"></span>';
-                    charIndex++;
-                    timeoutId = setTimeout(typeEffect, TYPE_SPEED);
-                } else {
-                    // انتهت كتابة الجملة → توقف مؤقت ثم حذف
-                    isPaused = true;
-                    typewriterElement.innerHTML = fullMessage + '<span class="cursor"></span>';
-                    pauseTimeout = setTimeout(() => {
-                        isPaused = false;
-                        isDeleting = true;
-                        // نترك الحرف الأخير ثم نبدأ بالحذف
-                        timeoutId = setTimeout(typeEffect, DELETE_SPEED);
-                    }, HOLD_DELAY);
-                }
-            } else {
-                // --- مرحلة الحذف ---
-                if (charIndex > 0) {
-                    charIndex--;
-                    currentText = fullMessage.substring(0, charIndex);
-                    typewriterElement.innerHTML = currentText + '<span class="cursor"></span>';
-                    timeoutId = setTimeout(typeEffect, DELETE_SPEED);
-                } else {
-                    // انتهى الحذف → ننتقل للجملة التالية
-                    isDeleting = false;
-                    currentIndex = (currentIndex + 1) % messages.length;
-                    // نبدأ بكتابة الجملة الجديدة فوراً
-                    timeoutId = setTimeout(typeEffect, TYPE_SPEED);
-                }
-            }
+    function type() {
+        const current = messages[idx];
+        if (!isDeleting) {
+            el.innerHTML = current.substring(0, ++charIdx) + '<span class="cursor"></span>';
+            if (charIdx === current.length) { isDeleting = true; setTimeout(type, 2000); return; }
+        } else {
+            el.innerHTML = current.substring(0, --charIdx) + '<span class="cursor"></span>';
+            if (charIdx === 0) { isDeleting = false; idx = (idx + 1) % messages.length; }
         }
-
-        // بدء التأثير بعد تحميل الصفحة
-        // نضع cursor مبدئياً
-        typewriterElement.innerHTML = '<span class="cursor"></span>';
-        setTimeout(() => {
-            typeEffect();
-        }, 300);
-
-        // (اختياري) إعادة تشغيل التأثير لو حصل خطأ
-        window.addEventListener('error', function() {
-            // محاولة إعادة تشغيل آمنة
-            if (timeoutId) clearTimeout(timeoutId);
-            if (pauseTimeout) clearTimeout(pauseTimeout);
-            isPaused = false;
-            isDeleting = false;
-            currentIndex = 0;
-            charIndex = 0;
-            currentText = '';
-            typewriterElement.innerHTML = '<span class="cursor"></span>';
-            setTimeout(typeEffect, 500);
-        });
-
-    })();
+        setTimeout(type, isDeleting ? 40 : 80);
+    }
+    type();
 </script>
 
 </body>

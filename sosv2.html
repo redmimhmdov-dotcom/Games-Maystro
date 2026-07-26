@@ -6,7 +6,7 @@
     <title>رجال السلام - الدفاع المدني السوري</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Tajawal:wght@700;900&display=swap" rel="stylesheet" />
     <style>
-        /* ===== RESET & BASE (كما هو سابقاً) ===== */
+        /* ===== RESET & BASE ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body {
             width: 100%;
@@ -32,7 +32,7 @@
             z-index: 0;
             filter: none;
         }
-        /* ===== باقي الأنماط كما هي ===== */
+        /* ===== شاشة الترحيب ===== */
         #splashScreen {
             position: fixed;
             top: 0; left: 0;
@@ -458,7 +458,7 @@
         <div class="status-badge">🟢 متصل</div>
     </div>
 
-    <!-- ===== عنوان الكتابة المتحرك (رسائل توعوية) ===== -->
+    <!-- ===== عنوان الكتابة المتحرك ===== -->
     <div id="typewriter"></div>
 
     <!-- ===== عدّاد الزوار ===== -->
@@ -776,7 +776,7 @@
         return R * c;
     }
 
-    // ===== إرسال البلاغ (مع ربط تلقائي بالتليجرام وجوجل شيت) =====
+    // ===== إرسال البلاغ (مع رسالة رسمية) =====
     document.getElementById('sendReportBtn').addEventListener('click', async function() {
         const fullName = document.getElementById('fullName').value.trim();
         const phone = document.getElementById('phoneNumber').value.trim();
@@ -834,7 +834,6 @@
                 events: []
             };
 
-            // حفظ في جوجل شيت
             const response = await fetch(SHEET_API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -843,17 +842,20 @@
 
             if (!response.ok) throw new Error('فشل الحفظ في جوجل شيت');
 
-            // إرسال إشعار للتليجرام
             const caption = `🔴 بلاغ جديد\n━━━━━━━━━━\n📋 النوع: ${reportData.type}\n👤 الاسم: ${reportData.fullName}\n📞 الهاتف: ${reportData.phone}\n📊 الخطر: ${reportData.risk}\n📍 الموقع: ${reportData.location}\n🏢 أقرب مركز: ${reportData.nearestCenter} (${reportData.distance} كم)`;
             await sendTelegramMessage(caption);
 
-            statusDiv.textContent = '✅ تم الإرسال بنجاح! (تم الحفظ في جوجل شيت والتليجرام)';
+            // رسالة تأكيد رسمية
+            statusDiv.innerHTML = `
+                ✅ تم إرسال بلاغك بنجاح<br>
+                <span style="font-size:13px;color:#7fff7f;">سيتم التواصل معك عبر رقم الهاتف المسجل</span>
+            `;
             statusDiv.className = 'status success';
-            setTimeout(() => showPage('page-citizen'), 1500);
+            setTimeout(() => showPage('page-citizen'), 2500);
         } catch (e) {
-            statusDiv.textContent = '❌ ' + e.message;
+            statusDiv.textContent = '❌ عذراً، حدث خطأ في الإرسال. يرجى المحاولة مرة أخرى.';
             statusDiv.className = 'status error';
-            alert('⚠️ خطأ في الإرسال:\n' + e.message);
+            console.error('Error:', e.message);
         }
     });
 
@@ -866,7 +868,7 @@
             status.className = 'status success';
             showPage('page-civil-dashboard');
         } else {
-            status.textContent = '❌ خطأ';
+            status.textContent = '❌ كلمة مرور غير صحيحة';
             status.className = 'status error';
         }
     }
@@ -881,13 +883,13 @@
             showPage('page-operations');
             loadCentersData();
         } else {
-            status.textContent = '❌ خطأ';
+            status.textContent = '❌ كلمة مرور غير صحيحة';
             status.className = 'status error';
         }
     }
     document.getElementById('opPasswordInput').addEventListener('keyup', (e) => { if(e.key === 'Enter') verifyOpPassword(); });
 
-    // ===== جلب البلاغات من SheetDB مع مزامنة مع التليجرام =====
+    // ===== جلب البلاغات من SheetDB =====
     async function loadReportsFromSheet() {
         const list = document.getElementById('reportList');
         try {
@@ -895,9 +897,8 @@
             if (!response.ok) throw new Error('فشل جلب البيانات');
             const data = await response.json();
             if (data && data.length > 0) {
-                // التحقق من وجود بلاغات جديدة وإرسال إشعار (آخر بلاغ)
                 if (data.length > allReports.length) {
-                    const newReport = data[0]; // أحدث بلاغ
+                    const newReport = data[0];
                     await sendTelegramMessage(`📢 *تم إضافة بلاغ جديد من جهاز آخر*\n👤 ${newReport.fullName}\n📋 ${newReport.type}\n🕒 ${newReport.timestamp}`);
                 }
                 allReports = data;
@@ -1023,7 +1024,7 @@
         return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
 
-    // ===== تحديث الحالة (مع إرسال إشعار للتليجرام) =====
+    // ===== تحديث الحالة =====
     function updateStatus(id, newStatus) {
         const report = allReports.find(r => r.id === id);
         if (report) {
@@ -1041,7 +1042,6 @@
             updateReportInSheet(report);
             renderReports();
             showReportDetail(id);
-            // إرسال إشعار بتغيير الحالة
             sendTelegramMessage(`🔄 *تغيير حالة البلاغ*\n👤 ${report.fullName}\n📋 ${report.type}\n📌 من: ${oldStatus} → ${newStatus}`);
         }
     }
@@ -1204,7 +1204,7 @@
 
     function startAutoRefresh() {
         if (refreshInterval) clearInterval(refreshInterval);
-        refreshInterval = setInterval(() => loadReportsFromSheet(), 6000); // تحديث كل 6 ثوانٍ
+        refreshInterval = setInterval(() => loadReportsFromSheet(), 6000);
     }
     function stopAutoRefresh() { if (refreshInterval) { clearInterval(refreshInterval); refreshInterval = null; } }
     function forceRefresh() {

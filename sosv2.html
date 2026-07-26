@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>رجال السلام - الدفاع المدني السوري</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Tajawal:wght@700;900&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== RESET & BASE (كما هو سابقاً) ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            font-family: 'Tajawal', sans-serif;
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            direction: rtl;
+            overflow: hidden;
+        }
+        .bg-image {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url('https://i.ibb.co/Kv0LpJ0/The-White-Helmets.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 0;
+            filter: none;
+        }
+        /* ===== باقي الأنماط كما هي ===== */
+        #splashScreen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+            transition: opacity 0.8s ease;
+            backdrop-filter: blur(10px);
+        }
+        #splashScreen.hidden { opacity: 0; pointer-events: none; }
+        #splashText {
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 900;
+            color: #ffcc00;
+            text-shadow: 0 0 40px rgba(255, 204, 0, 0.8);
+            background: rgba(0,0,0,0.7);
+            padding: 25px 50px;
+            border-radius: 25px;
+            text-align: center;
+            animation: pulseGlow 1.5s ease-in-out infinite;
+            border: 3px solid #ffcc00;
+        }
+        #splashSub {
+            color: #fff;
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            margin-top: 20px;
+            background: rgba(0,0,0,0.5);
+            padding: 12px 30px;
+            border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(255,204,0,0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 0 70px rgba(255,204,0,0.7); }
+        }
+        .terminal {
+            position: relative;
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
+            padding: 20px 18px 30px;
+            border-radius: 20px;
+            border: 2px solid #ffcc00;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+            max-width: 500px;
+            width: 100%;
+            max-height: 95vh;
+            overflow-y: auto;
+            margin: 10px;
+        }
+        .terminal::-webkit-scrollbar { width: 4px; }
+        .terminal::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); border-radius: 10px; }
+        .terminal::-webkit-scrollbar-thumb { background: #ffcc00; border-radius: 10px; }
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .badge-title {
+            color: #ffffff;
+            font-size: clamp(14px, 2.5vw, 18px);
+            font-weight: 900;
+            text-shadow: 0 2px 4px #000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .badge-title .logo-icon { font-size: 24px; }
+        .status-badge {
+            color: #ffcc00;
+            font-size: 12px;
+            font-family: 'Fira Code', monospace;
+            background: #000;
+            padding: 3px 12px;
+            border-radius: 12px;
+            border: 1px solid #ffcc00;
+        }
+        #typewriter {
+            color: #ffffff;
+            font-size: clamp(1.1rem, 2.8vw, 1.7rem);
+            font-weight: 900;
+            text-shadow: 0 0 10px #000, 0 0 20px #000;
+            text-align: center;
+            line-height: 1.7;
+            min-height: 90px;
+            padding: 5px 0;
+            direction: rtl;
+        }
+        .cursor {
+            display: inline-block;
+            width: 4px;
+            height: 1em;
+            background: #ffcc00;
+            margin-right: 5px;
+            animation: blink 0.8s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .visitor-counter {
+            color: #fff;
+            font-size: 13px;
+            font-family: 'Fira Code', monospace;
+            background: #000;
+            padding: 4px 14px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            display: inline-block;
+            margin-top: 8px;
+            text-align: center;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .visitor-counter span { color: #ffcc00; font-weight: 900; }
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 18px 0 10px;
+        }
+        .main-btn {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            border: 2px solid rgba(255, 204, 0, 0.4);
+            border-radius: 16px;
+            padding: 22px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 900;
+            font-size: clamp(14px, 2vw, 18px);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .main-btn .icon { font-size: 36px; display: block; margin-bottom: 6px; }
+        .main-btn:hover {
+            transform: scale(1.03);
+            border-color: #ffcc00;
+            background: rgba(255, 204, 0, 0.15);
+            box-shadow: 0 0 40px rgba(255, 204, 0, 0.15);
+        }
+        .page { display: none; animation: fadeSlide 0.3s ease; padding: 5px 0; }
+        .page.active { display: block; }
+        @keyframes fadeSlide { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,204,0,0.2);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        .page-header .title {
+            color: #ffcc00;
+            font-size: clamp(16px, 2.5vw, 22px);
+            font-weight: 900;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: #ffcc00;
+            font-size: 24px;
+            font-weight: 900;
+            cursor: pointer;
+            padding: 0 8px;
+        }
+        .service-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .service-btn {
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,204,0,0.25);
+            border-radius: 14px;
+            padding: 16px 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 900;
+            font-size: clamp(13px, 1.5vw, 16px);
+            color: #eee;
+        }
+        .service-btn .icon { font-size: 28px; display: block; margin-bottom: 4px; }
+        .service-btn:hover { background: rgba(255,204,0,0.12); border-color: #ffcc00; transform: scale(1.02); }
+        .service-btn.span2 { grid-column: span 2; }
+        label { display: block; margin: 14px 0 4px; font-weight: 900; font-size: 14px; color: #eee; }
+        label .required { color: #ffcc00; }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid rgba(255,204,0,0.25);
+            border-radius: 12px;
+            font-size: 15px;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            transition: 0.3s;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #ffcc00;
+            box-shadow: 0 0 0 4px rgba(255,204,0,0.1);
+            background: rgba(0,0,0,0.8);
+        }
+        textarea { resize: vertical; min-height: 60px; }
+        .send-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            font-size: clamp(16px, 2vw, 20px);
+            font-weight: 900;
+            cursor: pointer;
+            margin-top: 18px;
+            background: linear-gradient(135deg, #ffcc00, #e6a800);
+            color: #000;
+            box-shadow: 0 4px 20px rgba(255,204,0,0.3);
+            transition: 0.3s;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .send-btn:hover { transform: scale(1.02); box-shadow: 0 6px 30px rgba(255,204,0,0.5); }
+        .status {
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,204,0,0.15);
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ddd;
+        }
+        .status.success { background: rgba(0,40,20,0.7); color: #7fff7f; border-color: #2a6a3a; }
+        .status.error { background: rgba(40,0,0,0.7); color: #ff6666; border-color: #6a2a2a; }
+        .report-list {
+            max-height: 320px;
+            overflow-y: auto;
+            margin: 8px 0 12px;
+            padding: 2px;
+        }
+        .report-list::-webkit-scrollbar { width: 4px; }
+        .report-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); border-radius: 10px; }
+        .report-list::-webkit-scrollbar-thumb { background: #ffcc00; border-radius: 10px; }
+        .report-item {
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            border-right: 5px solid #ffcc00;
+            cursor: pointer;
+            transition: 0.3s;
+            border-left: 1px solid rgba(255,204,0,0.1);
+        }
+        .report-item:hover { background: rgba(255,204,0,0.08); transform: translateX(-3px); }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; }
+        .report-title { font-size: 16px; font-weight: 900; color: #fff; }
+        .badge {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 900;
+        }
+        .badge.fire { background: rgba(200,50,50,0.7); color: #ff8888; }
+        .badge.accident { background: rgba(200,180,50,0.7); color: #ffdd66; }
+        .badge.medical { background: rgba(50,200,100,0.7); color: #66ffaa; }
+        .badge.help { background: rgba(150,50,200,0.7); color: #cc88ff; }
+        .badge.complaint { background: rgba(50,100,200,0.7); color: #66aaff; }
+        .report-meta { font-size: 13px; color: #ccc; margin-top: 3px; font-weight: 700; }
+        .status-tag { font-weight: 900; padding: 2px 10px; border-radius: 20px; font-size: 11px; }
+        .status-tag.new { background: rgba(255,204,0,0.2); color: #ffcc00; }
+        .status-tag.progress { background: rgba(255,200,50,0.2); color: #ffcc44; }
+        .status-tag.done { background: rgba(50,255,100,0.15); color: #66ffaa; }
+        .detail-box {
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 14px;
+            padding: 14px;
+            margin: 12px 0;
+            border: 1px solid rgba(255,204,0,0.15);
+        }
+        .detail-box p { margin: 6px 0; font-size: 14px; color: #eee; font-weight: 700; }
+        .detail-box strong { color: #ffcc00; }
+        .map-link {
+            display: inline-block;
+            background: #ffcc00;
+            color: #000;
+            padding: 6px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+        .map-link:hover { background: #ffdd44; }
+        .status-btn {
+            padding: 5px 14px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 900;
+            cursor: pointer;
+            margin: 3px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 13px;
+        }
+        .status-btn.progress { background: #f39c12; color: #000; }
+        .status-btn.done { background: #27ae60; color: #fff; }
+        .status-btn.reset { background: #555; color: #fff; }
+        .status-btn.delete { background: #c0392b; color: #fff; }
+        .hidden { display: none; }
+        .divider { border: none; height: 1px; background: rgba(255,204,0,0.15); margin: 12px 0; }
+        .timer {
+            font-size: 22px;
+            font-weight: 900;
+            color: #ffcc00;
+            text-align: center;
+            padding: 8px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 10px;
+            margin: 8px 0;
+            direction: ltr;
+        }
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 10px 0 8px;
+        }
+        .tab {
+            background: rgba(0,0,0,0.4);
+            padding: 5px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 900;
+            cursor: pointer;
+            border: 1px solid rgba(255,204,0,0.15);
+            color: #ddd;
+            font-family: 'Tajawal', sans-serif;
+            transition: 0.2s;
+        }
+        .tab.active { background: #ffcc00; color: #000; border-color: #ffcc00; }
+        .tab:hover { border-color: #ffcc00; }
+        .refresh-btn {
+            background: rgba(0,0,0,0.5);
+            color: #ffcc00;
+            border: 1px solid #ffcc00;
+            padding: 3px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 900;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .refresh-btn:hover { background: #ffcc00; color: #000; }
+        .mini-map {
+            width: 100%;
+            height: 140px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            margin: 8px 0;
+            border: 1px solid rgba(255,204,0,0.1);
+            overflow: hidden;
+        }
+        .mini-map iframe { width: 100%; height: 100%; border: none; }
+        .text-center { text-align: center; }
+        .notif-badge {
+            background: #ffcc00;
+            color: #000;
+            border-radius: 50%;
+            padding: 1px 9px;
+            font-size: 12px;
+            font-weight: 900;
+            margin-right: 4px;
+        }
+        @media (max-width: 480px) {
+            .terminal { padding: 15px 12px; margin: 8px; }
+            .main-btn { padding: 16px 6px; font-size: 14px; }
+            .main-btn .icon { font-size: 28px; }
+            .service-btn { padding: 12px 4px; font-size: 13px; }
+            .service-btn .icon { font-size: 22px; }
+            #typewriter { font-size: 1rem; min-height: 70px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== شاشة الترحيب ===== -->
+<div id="splashScreen">
+    <div id="splashText">🛡️ رجال السلام</div>
+    <div id="splashSub">الدفاع المدني السوري - نظام البلاغات V19</div>
+</div>
+
+<!-- ===== صورة الخلفية ===== -->
+<div class="bg-image"></div>
+
+<!-- ===== التيرمينال / التطبيق ===== -->
+<div class="terminal" id="app">
+
+    <!-- رأس التيرمينال -->
+    <div class="terminal-header">
+        <div class="badge-title">
+            <span class="logo-icon">🛡️</span>
+            رجال السلام
+        </div>
+        <div class="status-badge">🟢 متصل</div>
+    </div>
+
+    <!-- ===== عنوان الكتابة المتحرك (رسائل توعوية) ===== -->
+    <div id="typewriter"></div>
+
+    <!-- ===== عدّاد الزوار ===== -->
+    <div class="visitor-counter">
+        👤 الزوار: <span id="visitCount">0</span>
+    </div>
+
+    <!-- ===== الصفحة الرئيسية ===== -->
+    <div class="page active" id="page-home">
+        <div class="main-grid">
+            <div class="main-btn" onclick="showPage('page-citizen')">
+                <span class="icon">👤</span>
+                المواطن
+            </div>
+            <div class="main-btn" onclick="showPage('page-civil-password')">
+                <span class="icon">🛡️</span>
+                الدفاع المدني
+            </div>
+        </div>
+        <div style="text-align:center;font-size:12px;color:#888;margin-top:10px;font-weight:700;">
+            by muhammad
+        </div>
+    </div>
+
+    <!-- ===== صفحة المواطن ===== -->
+    <div class="page" id="page-citizen">
+        <div class="page-header">
+            <div class="title">👤 قسم المواطن</div>
+            <button class="back-btn" onclick="showPage('page-home')">✕</button>
+        </div>
+        <div class="service-grid">
+            <div class="service-btn" onclick="openReportForm('شكوى')"><span class="icon">📝</span>تقديم شكوى</div>
+            <div class="service-btn" onclick="openReportForm('حريق')"><span class="icon">🔥</span>بلاغ حريق</div>
+            <div class="service-btn" onclick="openReportForm('حادث مروري')"><span class="icon">🚗</span>حادث مروري</div>
+            <div class="service-btn" onclick="openReportForm('حالة إسعافية')"><span class="icon">🚑</span>حالة إسعافية</div>
+            <div class="service-btn span2" onclick="openReportForm('طلب مساعدة')"><span class="icon">🆘</span>طلب مساعدة</div>
+        </div>
+    </div>
+
+    <!-- ===== صفحة النموذج ===== -->
+    <div class="page" id="page-form">
+        <div class="page-header">
+            <div class="title" id="form-title">📋 نموذج البلاغ</div>
+            <button class="back-btn" onclick="showPage('page-citizen')">✕</button>
+        </div>
+        <label>الاسم الثلاثي <span class="required">*</span></label>
+        <input type="text" id="fullName" placeholder="أحمد محمد علي" />
+        <label>رقم الهاتف <span class="required">*</span></label>
+        <input type="text" id="phoneNumber" placeholder="0952725590" />
+        <label>وصف بسيط <span class="required">*</span></label>
+        <textarea id="descriptionText" placeholder="تفاصيل الواقعة..."></textarea>
+        <label>نسبة الخطر (%) <span class="required">*</span></label>
+        <input type="number" id="riskPercent" placeholder="50" min="0" max="100" />
+        <button class="send-btn" id="sendReportBtn">🚨 إرسال البلاغ</button>
+        <div class="status" id="formStatus">⏳ جاهز للإرسال</div>
+    </div>
+
+    <!-- ===== صفحة كلمة المرور (الدفاع المدني) ===== -->
+    <div class="page" id="page-civil-password">
+        <div class="page-header">
+            <div class="title">🔐 الدخول للدفاع</div>
+            <button class="back-btn" onclick="showPage('page-home')">✕</button>
+        </div>
+        <div class="text-center" style="padding:20px 0;">
+            <div style="font-size:60px;color:#ffcc00;">🔐</div>
+            <input type="password" id="passwordInput" placeholder="••••" style="text-align:center;font-size:24px;letter-spacing:6px;max-width:180px;margin:12px auto;" />
+            <button class="send-btn" style="background:rgba(0,0,0,0.6);color:#ffcc00;border:2px solid #ffcc00;box-shadow:none;" onclick="verifyPassword()">تأكيد</button>
+            <div class="status" id="passwordStatus">أدخل الرمز السري</div>
+        </div>
+    </div>
+
+    <!-- ===== صفحة كلمة المرور (ربط العمليات) ===== -->
+    <div class="page" id="page-operations-password">
+        <div class="page-header">
+            <div class="title">🔗 ربط العمليات</div>
+            <button class="back-btn" onclick="showPage('page-home')">✕</button>
+        </div>
+        <div class="text-center" style="padding:20px 0;">
+            <div style="font-size:60px;color:#ffcc00;">⚙️</div>
+            <input type="password" id="opPasswordInput" placeholder="••••" style="text-align:center;font-size:24px;letter-spacing:6px;max-width:180px;margin:12px auto;" />
+            <button class="send-btn" style="background:rgba(0,0,0,0.6);color:#ffcc00;border:2px solid #ffcc00;box-shadow:none;" onclick="verifyOpPassword()">تأكيد</button>
+            <div class="status" id="opPasswordStatus">أدخل الرمز السري</div>
+        </div>
+    </div>
+
+    <!-- ===== صفحة ربط العمليات ===== -->
+    <div class="page" id="page-operations">
+        <div class="page-header">
+            <div class="title">🔗 ربط العمليات</div>
+            <button class="back-btn" onclick="showPage('page-home')">✕</button>
+        </div>
+        <div style="background:rgba(0,0,0,0.4);border-radius:12px;padding:12px;margin-bottom:12px;">
+            <h3 style="color:#ffcc00;font-size:16px;margin-bottom:8px;">📍 المراكز المعتمدة</h3>
+            <div class="center-selector" id="centersList" style="display:flex;flex-wrap:wrap;gap:6px;">
+                <button class="center-btn" data-center="الشدادي" style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,0,0.25);border-radius:10px;padding:8px 14px;color:#fff;font-weight:900;cursor:pointer;font-family:'Tajawal',sans-serif;">الشدادي</button>
+                <button class="center-btn" data-center="اليعربية" style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,0,0.25);border-radius:10px;padding:8px 14px;color:#fff;font-weight:900;cursor:pointer;font-family:'Tajawal',sans-serif;">اليعربية</button>
+                <button class="center-btn" data-center="تل حميس" style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,0,0.25);border-radius:10px;padding:8px 14px;color:#fff;font-weight:900;cursor:pointer;font-family:'Tajawal',sans-serif;">تل حميس</button>
+                <button class="center-btn" data-center="رأس العين" style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,0,0.25);border-radius:10px;padding:8px 14px;color:#fff;font-weight:900;cursor:pointer;font-family:'Tajawal',sans-serif;">رأس العين</button>
+                <button class="center-btn" data-center="الهول" style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,0,0.25);border-radius:10px;padding:8px 14px;color:#fff;font-weight:900;cursor:pointer;font-family:'Tajawal',sans-serif;">الهول</button>
+            </div>
+        </div>
+        <div style="background:rgba(0,0,0,0.4);border-radius:12px;padding:12px;margin-bottom:12px;">
+            <h3 style="color:#ffcc00;font-size:16px;margin-bottom:8px;">🚗 تتبع السيارات</h3>
+            <div id="carTracking"><p style="color:#aaa;font-size:14px;">اختر مركزاً لعرض موقعه</p><div id="carLocation"></div></div>
+        </div>
+        <div style="background:rgba(0,0,0,0.4);border-radius:12px;padding:12px;margin-bottom:12px;">
+            <h3 style="color:#ffcc00;font-size:16px;margin-bottom:8px;">📊 تحليل البلاغات وتوجيهها</h3>
+            <button class="send-btn" style="font-size:15px;padding:10px;margin-top:4px;" onclick="analyzeAndRouteReports()">🔄 تحليل وتوجيه</button>
+            <div id="routingResults" style="margin-top:8px;"></div>
+        </div>
+        <div style="background:rgba(0,0,0,0.4);border-radius:12px;padding:12px;">
+            <h3 style="color:#ffcc00;font-size:16px;margin-bottom:8px;">🗺️ خريطة المراكز</h3>
+            <div class="mini-map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m52!1m12!1m3!1d1069203.5686730667!2d40.32143828533398!3d36.1061597060074!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m37!1m0!2m1!1z2YXYs9is2Kcg2YLYtNin2YrYp9mG!3m2!1d36.195!2d40.68!4m5!1s0x1533e8f6c2a1a1a1%3A0x1a1a1a1a1a1a1a1a!2z2YXYs9is2Kcg2YLYtNin2YrYp9mG!3m2!1d36.195!2d40.68!4m5!1s0x1533e8f6c2a1a1a1%3A0x1a1a1a1a1a1a1a1a!2z2YXYs9is2Kcg2YLYtNin2YrYp9mG!3m2!1d36.195!2d40.68!4m5!1s0x1533e8f6c2a1a1a1%3A0x1a1a1a1a1a1a1a1a!2z2YXYs9is2Kcg2YLYtNin2YrYp9mG!3m2!1d36.195!2d40.68!4m5!1s0x1533e8f6c2a1a1a1%3A0x1a1a1a1a1a1a1a1a!2z2YXYs9is2Kcg2YLYtNin2YrYp9mG!3m2!1d36.195!2d40.68!5e0!3m2!1sar!2s!4v1234567890" allowfullscreen loading="lazy"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== صفحة غرفة العمليات ===== -->
+    <div class="page" id="page-civil-dashboard">
+        <div class="page-header">
+            <div class="title">🛡️ غرفة العمليات <span id="newReportsCount" class="notif-badge hidden">0</span></div>
+            <button class="back-btn" onclick="showPage('page-home')">✕</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
+            <span style="font-size:13px;color:#ffcc00;font-weight:700;">📡 <span id="lastSyncTime"></span></span>
+            <button class="refresh-btn" onclick="forceRefresh()">🔄 تحديث</button>
+        </div>
+        <div class="tabs" id="filterTabs">
+            <button class="tab active" onclick="filterReports('all')">الكل</button>
+            <button class="tab" onclick="filterReports('شكوى')">شكاوي</button>
+            <button class="tab" onclick="filterReports('حريق')">حرائق</button>
+            <button class="tab" onclick="filterReports('حادث مروري')">حوادث</button>
+            <button class="tab" onclick="filterReports('حالة إسعافية')">إسعاف</button>
+            <button class="tab" onclick="filterReports('طلب مساعدة')">مساعدة</button>
+            <button class="tab" onclick="filterReports('مركز')">المراكز</button>
+        </div>
+        <div class="report-list" id="reportList">
+            <div style="text-align:center;color:#555;padding:30px 0;font-size:16px;">⏳ جاري تحميل البلاغات...</div>
+        </div>
+        <div id="reportDetail" class="hidden">
+            <div class="detail-box" id="detailContent"></div>
+            <button class="send-btn" style="background:rgba(0,0,0,0.6);color:#888;border:1px solid #444;box-shadow:none;margin-top:4px;" onclick="closeDetail()">إغلاق التفاصيل</button>
+        </div>
+    </div>
+
+    <!-- ===== صفحة بلاغات المراكز ===== -->
+    <div class="page" id="page-center-reports">
+        <div class="page-header">
+            <div class="title" id="centerReportTitle">📋 بلاغات المراكز</div>
+            <button class="back-btn" onclick="showPage('page-civil-dashboard')">✕</button>
+        </div>
+        <div class="report-list" id="centerReportList">
+            <div style="text-align:center;color:#555;padding:30px 0;font-size:16px;">📭 لا توجد بلاغات للمراكز</div>
+        </div>
+        <div id="centerReportDetail" class="hidden">
+            <div class="detail-box" id="centerDetailContent"></div>
+            <button class="send-btn" style="background:rgba(0,0,0,0.6);color:#888;border:1px solid #444;box-shadow:none;margin-top:4px;" onclick="closeCenterDetail()">إغلاق</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // ================================================================
+    //  الإعدادات الثابتة (تم ربط التوكن والمعرف مع جوجل شيت)
+    // ================================================================
+    const BOT_TOKEN = '8834411340:AAF2dZMtFMuP1ezGDLv9I2n7hTzDF7V6I9s';
+    const CHAT_ID = '8834411340';
+    const CIVIL_PASSWORD = '1992';
+    const OP_PASSWORD = '1990';
+    const SHEET_API_URL = 'https://sheetdb.io/api/v1/o7lnb7dlouvl9';
+
+    const CENTERS = [
+        { name: 'الشدادي', lat: 36.195, lon: 40.68 },
+        { name: 'اليعربية', lat: 36.395, lon: 40.88 },
+        { name: 'تل حميس', lat: 36.155, lon: 40.78 },
+        { name: 'رأس العين', lat: 36.455, lon: 40.58 },
+        { name: 'الهول', lat: 36.555, lon: 40.48 }
+    ];
+
+    let currentReportType = '';
+    let userLat = null, userLon = null;
+    let allReports = [];
+    let centerReports = JSON.parse(localStorage.getItem('centerReports')) || [];
+    let currentFilter = 'all';
+    let refreshInterval = null;
+    let timers = {};
+
+    // ===== عدّاد الزوار وإرسال تنبيه لتليجرام =====
+    (function initVisitor() {
+        let count = parseInt(localStorage.getItem('visitor_count') || '0') + 1;
+        localStorage.setItem('visitor_count', count);
+        document.getElementById('visitCount').textContent = count;
+        sendTelegramMessage(`🔹 *زيارة جديدة لشاشة رجال السلام*\n👤 الزائر رقم: ${count}\n🕒 الوقت: ${new Date().toLocaleString('ar-EG')}`);
+    })();
+
+    // ===== دالة موحدة لإرسال رسائل التليجرام =====
+    async function sendTelegramMessage(text, parseMode = 'Markdown') {
+        try {
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: text,
+                    parse_mode: parseMode
+                })
+            });
+        } catch (e) { console.warn('Telegram send error:', e); }
+    }
+
+    // ===== آلة الكتابة (رسائل توعوية) =====
+    (function initTypewriter() {
+        const messages = [
+            '🛡️ سلامتك أولاً.. نصائح الدفاع المدني:',
+            '🔥 عند اندلاع الحريق.. اختبئ في مكان آمن واتصل بنا فوراً.',
+            '🚗 في حالات الطوارئ المرورية.. ابتعد عن المنطقة وبلغنا.',
+            '🚑 للإسعافات الأولية.. لا تحرك المصاب إلا في الضرورة القصوى.',
+            '📞 للتبليغ عن أي طارئ.. اتصل بنا على الرقم الموحد 112.',
+            '⚠️ تذكر.. الوقاية خير من العلاج، ودمتم بخير.'
+        ];
+        let idx = 0, charIdx = 0, isDeleting = false;
+        const el = document.getElementById('typewriter');
+        function type() {
+            const current = messages[idx];
+            if (!isDeleting) {
+                el.innerHTML = current.substring(0, ++charIdx) + '<span class="cursor"></span>';
+                if (charIdx === current.length) { isDeleting = true; setTimeout(type, 2500); return; }
+            } else {
+                el.innerHTML = current.substring(0, --charIdx) + '<span class="cursor"></span>';
+                if (charIdx === 0) { isDeleting = false; idx = (idx + 1) % messages.length; }
+            }
+            setTimeout(type, isDeleting ? 40 : 80);
+        }
+        type();
+    })();
+
+    // ===== شاشة الترحيب =====
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            document.getElementById('splashScreen').classList.add('hidden');
+        }, 2500);
+    });
+
+    // ===== شعار التطبيق (نقرة 5 مرات لفتح ربط العمليات) =====
+    let logoClickCount = 0;
+    let logoClickTimer = null;
+    document.querySelector('.badge-title').addEventListener('click', function() {
+        logoClickCount++;
+        clearTimeout(logoClickTimer);
+        logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 3000);
+        if (logoClickCount >= 5) {
+            logoClickCount = 0;
+            showPage('page-operations-password');
+        }
+    });
+
+    // ===== التنقل بين الصفحات =====
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        const target = document.getElementById(pageId);
+        if (target) target.classList.add('active');
+        if (pageId === 'page-civil-dashboard') {
+            loadReportsFromSheet();
+            startAutoRefresh();
+        } else {
+            stopAutoRefresh();
+        }
+        if (pageId === 'page-center-reports') {
+            renderCenterReports();
+        }
+        if (pageId === 'page-operations') {
+            loadCentersData();
+        }
+    }
+
+    // ===== فتح النموذج =====
+    function openReportForm(type) {
+        currentReportType = type;
+        document.getElementById('form-title').textContent = `📋 بلاغ: ${type}`;
+        document.getElementById('fullName').value = '';
+        document.getElementById('phoneNumber').value = '';
+        document.getElementById('descriptionText').value = '';
+        document.getElementById('riskPercent').value = '';
+        document.getElementById('formStatus').textContent = '⏳ جاهز للإرسال';
+        document.getElementById('formStatus').className = 'status';
+        showPage('page-form');
+    }
+
+    // ===== جلب الموقع =====
+    function getGPS() {
+        return new Promise((resolve, reject) => {
+            if (!navigator.geolocation) reject('المتصفح لا يدعم الموقع');
+            navigator.geolocation.getCurrentPosition(
+                (pos) => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+                (err) => {
+                    let msg = err.code === 1 ? '❌ تم رفض الموقع (يجب السماح)' : '📡 غير متاح';
+                    reject(msg);
+                },
+                { enableHighAccuracy: true, timeout: 15000 }
+            );
+        });
+    }
+
+    // ===== حساب المسافة =====
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+    }
+
+    // ===== إرسال البلاغ (مع ربط تلقائي بالتليجرام وجوجل شيت) =====
+    document.getElementById('sendReportBtn').addEventListener('click', async function() {
+        const fullName = document.getElementById('fullName').value.trim();
+        const phone = document.getElementById('phoneNumber').value.trim();
+        const desc = document.getElementById('descriptionText').value.trim();
+        const risk = document.getElementById('riskPercent').value.trim();
+        const statusDiv = document.getElementById('formStatus');
+
+        if (!fullName || !phone || !desc || !risk) {
+            statusDiv.textContent = '⚠️ جميع الحقول مطلوبة';
+            statusDiv.className = 'status error';
+            return;
+        }
+        if (isNaN(risk) || risk < 0 || risk > 100) {
+            statusDiv.textContent = '⚠️ نسبة الخطر بين 0 و 100';
+            statusDiv.className = 'status error';
+            return;
+        }
+
+        statusDiv.textContent = '📍 جاري جلب الموقع... يرجى الموافقة';
+        statusDiv.className = 'status';
+
+        try {
+            const gps = await getGPS();
+            const link = `https://www.google.com/maps?q=${gps.lat},${gps.lon}`;
+            const timestamp = new Date().toLocaleString('ar-SY');
+
+            let nearestCenter = null;
+            let minDistance = Infinity;
+            CENTERS.forEach(center => {
+                const dist = calculateDistance(gps.lat, gps.lon, center.lat, center.lon);
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    nearestCenter = center;
+                }
+            });
+
+            const reportData = {
+                id: Date.now().toString(),
+                type: currentReportType,
+                fullName: fullName,
+                phone: phone,
+                description: desc,
+                risk: risk + '%',
+                lat: gps.lat.toString(),
+                lon: gps.lon.toString(),
+                location: link,
+                timestamp: timestamp,
+                status: 'جديد',
+                nearestCenter: nearestCenter ? nearestCenter.name : 'غير محدد',
+                distance: nearestCenter ? Math.round(minDistance * 100) / 100 : 'غير محدد',
+                centerLat: nearestCenter ? nearestCenter.lat : null,
+                centerLon: nearestCenter ? nearestCenter.lon : null,
+                timerStart: null,
+                timerEnd: null,
+                events: []
+            };
+
+            // حفظ في جوجل شيت
+            const response = await fetch(SHEET_API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reportData)
+            });
+
+            if (!response.ok) throw new Error('فشل الحفظ في جوجل شيت');
+
+            // إرسال إشعار للتليجرام
+            const caption = `🔴 بلاغ جديد\n━━━━━━━━━━\n📋 النوع: ${reportData.type}\n👤 الاسم: ${reportData.fullName}\n📞 الهاتف: ${reportData.phone}\n📊 الخطر: ${reportData.risk}\n📍 الموقع: ${reportData.location}\n🏢 أقرب مركز: ${reportData.nearestCenter} (${reportData.distance} كم)`;
+            await sendTelegramMessage(caption);
+
+            statusDiv.textContent = '✅ تم الإرسال بنجاح! (تم الحفظ في جوجل شيت والتليجرام)';
+            statusDiv.className = 'status success';
+            setTimeout(() => showPage('page-citizen'), 1500);
+        } catch (e) {
+            statusDiv.textContent = '❌ ' + e.message;
+            statusDiv.className = 'status error';
+            alert('⚠️ خطأ في الإرسال:\n' + e.message);
+        }
+    });
+
+    // ===== كلمات المرور =====
+    function verifyPassword() {
+        const input = document.getElementById('passwordInput').value;
+        const status = document.getElementById('passwordStatus');
+        if (input === CIVIL_PASSWORD) {
+            status.textContent = '✅ مرحباً بك';
+            status.className = 'status success';
+            showPage('page-civil-dashboard');
+        } else {
+            status.textContent = '❌ خطأ';
+            status.className = 'status error';
+        }
+    }
+    document.getElementById('passwordInput').addEventListener('keyup', (e) => { if(e.key === 'Enter') verifyPassword(); });
+
+    function verifyOpPassword() {
+        const input = document.getElementById('opPasswordInput').value;
+        const status = document.getElementById('opPasswordStatus');
+        if (input === OP_PASSWORD) {
+            status.textContent = '✅ مرحباً بك';
+            status.className = 'status success';
+            showPage('page-operations');
+            loadCentersData();
+        } else {
+            status.textContent = '❌ خطأ';
+            status.className = 'status error';
+        }
+    }
+    document.getElementById('opPasswordInput').addEventListener('keyup', (e) => { if(e.key === 'Enter') verifyOpPassword(); });
+
+    // ===== جلب البلاغات من SheetDB مع مزامنة مع التليجرام =====
+    async function loadReportsFromSheet() {
+        const list = document.getElementById('reportList');
+        try {
+            const response = await fetch(SHEET_API_URL);
+            if (!response.ok) throw new Error('فشل جلب البيانات');
+            const data = await response.json();
+            if (data && data.length > 0) {
+                // التحقق من وجود بلاغات جديدة وإرسال إشعار (آخر بلاغ)
+                if (data.length > allReports.length) {
+                    const newReport = data[0]; // أحدث بلاغ
+                    await sendTelegramMessage(`📢 *تم إضافة بلاغ جديد من جهاز آخر*\n👤 ${newReport.fullName}\n📋 ${newReport.type}\n🕒 ${newReport.timestamp}`);
+                }
+                allReports = data;
+                document.getElementById('lastSyncTime').textContent = new Date().toLocaleTimeString();
+                renderReports();
+            } else {
+                allReports = [];
+                renderReports();
+            }
+        } catch (error) {
+            console.warn('Sheet Fetch Error:', error);
+            list.innerHTML = `
+                <div style="text-align:center;color:#ffcc00;padding:30px 15px;font-size:16px;border:1px solid rgba(255,204,0,0.2);border-radius:14px;background:rgba(0,0,0,0.4);">
+                    ⚠️ فشل الاتصال<br>
+                    <button onclick="forceRefresh()" style="background:#ffcc00;color:#000;border:none;padding:6px 20px;border-radius:30px;font-weight:900;font-family:'Tajawal',sans-serif;cursor:pointer;margin-top:8px;">🔄 إعادة المحاولة</button>
+                </div>
+            `;
+        }
+    }
+
+    // ===== عرض البلاغات =====
+    function renderReports() {
+        const list = document.getElementById('reportList');
+        let filtered = currentFilter === 'all' ? allReports : allReports.filter(r => r.type === currentFilter);
+        if (currentFilter === 'مركز') {
+            renderCenterReports();
+            return;
+        }
+        if (filtered.length === 0) {
+            list.innerHTML = `<div style="text-align:center;color:#555;padding:30px 0;font-size:16px;">📭 لا توجد بلاغات</div>`;
+            return;
+        }
+        const sorted = [...filtered].sort((a, b) => parseInt(b.id) - parseInt(a.id));
+        list.innerHTML = sorted.map(r => {
+            const badgeClass = { 'حريق':'fire', 'حادث مروري':'accident', 'حالة إسعافية':'medical', 'طلب مساعدة':'help', 'شكوى':'complaint' }[r.type] || 'complaint';
+            const statusClass = r.status === 'قيد المعالجة' ? 'progress' : (r.status === 'تم الحل' ? 'done' : 'new');
+            const centerInfo = r.nearestCenter ? `🏢 ${r.nearestCenter} (${r.distance} كم)` : '';
+            return `
+                <div class="report-item" onclick="showReportDetail('${r.id}')">
+                    <div class="flex-between">
+                        <span class="report-title">${r.fullName}</span>
+                        <span class="badge ${badgeClass}">${r.type}</span>
+                    </div>
+                    <div class="flex-between" style="margin-top:3px;">
+                        <span class="report-meta">📞 ${r.phone} · ⚠️ ${r.risk}</span>
+                        <span class="status-tag ${statusClass}">${r.status}</span>
+                    </div>
+                    <div class="report-meta" style="font-size:12px;color:#666;">${centerInfo} · 🕒 ${r.timestamp}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // ===== تفاصيل البلاغ =====
+    function showReportDetail(id) {
+        const report = allReports.find(r => r.id === id);
+        if (!report) return;
+        const detailDiv = document.getElementById('detailContent');
+        const link = report.location || `https://www.google.com/maps?q=${report.lat},${report.lon}`;
+        const centerLink = report.centerLat ? `https://www.google.com/maps?q=${report.centerLat},${report.centerLon}` : '#';
+
+        if (!report.timerStart && report.status !== 'تم الحل') {
+            report.timerStart = Date.now();
+            updateReportInSheet(report);
+        }
+
+        const timerDisplay = report.timerStart ? `
+            <div class="timer" id="timer_${report.id}">⏱️ ${formatTime(report.timerStart, report.timerEnd)}</div>
+        ` : '';
+
+        detailDiv.innerHTML = `
+            <p><strong>📋 النوع:</strong> ${report.type}</p>
+            <p><strong>👤 الاسم:</strong> ${report.fullName}</p>
+            <p><strong>📞 الهاتف:</strong> ${report.phone}</p>
+            <p><strong>📝 الوصف:</strong> ${report.description}</p>
+            <p><strong>📊 الخطر:</strong> ${report.risk}</p>
+            <p><strong>🏢 أقرب مركز:</strong> ${report.nearestCenter || 'غير محدد'} (${report.distance || '?'} كم)</p>
+            <p><strong>📌 الحالة:</strong> ${report.status}</p>
+            ${timerDisplay}
+            <div class="mini-map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d${Math.abs(report.lat - (report.centerLat || report.lat)) * 100000}!2d${report.lon}!3d${report.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!1m0!2m1!1z2KfZhNin2YbYqtiuINin2YTYs9in2YbbjCDYp9mE2YLYtdmKINin2YTYqti02KfbjA!3m2!1d${report.centerLat || report.lat}!2d${report.centerLon || report.lon}!4m5!1s0x0%3A0x0!2z2KfZhNin2YbYqtiuINin2YTYs9in2YbbjCDYp9mE2YLYtdmKINin2YTYqti02KfbjA!3m2!1d${report.lat}!2d${report.lon}!5e0!3m2!1sar!2s!4v1234567890" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <p><a href="${link}" target="_blank" class="map-link">🗺️ فتح موقع المبلغ</a>
+            ${report.centerLat ? `<a href="${centerLink}" target="_blank" class="map-link" style="background:#2980b9;">🏢 فتح موقع المركز</a>` : ''}</p>
+            <hr class="divider">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+                <button class="status-btn progress" onclick="updateStatus('${report.id}', 'قيد المعالجة')">⚙️ معالجة</button>
+                <button class="status-btn done" onclick="updateStatus('${report.id}', 'تم الحل')">✅ حل</button>
+                <button class="status-btn reset" onclick="updateStatus('${report.id}', 'جديد')">↩️ إعادة</button>
+                <button class="status-btn delete" onclick="deleteReport('${report.id}')">🗑️ حذف</button>
+            </div>
+            <div style="margin-top:8px;">
+                <button class="send-btn" style="font-size:14px;padding:8px;background:#2980b9;margin-top:4px;" onclick="sendToCenter('${report.id}')">📤 إرسال للمركز</button>
+            </div>
+            <div id="events_${report.id}" style="margin-top:8px;font-size:13px;color:#aaa;"></div>
+        `;
+        document.getElementById('reportDetail').classList.remove('hidden');
+
+        if (report.timerStart && report.status !== 'تم الحل') {
+            if (timers[report.id]) clearInterval(timers[report.id]);
+            timers[report.id] = setInterval(() => {
+                const timerEl = document.getElementById(`timer_${report.id}`);
+                if (timerEl) {
+                    timerEl.textContent = `⏱️ ${formatTime(report.timerStart, report.timerEnd)}`;
+                }
+            }, 1000);
+        }
+
+        const eventsDiv = document.getElementById(`events_${report.id}`);
+        if (report.events && report.events.length > 0) {
+            eventsDiv.innerHTML = `<strong style="color:#ffcc00;">📋 سجل الأحداث:</strong><br>` + report.events.map(e => `• ${e}`).join('<br>');
+        }
+    }
+
+    // ===== تنسيق الوقت =====
+    function formatTime(start, end) {
+        if (!start) return 'لم يبدأ';
+        const now = end || Date.now();
+        const diff = Math.floor((now - start) / 1000);
+        const hours = Math.floor(diff / 3600);
+        const minutes = Math.floor((diff % 3600) / 60);
+        const seconds = diff % 60;
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    // ===== تحديث الحالة (مع إرسال إشعار للتليجرام) =====
+    function updateStatus(id, newStatus) {
+        const report = allReports.find(r => r.id === id);
+        if (report) {
+            const oldStatus = report.status;
+            report.status = newStatus;
+            if (newStatus === 'تم الحل' && !report.timerEnd) {
+                report.timerEnd = Date.now();
+                report.events = report.events || [];
+                report.events.push(`✅ تم الحل في ${new Date().toLocaleString('ar-SY')}`);
+            }
+            if (newStatus === 'قيد المعالجة') {
+                report.events = report.events || [];
+                report.events.push(`⚙️ بدء المعالجة في ${new Date().toLocaleString('ar-SY')}`);
+            }
+            updateReportInSheet(report);
+            renderReports();
+            showReportDetail(id);
+            // إرسال إشعار بتغيير الحالة
+            sendTelegramMessage(`🔄 *تغيير حالة البلاغ*\n👤 ${report.fullName}\n📋 ${report.type}\n📌 من: ${oldStatus} → ${newStatus}`);
+        }
+    }
+
+    // ===== حذف البلاغ =====
+    function deleteReport(id) {
+        if (confirm('⚠️ هل أنت متأكد من حذف هذا البلاغ؟')) {
+            const report = allReports.find(r => r.id === id);
+            allReports = allReports.filter(r => r.id !== id);
+            fetch(`${SHEET_API_URL}/id/${id}`, { method: 'DELETE' }).catch(e => console.warn('Delete error:', e));
+            renderReports();
+            document.getElementById('reportDetail').classList.add('hidden');
+            if (report) {
+                sendTelegramMessage(`🗑️ *تم حذف البلاغ*\n👤 ${report.fullName}\n📋 ${report.type}`);
+            }
+        }
+    }
+
+    // ===== إرسال البلاغ للمركز =====
+    function sendToCenter(id) {
+        const report = allReports.find(r => r.id === id);
+        if (!report) return;
+        const centerReport = { ...report, centerName: report.nearestCenter || 'مركز غير محدد', receivedAt: new Date().toLocaleString('ar-SY'), status: 'وارد' };
+        centerReports.push(centerReport);
+        localStorage.setItem('centerReports', JSON.stringify(centerReports));
+        report.events = report.events || [];
+        report.events.push(`📤 تم إرسال البلاغ إلى مركز ${report.nearestCenter} في ${new Date().toLocaleString('ar-SY')}`);
+        updateReportInSheet(report);
+        renderReports();
+        showReportDetail(id);
+        sendTelegramMessage(`📤 *تم إرسال البلاغ للمركز*\n👤 ${report.fullName}\n🏢 المركز: ${report.nearestCenter}`);
+        alert(`✅ تم إرسال البلاغ إلى مركز ${report.nearestCenter}`);
+    }
+
+    // ===== عرض بلاغات المراكز =====
+    function renderCenterReports() {
+        const list = document.getElementById('centerReportList');
+        if (centerReports.length === 0) {
+            list.innerHTML = `<div style="text-align:center;color:#555;padding:30px 0;font-size:16px;">📭 لا توجد بلاغات للمراكز</div>`;
+            return;
+        }
+        const sorted = [...centerReports].sort((a, b) => parseInt(b.id) - parseInt(a.id));
+        list.innerHTML = sorted.map(r => `
+            <div class="report-item" onclick="showCenterDetail('${r.id}')">
+                <div class="flex-between">
+                    <span class="report-title">🏢 ${r.centerName}</span>
+                    <span class="badge ${r.type === 'حريق'?'fire':r.type === 'حادث مروري'?'accident':r.type === 'حالة إسعافية'?'medical':'complaint'}">${r.type}</span>
+                </div>
+                <div class="report-meta">👤 ${r.fullName} · 📞 ${r.phone}</div>
+                <div class="report-meta" style="font-size:12px;color:#666;">🕒 ${r.receivedAt}</div>
+            </div>
+        `).join('');
+    }
+
+    // ===== تفاصيل بلاغ المركز =====
+    function showCenterDetail(id) {
+        const report = centerReports.find(r => r.id === id);
+        if (!report) return;
+        const detailDiv = document.getElementById('centerDetailContent');
+        const link = report.location || `https://www.google.com/maps?q=${report.lat},${report.lon}`;
+        if (!report.timerStart) { report.timerStart = Date.now(); localStorage.setItem('centerReports', JSON.stringify(centerReports)); }
+        detailDiv.innerHTML = `
+            <p><strong>🏢 المركز:</strong> ${report.centerName}</p>
+            <p><strong>📋 النوع:</strong> ${report.type}</p>
+            <p><strong>👤 المبلغ:</strong> ${report.fullName}</p>
+            <p><strong>📞 الهاتف:</strong> ${report.phone}</p>
+            <p><strong>📝 الوصف:</strong> ${report.description}</p>
+            <p><strong>📊 الخطر:</strong> ${report.risk}</p>
+            <div class="timer" id="centerTimer_${report.id}">⏱️ ${formatTime(report.timerStart, report.timerEnd)}</div>
+            <div class="mini-map"><iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d${Math.abs(report.lat - (report.centerLat || report.lat)) * 100000}!2d${report.lon}!3d${report.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!1m0!2m1!1z2KfZhNin2YbYqtiuINin2YTYs9in2YbbjCDYp9mE2YLYtdmKINin2YTYqti02KfbjA!3m2!1d${report.centerLat || report.lat}!2d${report.centerLon || report.lon}!4m5!1s0x0%3A0x0!2z2KfZhNin2YbYqtiuINin2YTYs9in2YbbjCDYp9mE2YLYtdmKINin2YTYqti02KfbjA!3m2!1d${report.lat}!2d${report.lon}!5e0!3m2!1sar!2s!4v1234567890" allowfullscreen loading="lazy"></iframe></div>
+            <p><a href="${link}" target="_blank" class="map-link">🗺️ فتح الموقع</a></p>
+            <hr class="divider">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;"><button class="status-btn done" onclick="completeCenterReport('${report.id}')">✅ تم الإنجاز</button></div>
+            <div id="centerEvents_${report.id}" style="margin-top:8px;font-size:13px;color:#aaa;"></div>
+        `;
+        document.getElementById('centerReportDetail').classList.remove('hidden');
+        if (timers[`center_${report.id}`]) clearInterval(timers[`center_${report.id}`]);
+        timers[`center_${report.id}`] = setInterval(() => {
+            const timerEl = document.getElementById(`centerTimer_${report.id}`);
+            if (timerEl) timerEl.textContent = `⏱️ ${formatTime(report.timerStart, report.timerEnd)}`;
+        }, 1000);
+        const eventsDiv = document.getElementById(`centerEvents_${report.id}`);
+        if (report.events && report.events.length > 0) {
+            eventsDiv.innerHTML = `<strong style="color:#ffcc00;">📋 سجل الأحداث:</strong><br>` + report.events.map(e => `• ${e}`).join('<br>');
+        }
+    }
+
+    function completeCenterReport(id) {
+        const report = centerReports.find(r => r.id === id);
+        if (report) {
+            report.timerEnd = Date.now();
+            report.events = report.events || [];
+            report.events.push(`✅ تم الإنجاز في ${new Date().toLocaleString('ar-SY')}`);
+            localStorage.setItem('centerReports', JSON.stringify(centerReports));
+            renderCenterReports();
+            showCenterDetail(id);
+            sendTelegramMessage(`✅ *تم إنجاز بلاغ المركز*\n🏢 ${report.centerName}\n👤 ${report.fullName}`);
+            alert('✅ تم إنجاز البلاغ');
+        }
+    }
+
+    function closeDetail() { document.getElementById('reportDetail').classList.add('hidden'); }
+    function closeCenterDetail() { document.getElementById('centerReportDetail').classList.add('hidden'); }
+
+    function updateReportInSheet(report) {
+        fetch(`${SHEET_API_URL}/id/${report.id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(report)
+        }).catch(e => console.warn('Update error:', e));
+    }
+
+    function filterReports(type) {
+        currentFilter = type;
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => { if (t.textContent.includes(type) || (type === 'all' && t.textContent === 'الكل')) t.classList.add('active'); });
+        if (type === 'مركز') { showPage('page-center-reports'); return; }
+        renderReports();
+        document.getElementById('reportDetail').classList.add('hidden');
+    }
+
+    function analyzeAndRouteReports() {
+        const results = document.getElementById('routingResults');
+        if (allReports.length === 0) { results.innerHTML = '<p style="color:#ffcc00;">📭 لا توجد بلاغات للتحليل</p>'; return; }
+        let html = '<div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:10px;"><h4 style="color:#ffcc00;">📊 نتائج التحليل</h4>';
+        allReports.forEach(r => {
+            if (r.status !== 'تم الحل') {
+                const dist = r.distance ? parseFloat(r.distance) : '?';
+                html += `
+                    <div style="border-bottom:1px solid rgba(255,204,0,0.1);padding:6px 0;">
+                        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;">
+                            <span style="color:#fff;">${r.fullName}</span>
+                            <span class="badge ${r.type === 'حريق'?'fire':r.type === 'حادث مروري'?'accident':r.type === 'حالة إسعافية'?'medical':'complaint'}">${r.type}</span>
+                        </div>
+                        <div style="font-size:13px;color:#aaa;">🏢 أقرب مركز: ${r.nearestCenter || 'غير محدد'} (${dist} كم)</div>
+                        <div style="font-size:12px;color:#666;"><a href="${r.location}" target="_blank" style="color:#ffcc00;">🗺️ فتح الموقع</a></div>
+                    </div>
+                `;
+            }
+        });
+        html += '</div>';
+        results.innerHTML = html;
+    }
+
+    function loadCentersData() {
+        const container = document.getElementById('carLocation');
+        container.innerHTML = CENTERS.map(c => `
+            <div style="background:rgba(0,0,0,0.4);border-radius:12px;padding:10px;margin-bottom:6px;border-right:4px solid #ffcc00;">
+                <div style="display:flex;justify-content:space-between;flex-wrap:wrap;">
+                    <span style="color:#fff;font-weight:900;">🏢 ${c.name}</span>
+                    <span style="color:#ffcc00;">📍 ${c.lat}, ${c.lon}</span>
+                </div>
+                <div style="font-size:12px;color:#aaa;margin-top:3px;">
+                    🚗 الحالة: <span style="color:#7fff7f;">جاهز</span>
+                    <button onclick="window.open('https://www.google.com/maps?q=${c.lat},${c.lon}','_blank')" style="background:rgba(0,0,0,0.5);color:#ffcc00;border:1px solid #ffcc00;border-radius:20px;padding:2px 12px;font-family:'Tajawal',sans-serif;font-weight:900;cursor:pointer;float:left;">🗺️ عرض</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function startAutoRefresh() {
+        if (refreshInterval) clearInterval(refreshInterval);
+        refreshInterval = setInterval(() => loadReportsFromSheet(), 6000); // تحديث كل 6 ثوانٍ
+    }
+    function stopAutoRefresh() { if (refreshInterval) { clearInterval(refreshInterval); refreshInterval = null; } }
+    function forceRefresh() {
+        allReports = [];
+        document.getElementById('reportList').innerHTML = '<div style="text-align:center;color:#ffcc00;padding:30px 0;font-size:16px;">🔄 جاري التحديث...</div>';
+        loadReportsFromSheet();
+    }
+
+    // ===== إشعارات =====
+    if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
+
+    // ===== التحميل الأولي =====
+    document.addEventListener('DOMContentLoaded', () => {
+        centerReports = JSON.parse(localStorage.getItem('centerReports')) || [];
+        setTimeout(() => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (p) => { userLat = p.coords.latitude; userLon = p.coords.longitude; },
+                    () => {}
+                );
+            }
+        }, 1500);
+    });
+</script>
+</body>
+</html>

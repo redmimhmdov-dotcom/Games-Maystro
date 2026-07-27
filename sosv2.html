@@ -2,15 +2,20 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>رجال السلام - الدفاع المدني السوري</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Tajawal:wght@700;900&display=swap" rel="stylesheet" />
     <style>
-        /* ===== RESET & BASE ===== */
+        /* ===== RESET & BASE (محسّن للشاشة الكاملة) ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body {
             width: 100%;
+            height: 100%;
             min-height: 100vh;
+            min-height: 100dvh;
             font-family: 'Tajawal', sans-serif;
             background: #0a0a0a;
             display: flex;
@@ -20,6 +25,9 @@
             margin: 0;
             direction: rtl;
             overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
         }
         .bg-image {
             position: fixed;
@@ -71,64 +79,72 @@
             0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(255,204,0,0.3); }
             50% { transform: scale(1.05); box-shadow: 0 0 70px rgba(255,204,0,0.7); }
         }
+
+        /* ===== التيرمينال - يملأ الشاشة بالكامل ===== */
         .terminal {
             position: relative;
             z-index: 2;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
             background: rgba(0, 0, 0, 0.65);
             backdrop-filter: blur(8px);
-            padding: 20px 18px 30px;
-            border-radius: 20px;
-            border: 2px solid #ffcc00;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.9);
-            max-width: 500px;
-            width: 100%;
-            max-height: 95vh;
+            padding: 15px 14px 20px;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
             overflow-y: auto;
-            margin: 10px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
         }
         .terminal::-webkit-scrollbar { width: 4px; }
         .terminal::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); border-radius: 10px; }
         .terminal::-webkit-scrollbar-thumb { background: #ffcc00; border-radius: 10px; }
+
+        /* ===== باقي الأنماط (كما هي مع تعديلات بسيطة) ===== */
         .terminal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             padding-bottom: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
+            flex-shrink: 0;
         }
         .badge-title {
             color: #ffffff;
-            font-size: clamp(14px, 2.5vw, 18px);
+            font-size: clamp(13px, 2.5vw, 17px);
             font-weight: 900;
             text-shadow: 0 2px 4px #000;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             cursor: pointer;
         }
-        .badge-title .logo-icon { font-size: 24px; }
+        .badge-title .logo-icon { font-size: 22px; }
         .status-badge {
             color: #ffcc00;
-            font-size: 12px;
+            font-size: 11px;
             font-family: 'Fira Code', monospace;
             background: #000;
-            padding: 3px 12px;
+            padding: 3px 10px;
             border-radius: 12px;
             border: 1px solid #ffcc00;
         }
         #typewriter {
             color: #ffffff;
-            font-size: clamp(1.1rem, 2.8vw, 1.7rem);
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
             font-weight: 900;
             text-shadow: 0 0 10px #000, 0 0 20px #000;
             text-align: center;
-            line-height: 1.7;
-            min-height: 90px;
-            padding: 5px 0;
+            line-height: 1.6;
+            min-height: 70px;
+            padding: 4px 0;
             direction: rtl;
+            flex-shrink: 0;
         }
         .cursor {
             display: inline-block;
@@ -141,151 +157,130 @@
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         .visitor-counter {
             color: #fff;
-            font-size: 13px;
+            font-size: 12px;
             font-family: 'Fira Code', monospace;
             background: #000;
-            padding: 4px 14px;
+            padding: 3px 12px;
             border-radius: 6px;
             border: 1px solid #444;
             display: inline-block;
-            margin-top: 8px;
+            margin-top: 4px;
             text-align: center;
             width: fit-content;
             margin-left: auto;
             margin-right: auto;
+            flex-shrink: 0;
         }
         .visitor-counter span { color: #ffcc00; font-weight: 900; }
 
-        /* ===== الأزرار الرئيسية (تصميم جديد عصري) ===== */
+        /* ===== الأزرار الرئيسية ===== */
         .main-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin: 20px 0 12px;
+            gap: 12px;
+            margin: 14px 0 10px;
+            flex-shrink: 0;
         }
         .main-btn {
             background: linear-gradient(145deg, rgba(255, 204, 0, 0.12), rgba(255, 204, 0, 0.04));
             backdrop-filter: blur(8px);
             border: 2px solid rgba(255, 204, 0, 0.35);
-            border-radius: 18px;
-            padding: 28px 10px;
+            border-radius: 16px;
+            padding: 20px 8px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 900;
-            font-size: clamp(15px, 2vw, 19px);
+            font-size: clamp(14px, 2vw, 17px);
             color: #fff;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
             position: relative;
             overflow: hidden;
         }
-        .main-btn::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,204,0,0.1) 0%, transparent 70%);
-            transition: 0.5s;
-            opacity: 0;
-        }
-        .main-btn:hover::before { opacity: 1; }
         .main-btn .icon {
-            font-size: 42px;
+            font-size: 34px;
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             filter: drop-shadow(0 0 15px rgba(255,204,0,0.2));
             transition: 0.3s;
         }
         .main-btn:hover {
-            transform: translateY(-3px) scale(1.02);
+            transform: translateY(-2px) scale(1.02);
             border-color: #ffcc00;
             background: linear-gradient(145deg, rgba(255, 204, 0, 0.25), rgba(255, 204, 0, 0.08));
-            box-shadow: 0 12px 48px rgba(255, 204, 0, 0.2);
+            box-shadow: 0 8px 30px rgba(255, 204, 0, 0.2);
         }
-        .main-btn:hover .icon { transform: scale(1.1) rotate(-3deg); }
         .main-btn:active { transform: scale(0.95); }
 
-        /* ===== أزرار الخدمات (تصميم جديد) ===== */
+        /* ===== أزرار الخدمات ===== */
         .service-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin: 12px 0;
+            gap: 10px;
+            margin: 10px 0;
+            flex-shrink: 0;
         }
         .service-btn {
             background: rgba(0,0,0,0.5);
             backdrop-filter: blur(6px);
             border: 1px solid rgba(255,204,0,0.2);
-            border-radius: 16px;
-            padding: 18px 8px;
+            border-radius: 14px;
+            padding: 14px 6px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 900;
-            font-size: clamp(13px, 1.5vw, 16px);
+            font-size: clamp(12px, 1.4vw, 15px);
             color: #eee;
             position: relative;
             overflow: hidden;
         }
-        .service-btn::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, #ffcc00, #ff8800);
-            transform: scaleX(0);
-            transition: 0.3s;
-        }
-        .service-btn:hover::after { transform: scaleX(1); }
-        .service-btn .icon { font-size: 30px; display: block; margin-bottom: 5px; }
+        .service-btn .icon { font-size: 26px; display: block; margin-bottom: 4px; }
         .service-btn:hover {
             background: rgba(255,204,0,0.12);
             border-color: #ffcc00;
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255,204,0,0.1);
+            box-shadow: 0 6px 20px rgba(255,204,0,0.1);
         }
         .service-btn.span2 { grid-column: span 2; }
 
-        /* ===== باقي الأنماط ===== */
-        .page { display: none; animation: fadeSlide 0.3s ease; padding: 5px 0; }
-        .page.active { display: block; }
+        /* ===== باقي الأنماط (مختصرة مع تحسينات) ===== */
+        .page { display: none; animation: fadeSlide 0.3s ease; padding: 4px 0; flex: 1; overflow-y: auto; }
+        .page.active { display: flex; flex-direction: column; }
         @keyframes fadeSlide { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
         .page-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(255,204,0,0.2);
-            padding-bottom: 8px;
-            margin-bottom: 15px;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+            flex-shrink: 0;
         }
         .page-header .title {
             color: #ffcc00;
-            font-size: clamp(16px, 2.5vw, 22px);
+            font-size: clamp(15px, 2.2vw, 20px);
             font-weight: 900;
         }
         .back-btn {
             background: none;
             border: none;
             color: #ffcc00;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 900;
             cursor: pointer;
-            padding: 0 8px;
+            padding: 0 6px;
             transition: 0.3s;
         }
         .back-btn:hover { transform: rotate(90deg); }
-        label { display: block; margin: 14px 0 4px; font-weight: 900; font-size: 14px; color: #eee; }
+        label { display: block; margin: 10px 0 3px; font-weight: 900; font-size: 13px; color: #eee; }
         label .required { color: #ffcc00; }
         input, select, textarea {
             width: 100%;
-            padding: 10px 14px;
+            padding: 8px 12px;
             border: 2px solid rgba(255,204,0,0.25);
-            border-radius: 12px;
-            font-size: 15px;
+            border-radius: 10px;
+            font-size: 14px;
             background: rgba(0,0,0,0.6);
             color: #fff;
             transition: 0.3s;
@@ -298,71 +293,75 @@
             box-shadow: 0 0 0 4px rgba(255,204,0,0.1);
             background: rgba(0,0,0,0.8);
         }
-        textarea { resize: vertical; min-height: 60px; }
+        textarea { resize: vertical; min-height: 50px; }
 
         .send-btn {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             border: none;
-            border-radius: 14px;
-            font-size: clamp(16px, 2vw, 20px);
+            border-radius: 12px;
+            font-size: clamp(15px, 1.8vw, 18px);
             font-weight: 900;
             cursor: pointer;
-            margin-top: 18px;
+            margin-top: 14px;
             background: linear-gradient(135deg, #ffcc00, #e6a800);
             color: #000;
             box-shadow: 0 4px 20px rgba(255,204,0,0.3);
             transition: 0.3s;
             font-family: 'Tajawal', sans-serif;
+            flex-shrink: 0;
         }
         .send-btn:hover { transform: scale(1.02); box-shadow: 0 6px 30px rgba(255,204,0,0.5); }
 
         .status {
-            margin-top: 12px;
-            padding: 10px;
-            border-radius: 12px;
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 10px;
             text-align: center;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             background: rgba(0,0,0,0.5);
             border: 1px solid rgba(255,204,0,0.15);
-            min-height: 44px;
+            min-height: 38px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #ddd;
+            flex-shrink: 0;
         }
         .status.success { background: rgba(0,40,20,0.7); color: #7fff7f; border-color: #2a6a3a; }
         .status.error { background: rgba(40,0,0,0.7); color: #ff6666; border-color: #6a2a2a; }
 
         .report-list {
-            max-height: 320px;
+            max-height: 280px;
             overflow-y: auto;
-            margin: 8px 0 12px;
+            margin: 6px 0 10px;
             padding: 2px;
+            flex: 1;
         }
         .report-list::-webkit-scrollbar { width: 4px; }
         .report-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); border-radius: 10px; }
         .report-list::-webkit-scrollbar-thumb { background: #ffcc00; border-radius: 10px; }
+
         .report-item {
             background: rgba(0,0,0,0.5);
             backdrop-filter: blur(4px);
-            border-radius: 14px;
-            padding: 12px 14px;
-            margin-bottom: 10px;
-            border-right: 5px solid #ffcc00;
+            border-radius: 12px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border-right: 4px solid #ffcc00;
             cursor: pointer;
             transition: 0.3s;
             border-left: 1px solid rgba(255,204,0,0.1);
         }
-        .report-item:hover { background: rgba(255,204,0,0.08); transform: translateX(-3px); }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; }
-        .report-title { font-size: 16px; font-weight: 900; color: #fff; }
+        .report-item:hover { background: rgba(255,204,0,0.08); transform: translateX(-2px); }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 3px; }
+        .report-title { font-size: 15px; font-weight: 900; color: #fff; }
         .badge {
             display: inline-block;
-            padding: 2px 12px;
+            padding: 1px 10px;
             border-radius: 30px;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 900;
         }
         .badge.fire { background: rgba(200,50,50,0.7); color: #ff8888; }
@@ -370,8 +369,8 @@
         .badge.medical { background: rgba(50,200,100,0.7); color: #66ffaa; }
         .badge.help { background: rgba(150,50,200,0.7); color: #cc88ff; }
         .badge.complaint { background: rgba(50,100,200,0.7); color: #66aaff; }
-        .report-meta { font-size: 13px; color: #ccc; margin-top: 3px; font-weight: 700; }
-        .status-tag { font-weight: 900; padding: 2px 10px; border-radius: 20px; font-size: 11px; }
+        .report-meta { font-size: 12px; color: #ccc; margin-top: 2px; font-weight: 700; }
+        .status-tag { font-weight: 900; padding: 1px 8px; border-radius: 20px; font-size: 10px; }
         .status-tag.new { background: rgba(255,204,0,0.2); color: #ffcc00; }
         .status-tag.progress { background: rgba(255,200,50,0.2); color: #ffcc44; }
         .status-tag.done { background: rgba(50,255,100,0.15); color: #66ffaa; }
@@ -379,34 +378,34 @@
         .detail-box {
             background: rgba(0,0,0,0.6);
             backdrop-filter: blur(8px);
-            border-radius: 14px;
-            padding: 14px;
-            margin: 12px 0;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 10px 0;
             border: 1px solid rgba(255,204,0,0.15);
         }
-        .detail-box p { margin: 6px 0; font-size: 14px; color: #eee; font-weight: 700; }
+        .detail-box p { margin: 4px 0; font-size: 13px; color: #eee; font-weight: 700; }
         .detail-box strong { color: #ffcc00; }
         .map-link {
             display: inline-block;
             background: #ffcc00;
             color: #000;
-            padding: 6px 16px;
+            padding: 4px 14px;
             border-radius: 30px;
             text-decoration: none;
             font-weight: 900;
-            font-size: 13px;
-            margin-top: 6px;
+            font-size: 12px;
+            margin-top: 4px;
         }
         .map-link:hover { background: #ffdd44; }
         .status-btn {
-            padding: 5px 14px;
+            padding: 4px 12px;
             border: none;
             border-radius: 30px;
             font-weight: 900;
             cursor: pointer;
-            margin: 3px;
+            margin: 2px;
             font-family: 'Tajawal', sans-serif;
-            font-size: 13px;
+            font-size: 12px;
             transition: 0.3s;
         }
         .status-btn:hover { transform: scale(1.05); }
@@ -415,29 +414,30 @@
         .status-btn.reset { background: #555; color: #fff; }
         .status-btn.delete { background: #c0392b; color: #fff; }
         .hidden { display: none; }
-        .divider { border: none; height: 1px; background: rgba(255,204,0,0.15); margin: 12px 0; }
+        .divider { border: none; height: 1px; background: rgba(255,204,0,0.15); margin: 8px 0; }
         .timer {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 900;
             color: #ffcc00;
             text-align: center;
-            padding: 8px;
+            padding: 6px;
             background: rgba(0,0,0,0.4);
             border-radius: 10px;
-            margin: 8px 0;
+            margin: 6px 0;
             direction: ltr;
         }
         .tabs {
             display: flex;
             flex-wrap: wrap;
-            gap: 5px;
-            margin: 10px 0 8px;
+            gap: 4px;
+            margin: 8px 0 6px;
+            flex-shrink: 0;
         }
         .tab {
             background: rgba(0,0,0,0.4);
-            padding: 5px 14px;
+            padding: 4px 12px;
             border-radius: 30px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 900;
             cursor: pointer;
             border: 1px solid rgba(255,204,0,0.15);
@@ -451,9 +451,9 @@
             background: rgba(0,0,0,0.5);
             color: #ffcc00;
             border: 1px solid #ffcc00;
-            padding: 3px 14px;
+            padding: 2px 12px;
             border-radius: 30px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 900;
             cursor: pointer;
             font-family: 'Tajawal', sans-serif;
@@ -462,10 +462,10 @@
         .refresh-btn:hover { background: #ffcc00; color: #000; }
         .mini-map {
             width: 100%;
-            height: 140px;
+            height: 120px;
             background: rgba(0,0,0,0.3);
-            border-radius: 12px;
-            margin: 8px 0;
+            border-radius: 10px;
+            margin: 6px 0;
             border: 1px solid rgba(255,204,0,0.1);
             overflow: hidden;
         }
@@ -475,30 +475,30 @@
             background: #ffcc00;
             color: #000;
             border-radius: 50%;
-            padding: 1px 9px;
-            font-size: 12px;
+            padding: 1px 8px;
+            font-size: 11px;
             font-weight: 900;
             margin-right: 4px;
         }
 
-        /* ===== زر إعادة التعيين ===== */
         .reset-section {
-            margin-top: 18px;
-            padding-top: 14px;
+            margin-top: 14px;
+            padding-top: 10px;
             border-top: 1px solid rgba(255,204,0,0.15);
             text-align: center;
+            flex-shrink: 0;
         }
         .reset-btn {
             background: rgba(200, 50, 50, 0.15);
             border: 1px solid rgba(200, 50, 50, 0.3);
             color: #ff6666;
-            padding: 8px 24px;
+            padding: 6px 20px;
             border-radius: 30px;
             font-weight: 900;
             cursor: pointer;
             font-family: 'Tajawal', sans-serif;
             transition: 0.3s;
-            font-size: 14px;
+            font-size: 13px;
         }
         .reset-btn:hover {
             background: rgba(200, 50, 50, 0.3);
@@ -508,12 +508,18 @@
         }
 
         @media (max-width: 480px) {
-            .terminal { padding: 15px 12px; margin: 8px; }
-            .main-btn { padding: 20px 6px; font-size: 14px; }
-            .main-btn .icon { font-size: 32px; }
-            .service-btn { padding: 14px 4px; font-size: 13px; }
-            .service-btn .icon { font-size: 24px; }
-            #typewriter { font-size: 1rem; min-height: 70px; }
+            .terminal { padding: 10px 10px 14px; }
+            .main-btn { padding: 14px 6px; font-size: 13px; }
+            .main-btn .icon { font-size: 28px; }
+            .service-btn { padding: 10px 4px; font-size: 12px; }
+            .service-btn .icon { font-size: 22px; }
+            #typewriter { font-size: 0.95rem; min-height: 60px; }
+            .report-list { max-height: 200px; }
+        }
+
+        /* تحسين للشاشات الطويلة جداً */
+        @media (min-height: 800px) {
+            .report-list { max-height: 400px; }
         }
     </style>
 </head>
@@ -528,7 +534,7 @@
 <!-- ===== صورة الخلفية ===== -->
 <div class="bg-image"></div>
 
-<!-- ===== التيرمينال / التطبيق ===== -->
+<!-- ===== التيرمينال / التطبيق (يملأ الشاشة) ===== -->
 <div class="terminal" id="app">
 
     <!-- رأس التيرمينال -->
@@ -560,10 +566,9 @@
                 الدفاع المدني
             </div>
         </div>
-        <div style="text-align:center;font-size:12px;color:#888;margin-top:10px;font-weight:700;">
+        <div style="text-align:center;font-size:11px;color:#888;margin-top:6px;font-weight:700;flex-shrink:0;">
             by muhammad
         </div>
-        <!-- ===== زر إعادة التعيين ===== -->
         <div class="reset-section">
             <button class="reset-btn" onclick="showResetPassword()">🗑️ مسح شامل وإعادة تعيين</button>
         </div>
@@ -575,11 +580,11 @@
             <div class="title">🔐 تأكيد إعادة التعيين</div>
             <button class="back-btn" onclick="showPage('page-home')">✕</button>
         </div>
-        <div class="text-center" style="padding:20px 0;">
-            <div style="font-size:60px;color:#ff4444;">⚠️</div>
-            <p style="color:#ff6666;font-weight:900;margin-bottom:15px;">سيتم حذف جميع البلاغات والإعدادات بشكل نهائي</p>
-            <input type="password" id="resetPasswordInput" placeholder="••••" style="text-align:center;font-size:24px;letter-spacing:6px;max-width:180px;margin:12px auto;" />
-            <button class="send-btn" style="background:rgba(200,50,50,0.3);color:#ff6666;border:2px solid #ff4444;box-shadow:none;" onclick="confirmReset()">🗑️ تأكيد الحذف الشامل</button>
+        <div class="text-center" style="padding:20px 0;flex:1;display:flex;flex-direction:column;justify-content:center;">
+            <div style="font-size:50px;color:#ff4444;">⚠️</div>
+            <p style="color:#ff6666;font-weight:900;margin-bottom:12px;font-size:14px;">سيتم حذف جميع البلاغات والإعدادات بشكل نهائي</p>
+            <input type="password" id="resetPasswordInput" placeholder="••••" style="text-align:center;font-size:22px;letter-spacing:6px;max-width:160px;margin:10px auto;" />
+            <button class="send-btn" style="background:rgba(200,50,50,0.3);color:#ff6666;border:2px solid #ff4444;box-shadow:none;font-size:16px;padding:10px;" onclick="confirmReset()">🗑️ تأكيد الحذف الشامل</button>
             <div class="status" id="resetStatus">أدخل كلمة المرور (1992)</div>
         </div>
     </div>
@@ -623,10 +628,10 @@
             <div class="title">🔐 الدخول للدفاع</div>
             <button class="back-btn" onclick="showPage('page-home')">✕</button>
         </div>
-        <div class="text-center" style="padding:20px 0;">
-            <div style="font-size:60px;color:#ffcc00;">🔐</div>
-            <input type="password" id="passwordInput" placeholder="••••" style="text-align:center;font-size:24px;letter-spacing:6px;max-width:180px;margin:12px auto;" />
-            <button class="send-btn" style="background:rgba(0,0,0,0.6);color:#ffcc00;border:2px solid #ffcc00;box-shadow:none;" onclick="verifyPassword()">تأكيد</button>
+        <div class="text-center" style="padding:20px 0;flex:1;display:flex;flex-direction:column;justify-content:center;">
+            <div style="font-size:50px;color:#ffcc00;">🔐</div>
+            <input type="password" id="passwordInput" placeholder="••••" style="text-align:center;font-size:22px;letter-spacing:6px;max-width:160px;margin:10px auto;" />
+            <button class="send-btn" style="background:rgba(0,0,0,0.6);color:#ffcc00;border:2px solid #ffcc00;box-shadow:none;font-size:16px;padding:10px;" onclick="verifyPassword()">تأكيد</button>
             <div class="status" id="passwordStatus">أدخل الرمز السري</div>
         </div>
     </div>
@@ -637,10 +642,10 @@
             <div class="title">🔗 ربط العمليات</div>
             <button class="back-btn" onclick="showPage('page-home')">✕</button>
         </div>
-        <div class="text-center" style="padding:20px 0;">
-            <div style="font-size:60px;color:#ffcc00;">⚙️</div>
-            <input type="password" id="opPasswordInput" placeholder="••••" style="text-align:center;font-size:24px;letter-spacing:6px;max-width:180px;margin:12px auto;" />
-            <button class="send-btn" style="background:rgba(0,0,0,0.6);color:#ffcc00;border:2px solid #ffcc00;box-shadow:none;" onclick="verifyOpPassword()">تأكيد</button>
+        <div class="text-center" style="padding:20px 0;flex:1;display:flex;flex-direction:column;justify-content:center;">
+            <div style="font-size:50px;color:#ffcc00;">⚙️</div>
+            <input type="password" id="opPasswordInput" placeholder="••••" style="text-align:center;font-size:22px;letter-spacing:6px;max-width:160px;margin:10px auto;" />
+            <button class="send-btn" style="background:rgba(0,0,0,0.6);color:#ffcc00;border:2px solid #ffcc00;box-shadow:none;font-size:16px;padding:10px;" onclick="verifyOpPassword()">تأكيد</button>
             <div class="status" id="opPasswordStatus">أدخل الرمز السري</div>
         </div>
     </div>
@@ -651,27 +656,27 @@
             <div class="title">🔗 ربط العمليات</div>
             <button class="back-btn" onclick="showPage('page-home')">✕</button>
         </div>
-        <div style="background:rgba(0,0,0,0.4);border-radius:12px;padding:12px;margin-bottom:12px;">
-            <h3 style="color:#ffcc00;font-size:16px;margin-bottom:8px;">📍 المراكز المعتمدة</h3>
-            <div class="center-selector" id="centersList" style="display:flex;flex-wrap:wrap;gap:6px;">
-                <button class="center-btn" data-center="الشدادي" style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,0,0.25);border-radius:10px;padding:8px 14px;color:#fff;font-weight:900;cursor:pointer;font-family:'Tajawal',sans-serif;">الشدادي</button>
-                <button class="center-btn" data-center="اليعربية" style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,0,0.25);border-radius:10px;padding:8px 14px;color:#fff;font-weight:900;cursor:pointer;font-family:'Tajawal',sans-serif;">اليعربية</button>
-                <button class="center-btn" data-center="تل حميس" style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,0,0.25);border-radius:10px;padding:8px 14px;color:#fff;font-weight:900;cursor:pointer;font-family:'Tajawal',sans-serif;">تل حميس</button>
-                <button class="center-btn" data-center="رأس العين" style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,0,0.25);border-radius:10px;padding:8px 14px;color:#fff;font-weight:900;cursor:pointer;font-family:'Tajawal',sans-serif;">رأس العين</button>
-                <button class="center-btn" data-center="الهول" style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,0,0.25);border-radius:10px;padding:8px 14px;color:#fff;font-weight:900;cursor:pointer;font-family:'Tajawal',sans-serif;">الهول</button>
+        <div style="background:rgba(0,0,0,0.4);border-radius:10px;padding:10px;margin-bottom:8px;flex-shrink:0;">
+            <h3 style="color:#ffcc00;font-size:15px;margin-bottom:6px;">📍 المراكز المعتمدة</h3>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                <button onclick="selectCenter('الشدادي')" style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,0,0.25);border-radius:8px;padding:6px 12px;color:#fff;font-weight:900;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:13px;">الشدادي</button>
+                <button onclick="selectCenter('اليعربية')" style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,0,0.25);border-radius:8px;padding:6px 12px;color:#fff;font-weight:900;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:13px;">اليعربية</button>
+                <button onclick="selectCenter('تل حميس')" style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,0,0.25);border-radius:8px;padding:6px 12px;color:#fff;font-weight:900;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:13px;">تل حميس</button>
+                <button onclick="selectCenter('رأس العين')" style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,0,0.25);border-radius:8px;padding:6px 12px;color:#fff;font-weight:900;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:13px;">رأس العين</button>
+                <button onclick="selectCenter('الهول')" style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,0,0.25);border-radius:8px;padding:6px 12px;color:#fff;font-weight:900;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:13px;">الهول</button>
             </div>
         </div>
-        <div style="background:rgba(0,0,0,0.4);border-radius:12px;padding:12px;margin-bottom:12px;">
-            <h3 style="color:#ffcc00;font-size:16px;margin-bottom:8px;">🚗 تتبع السيارات</h3>
-            <div id="carTracking"><p style="color:#aaa;font-size:14px;">اختر مركزاً لعرض موقعه</p><div id="carLocation"></div></div>
+        <div style="background:rgba(0,0,0,0.4);border-radius:10px;padding:10px;margin-bottom:8px;flex-shrink:0;">
+            <h3 style="color:#ffcc00;font-size:15px;margin-bottom:6px;">🚗 تتبع السيارات</h3>
+            <div id="carLocation"></div>
         </div>
-        <div style="background:rgba(0,0,0,0.4);border-radius:12px;padding:12px;margin-bottom:12px;">
-            <h3 style="color:#ffcc00;font-size:16px;margin-bottom:8px;">📊 تحليل البلاغات وتوجيهها</h3>
-            <button class="send-btn" style="font-size:15px;padding:10px;margin-top:4px;" onclick="analyzeAndRouteReports()">🔄 تحليل وتوجيه</button>
-            <div id="routingResults" style="margin-top:8px;"></div>
+        <div style="background:rgba(0,0,0,0.4);border-radius:10px;padding:10px;margin-bottom:8px;flex-shrink:0;">
+            <h3 style="color:#ffcc00;font-size:15px;margin-bottom:6px;">📊 تحليل البلاغات وتوجيهها</h3>
+            <button class="send-btn" style="font-size:14px;padding:8px;margin-top:4px;" onclick="analyzeAndRouteReports()">🔄 تحليل وتوجيه</button>
+            <div id="routingResults" style="margin-top:6px;"></div>
         </div>
-        <div style="background:rgba(0,0,0,0.4);border-radius:12px;padding:12px;">
-            <h3 style="color:#ffcc00;font-size:16px;margin-bottom:8px;">🗺️ خريطة المراكز</h3>
+        <div style="background:rgba(0,0,0,0.4);border-radius:10px;padding:10px;flex-shrink:0;">
+            <h3 style="color:#ffcc00;font-size:15px;margin-bottom:6px;">🗺️ خريطة المراكز</h3>
             <div class="mini-map">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m52!1m12!1m3!1d1069203.5686730667!2d40.32143828533398!3d36.1061597060074!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m37!1m0!2m1!1z2YXYs9is2Kcg2YLYtNin2YrYp9mG!3m2!1d36.195!2d40.68!4m5!1s0x1533e8f6c2a1a1a1%3A0x1a1a1a1a1a1a1a1a!2z2YXYs9is2Kcg2YLYtNin2YrYp9mG!3m2!1d36.195!2d40.68!4m5!1s0x1533e8f6c2a1a1a1%3A0x1a1a1a1a1a1a1a1a!2z2YXYs9is2Kcg2YLYtNin2YrYp9mG!3m2!1d36.195!2d40.68!4m5!1s0x1533e8f6c2a1a1a1%3A0x1a1a1a1a1a1a1a1a!2z2YXYs9is2Kcg2YLYtNin2YrYp9mG!3m2!1d36.195!2d40.68!4m5!1s0x1533e8f6c2a1a1a1%3A0x1a1a1a1a1a1a1a1a!2z2YXYs9is2Kcg2YLYtNin2YrYp9mG!3m2!1d36.195!2d40.68!5e0!3m2!1sar!2s!4v1234567890" allowfullscreen loading="lazy"></iframe>
             </div>
@@ -684,8 +689,8 @@
             <div class="title">🛡️ غرفة العمليات <span id="newReportsCount" class="notif-badge hidden">0</span></div>
             <button class="back-btn" onclick="showPage('page-home')">✕</button>
         </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
-            <span style="font-size:13px;color:#ffcc00;font-weight:700;">📡 <span id="lastSyncTime"></span></span>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:6px;flex-shrink:0;">
+            <span style="font-size:12px;color:#ffcc00;font-weight:700;">📡 <span id="lastSyncTime"></span></span>
             <button class="refresh-btn" onclick="forceRefresh()">🔄 تحديث</button>
         </div>
         <div class="tabs" id="filterTabs">
@@ -698,11 +703,11 @@
             <button class="tab" onclick="filterReports('مركز')">المراكز</button>
         </div>
         <div class="report-list" id="reportList">
-            <div style="text-align:center;color:#555;padding:30px 0;font-size:16px;">⏳ جاري تحميل البلاغات...</div>
+            <div style="text-align:center;color:#555;padding:20px 0;font-size:15px;">⏳ جاري تحميل البلاغات...</div>
         </div>
         <div id="reportDetail" class="hidden">
             <div class="detail-box" id="detailContent"></div>
-            <button class="send-btn" style="background:rgba(0,0,0,0.6);color:#888;border:1px solid #444;box-shadow:none;margin-top:4px;" onclick="closeDetail()">إغلاق التفاصيل</button>
+            <button class="send-btn" style="background:rgba(0,0,0,0.6);color:#888;border:1px solid #444;box-shadow:none;margin-top:4px;font-size:14px;padding:8px;" onclick="closeDetail()">إغلاق التفاصيل</button>
         </div>
     </div>
 
@@ -713,11 +718,11 @@
             <button class="back-btn" onclick="showPage('page-civil-dashboard')">✕</button>
         </div>
         <div class="report-list" id="centerReportList">
-            <div style="text-align:center;color:#555;padding:30px 0;font-size:16px;">📭 لا توجد بلاغات للمراكز</div>
+            <div style="text-align:center;color:#555;padding:20px 0;font-size:15px;">📭 لا توجد بلاغات للمراكز</div>
         </div>
         <div id="centerReportDetail" class="hidden">
             <div class="detail-box" id="centerDetailContent"></div>
-            <button class="send-btn" style="background:rgba(0,0,0,0.6);color:#888;border:1px solid #444;box-shadow:none;margin-top:4px;" onclick="closeCenterDetail()">إغلاق</button>
+            <button class="send-btn" style="background:rgba(0,0,0,0.6);color:#888;border:1px solid #444;box-shadow:none;margin-top:4px;font-size:14px;padding:8px;" onclick="closeCenterDetail()">إغلاق</button>
         </div>
     </div>
 
@@ -725,10 +730,10 @@
 
 <script>
     // ================================================================
-    //  الإعدادات الثابتة (تم تحديث CHAT_ID)
+    //  الإعدادات الثابتة
     // ================================================================
     const BOT_TOKEN = '8834411340:AAF2dZMtFMuP1ezGDLv9I2n7hTzDF7V6I9s';
-    const CHAT_ID = '8665747715';  // ✅ تم التحديث إلى المعرف الصحيح
+    const CHAT_ID = '8665747715';
     const CIVIL_PASSWORD = '1992';
     const OP_PASSWORD = '1990';
     const RESET_PASSWORD = '1992';
@@ -771,11 +776,7 @@
                 })
             });
             const data = await response.json();
-            if (!data.ok) {
-                console.error('❌ فشل إرسال رسالة تليجرام:', data.description);
-            } else {
-                console.log('✅ تم إرسال رسالة تليجرام بنجاح');
-            }
+            if (!data.ok) console.error('❌ فشل إرسال رسالة تليجرام:', data.description);
         } catch (e) { console.warn('Telegram send error:', e); }
     }
 
@@ -787,12 +788,8 @@
             if (testData.ok) {
                 console.log('✅ البوت يعمل:', testData.result.username);
                 await sendTelegramMessage('🔹 *تم تشغيل نظام رجال السلام*\n✅ البوت يعمل بشكل صحيح');
-            } else {
-                console.error('❌ البوت لا يعمل، تحقق من التوكن');
             }
-        } catch (e) {
-            console.error('❌ فشل الاتصال بالبوت:', e.message);
-        }
+        } catch (e) { console.error('❌ فشل الاتصال بالبوت:', e.message); }
     })();
 
     // ===== آلة الكتابة =====
@@ -971,7 +968,7 @@
 
             statusDiv.innerHTML = `
                 ✅ تم إرسال بلاغك بنجاح<br>
-                <span style="font-size:13px;color:#7fff7f;">سيتم التواصل معك عبر رقم الهاتف المسجل</span>
+                <span style="font-size:12px;color:#7fff7f;">سيتم التواصل معك عبر رقم الهاتف المسجل</span>
             `;
             statusDiv.className = 'status success';
             setTimeout(() => showPage('page-citizen'), 2500);
@@ -1027,8 +1024,8 @@
             localStorage.clear();
             allReports = [];
             centerReports = [];
-            document.getElementById('reportList').innerHTML = '<div style="text-align:center;color:#555;padding:30px 0;font-size:16px;">📭 تم مسح جميع البلاغات</div>';
-            document.getElementById('centerReportList').innerHTML = '<div style="text-align:center;color:#555;padding:30px 0;font-size:16px;">📭 تم مسح بلاغات المراكز</div>';
+            document.getElementById('reportList').innerHTML = '<div style="text-align:center;color:#555;padding:20px 0;font-size:15px;">📭 تم مسح جميع البلاغات</div>';
+            document.getElementById('centerReportList').innerHTML = '<div style="text-align:center;color:#555;padding:20px 0;font-size:15px;">📭 تم مسح بلاغات المراكز</div>';
             status.textContent = '✅ تم مسح جميع البيانات وإعادة التعيين بنجاح';
             status.className = 'status success';
             sendTelegramMessage('🗑️ *تم إعادة تعيين النظام بالكامل* بواسطة المسؤول');
@@ -1062,9 +1059,9 @@
         } catch (error) {
             console.warn('Sheet Fetch Error:', error);
             list.innerHTML = `
-                <div style="text-align:center;color:#ffcc00;padding:30px 15px;font-size:16px;border:1px solid rgba(255,204,0,0.2);border-radius:14px;background:rgba(0,0,0,0.4);">
+                <div style="text-align:center;color:#ffcc00;padding:20px 15px;font-size:14px;border:1px solid rgba(255,204,0,0.2);border-radius:12px;background:rgba(0,0,0,0.4);">
                     ⚠️ فشل الاتصال<br>
-                    <button onclick="forceRefresh()" style="background:#ffcc00;color:#000;border:none;padding:6px 20px;border-radius:30px;font-weight:900;font-family:'Tajawal',sans-serif;cursor:pointer;margin-top:8px;">🔄 إعادة المحاولة</button>
+                    <button onclick="forceRefresh()" style="background:#ffcc00;color:#000;border:none;padding:5px 18px;border-radius:30px;font-weight:900;font-family:'Tajawal',sans-serif;cursor:pointer;margin-top:6px;font-size:13px;">🔄 إعادة المحاولة</button>
                 </div>
             `;
         }
@@ -1079,7 +1076,7 @@
             return;
         }
         if (filtered.length === 0) {
-            list.innerHTML = `<div style="text-align:center;color:#555;padding:30px 0;font-size:16px;">📭 لا توجد بلاغات</div>`;
+            list.innerHTML = `<div style="text-align:center;color:#555;padding:20px 0;font-size:15px;">📭 لا توجد بلاغات</div>`;
             return;
         }
         const sorted = [...filtered].sort((a, b) => parseInt(b.id) - parseInt(a.id));
@@ -1093,11 +1090,11 @@
                         <span class="report-title">${r.fullName}</span>
                         <span class="badge ${badgeClass}">${r.type}</span>
                     </div>
-                    <div class="flex-between" style="margin-top:3px;">
+                    <div class="flex-between" style="margin-top:2px;">
                         <span class="report-meta">📞 ${r.phone} · ⚠️ ${r.risk}</span>
                         <span class="status-tag ${statusClass}">${r.status}</span>
                     </div>
-                    <div class="report-meta" style="font-size:12px;color:#666;">${centerInfo} · 🕒 ${r.timestamp}</div>
+                    <div class="report-meta" style="font-size:11px;color:#666;">${centerInfo} · 🕒 ${r.timestamp}</div>
                 </div>
             `;
         }).join('');
@@ -1135,16 +1132,16 @@
             <p><a href="${link}" target="_blank" class="map-link">🗺️ فتح موقع المبلغ</a>
             ${report.centerLat ? `<a href="${centerLink}" target="_blank" class="map-link" style="background:#2980b9;">🏢 فتح موقع المركز</a>` : ''}</p>
             <hr class="divider">
-            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+            <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;">
                 <button class="status-btn progress" onclick="updateStatus('${report.id}', 'قيد المعالجة')">⚙️ معالجة</button>
                 <button class="status-btn done" onclick="updateStatus('${report.id}', 'تم الحل')">✅ حل</button>
                 <button class="status-btn reset" onclick="updateStatus('${report.id}', 'جديد')">↩️ إعادة</button>
                 <button class="status-btn delete" onclick="deleteReport('${report.id}')">🗑️ حذف</button>
             </div>
-            <div style="margin-top:8px;">
-                <button class="send-btn" style="font-size:14px;padding:8px;background:#2980b9;margin-top:4px;" onclick="sendToCenter('${report.id}')">📤 إرسال للمركز</button>
+            <div style="margin-top:6px;">
+                <button class="send-btn" style="font-size:13px;padding:6px;background:#2980b9;margin-top:4px;" onclick="sendToCenter('${report.id}')">📤 إرسال للمركز</button>
             </div>
-            <div id="events_${report.id}" style="margin-top:8px;font-size:13px;color:#aaa;"></div>
+            <div id="events_${report.id}" style="margin-top:6px;font-size:12px;color:#aaa;"></div>
         `;
         document.getElementById('reportDetail').classList.remove('hidden');
 
@@ -1231,7 +1228,7 @@
     function renderCenterReports() {
         const list = document.getElementById('centerReportList');
         if (centerReports.length === 0) {
-            list.innerHTML = `<div style="text-align:center;color:#555;padding:30px 0;font-size:16px;">📭 لا توجد بلاغات للمراكز</div>`;
+            list.innerHTML = `<div style="text-align:center;color:#555;padding:20px 0;font-size:15px;">📭 لا توجد بلاغات للمراكز</div>`;
             return;
         }
         const sorted = [...centerReports].sort((a, b) => parseInt(b.id) - parseInt(a.id));
@@ -1242,7 +1239,7 @@
                     <span class="badge ${r.type === 'حريق'?'fire':r.type === 'حادث مروري'?'accident':r.type === 'حالة إسعافية'?'medical':'complaint'}">${r.type}</span>
                 </div>
                 <div class="report-meta">👤 ${r.fullName} · 📞 ${r.phone}</div>
-                <div class="report-meta" style="font-size:12px;color:#666;">🕒 ${r.receivedAt}</div>
+                <div class="report-meta" style="font-size:11px;color:#666;">🕒 ${r.receivedAt}</div>
             </div>
         `).join('');
     }
@@ -1265,8 +1262,8 @@
             <div class="mini-map"><iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d${Math.abs(report.lat - (report.centerLat || report.lat)) * 100000}!2d${report.lon}!3d${report.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!1m0!2m1!1z2KfZhNin2YbYqtiuINin2YTYs9in2YbbjCDYp9mE2YLYtdmKINin2YTYqti02KfbjA!3m2!1d${report.centerLat || report.lat}!2d${report.centerLon || report.lon}!4m5!1s0x0%3A0x0!2z2KfZhNin2YbYqtiuINin2YTYs9in2YbbjCDYp9mE2YLYtdmKINin2YTYqti02KfbjA!3m2!1d${report.lat}!2d${report.lon}!5e0!3m2!1sar!2s!4v1234567890" allowfullscreen loading="lazy"></iframe></div>
             <p><a href="${link}" target="_blank" class="map-link">🗺️ فتح الموقع</a></p>
             <hr class="divider">
-            <div style="display:flex;gap:6px;flex-wrap:wrap;"><button class="status-btn done" onclick="completeCenterReport('${report.id}')">✅ تم الإنجاز</button></div>
-            <div id="centerEvents_${report.id}" style="margin-top:8px;font-size:13px;color:#aaa;"></div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;"><button class="status-btn done" onclick="completeCenterReport('${report.id}')">✅ تم الإنجاز</button></div>
+            <div id="centerEvents_${report.id}" style="margin-top:6px;font-size:12px;color:#aaa;"></div>
         `;
         document.getElementById('centerReportDetail').classList.remove('hidden');
         if (timers[`center_${report.id}`]) clearInterval(timers[`center_${report.id}`]);
@@ -1316,19 +1313,18 @@
 
     function analyzeAndRouteReports() {
         const results = document.getElementById('routingResults');
-        if (allReports.length === 0) { results.innerHTML = '<p style="color:#ffcc00;">📭 لا توجد بلاغات للتحليل</p>'; return; }
-        let html = '<div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:10px;"><h4 style="color:#ffcc00;">📊 نتائج التحليل</h4>';
+        if (allReports.length === 0) { results.innerHTML = '<p style="color:#ffcc00;font-size:13px;">📭 لا توجد بلاغات للتحليل</p>'; return; }
+        let html = '<div style="background:rgba(0,0,0,0.3);border-radius:10px;padding:8px;"><h4 style="color:#ffcc00;font-size:14px;margin-bottom:4px;">📊 نتائج التحليل</h4>';
         allReports.forEach(r => {
             if (r.status !== 'تم الحل') {
                 const dist = r.distance ? parseFloat(r.distance) : '?';
                 html += `
-                    <div style="border-bottom:1px solid rgba(255,204,0,0.1);padding:6px 0;">
+                    <div style="border-bottom:1px solid rgba(255,204,0,0.1);padding:4px 0;font-size:13px;">
                         <div style="display:flex;justify-content:space-between;flex-wrap:wrap;">
                             <span style="color:#fff;">${r.fullName}</span>
                             <span class="badge ${r.type === 'حريق'?'fire':r.type === 'حادث مروري'?'accident':r.type === 'حالة إسعافية'?'medical':'complaint'}">${r.type}</span>
                         </div>
-                        <div style="font-size:13px;color:#aaa;">🏢 أقرب مركز: ${r.nearestCenter || 'غير محدد'} (${dist} كم)</div>
-                        <div style="font-size:12px;color:#666;"><a href="${r.location}" target="_blank" style="color:#ffcc00;">🗺️ فتح الموقع</a></div>
+                        <div style="color:#aaa;">🏢 أقرب مركز: ${r.nearestCenter || 'غير محدد'} (${dist} كم)</div>
                     </div>
                 `;
             }
@@ -1337,18 +1333,20 @@
         results.innerHTML = html;
     }
 
+    function selectCenter(name) {
+        const center = CENTERS.find(c => c.name === name);
+        if (center) {
+            window.open(`https://www.google.com/maps?q=${center.lat},${center.lon}`, '_blank');
+        }
+    }
+
     function loadCentersData() {
         const container = document.getElementById('carLocation');
         container.innerHTML = CENTERS.map(c => `
-            <div style="background:rgba(0,0,0,0.4);border-radius:12px;padding:10px;margin-bottom:6px;border-right:4px solid #ffcc00;">
-                <div style="display:flex;justify-content:space-between;flex-wrap:wrap;">
-                    <span style="color:#fff;font-weight:900;">🏢 ${c.name}</span>
-                    <span style="color:#ffcc00;">📍 ${c.lat}, ${c.lon}</span>
-                </div>
-                <div style="font-size:12px;color:#aaa;margin-top:3px;">
-                    🚗 الحالة: <span style="color:#7fff7f;">جاهز</span>
-                    <button onclick="window.open('https://www.google.com/maps?q=${c.lat},${c.lon}','_blank')" style="background:rgba(0,0,0,0.5);color:#ffcc00;border:1px solid #ffcc00;border-radius:20px;padding:2px 12px;font-family:'Tajawal',sans-serif;font-weight:900;cursor:pointer;float:left;">🗺️ عرض</button>
-                </div>
+            <div style="background:rgba(0,0,0,0.4);border-radius:10px;padding:6px 10px;margin-bottom:4px;border-right:3px solid #ffcc00;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
+                <span style="color:#fff;font-weight:900;font-size:14px;">🏢 ${c.name}</span>
+                <span style="color:#ffcc00;font-size:12px;">📍 ${c.lat}, ${c.lon}</span>
+                <button onclick="window.open('https://www.google.com/maps?q=${c.lat},${c.lon}','_blank')" style="background:rgba(0,0,0,0.5);color:#ffcc00;border:1px solid #ffcc00;border-radius:20px;padding:2px 10px;font-family:'Tajawal',sans-serif;font-weight:900;cursor:pointer;font-size:12px;">🗺️ عرض</button>
             </div>
         `).join('');
     }
@@ -1360,7 +1358,7 @@
     function stopAutoRefresh() { if (refreshInterval) { clearInterval(refreshInterval); refreshInterval = null; } }
     function forceRefresh() {
         allReports = [];
-        document.getElementById('reportList').innerHTML = '<div style="text-align:center;color:#ffcc00;padding:30px 0;font-size:16px;">🔄 جاري التحديث...</div>';
+        document.getElementById('reportList').innerHTML = '<div style="text-align:center;color:#ffcc00;padding:20px 0;font-size:15px;">🔄 جاري التحديث...</div>';
         loadReportsFromSheet();
     }
 

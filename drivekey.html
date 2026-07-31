@@ -19,6 +19,8 @@
         input, select, textarea { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #2a4a4a; background: #0a1a1a; color: #c9d4c9; font-size: 15px; outline: none; }
         input:focus, select:focus, textarea:focus { border-color: #c9a84c; }
         textarea { min-height: 50px; resize: vertical; }
+        input[type="file"] { padding: 8px; background: #0a1a1a; border: 1px dashed #2a4a4a; cursor: pointer; }
+        input[type="file"]::file-selector-button { background: #c9a84c; color: #0a1a1a; border: none; padding: 6px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; }
         .btn { padding: 10px 20px; border-radius: 10px; border: none; font-size: 15px; cursor: pointer; transition: 0.3s; font-weight: bold; }
         .btn-primary { background: #c9a84c; color: #0a1a1a; }
         .btn-primary:hover { background: #dbb95a; transform: scale(1.02); }
@@ -60,7 +62,7 @@
         #loginError { color: #ff6b6b; font-size: 14px; margin-top: 12px; display: none; }
 
         .location-tag { background: #2a4a4a; padding: 2px 10px; border-radius: 20px; font-size: 11px; color: #8a9a8a; }
-        .img-thumb { max-width: 60px; max-height: 60px; border-radius: 8px; border: 1px solid #2a4a4a; }
+        .img-thumb { max-width: 80px; max-height: 80px; border-radius: 8px; border: 1px solid #2a4a4a; cursor: pointer; object-fit: cover; }
         .action-btn { padding: 6px 12px; border-radius: 8px; border: none; font-size: 12px; cursor: pointer; transition: 0.3s; }
         .action-btn-edit { background: #2a4a4a; color: #c9a84c; }
         .action-btn-edit:hover { background: #3a5a5a; }
@@ -83,12 +85,13 @@
             transition: all 0.4s ease;
             max-width: 90%;
         }
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
+        .toast.show { transform: translateY(0); opacity: 1; }
         .toast.success { border-right-color: #6f6; }
         .toast.error { border-right-color: #ff6b6b; }
+        
+        .preview-img { max-width: 100px; max-height: 100px; border-radius: 8px; margin-top: 8px; border: 1px solid #2a4a4a; }
+        .image-preview-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .image-preview-container img { max-width: 80px; max-height: 80px; border-radius: 8px; border: 1px solid #2a4a4a; object-fit: cover; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -219,7 +222,6 @@
             const toast = document.getElementById('toast');
             toast.textContent = message;
             toast.className = 'toast ' + type;
-            // إعادة تشغيل الأنيميشن
             void toast.offsetWidth;
             toast.classList.add('show');
             clearTimeout(toast._timeout);
@@ -232,7 +234,6 @@
         const BOT_TOKEN = "8834411340:AAF2dZMtFMuP1ezGDLv9I2n7hTzDF7V6I9s";
         const CHAT_ID = "83556189";
 
-        // ====== المستخدمون والصلاحيات ======
         const USER_PERMISSIONS = {
             '1234': ['receive', 'disburse', 'view'],
             '1111': ['receive', 'view'],
@@ -249,7 +250,6 @@
             '1992': { role: 'admin', name: 'مدير الوزارة', location: 'المركز العام', id: 0 }
         };
 
-        // ====== المواد والمصروفات ======
         let materials = [
             { id: 1, name: 'ماكولات وشراب', price: 0 },
             { id: 2, name: 'شراء اغراض', price: 0 },
@@ -259,8 +259,6 @@
             { id: 6, name: 'صيانة', price: 0 }
         ];
         let nextMaterialId = 7;
-
-        // ====== المعاملات ======
         let transactions = [];
         let alerts = [];
         let currentUser = null;
@@ -373,7 +371,9 @@
                     <td><span class="badge ${t.type === 'receive' ? 'badge-success' : 'badge-warning'}">${t.type === 'receive' ? '📥 استلام' : '📤 مصروف'}</span></td>
                     <td>${t.note || '---'}</td>
                     <td>${t.amount.toLocaleString()} ل.س</td>
-                    <td>${t.image ? `<img src="${t.image}" class="img-thumb" onclick="window.open('${t.image}','_blank')" />` : '---'}</td>
+                    <td>
+                        ${t.image ? `<img src="${t.image}" class="img-thumb" onclick="window.open('${t.image}','_blank')" />` : '---'}
+                    </td>
                     <td>${t.location ? `<span class="location-tag">📍 ${t.location}</span>` : '---'}</td>
                     <td>${t.phone || '---'}</td>
                     <td>${t.remarks || '---'}</td>
@@ -409,7 +409,19 @@
         }
 
         // =====================================================
-        // 6. نوافذ التعديل (مودال حديث بديل عن prompt)
+        // 6. تحويل الصورة إلى Base64
+        // =====================================================
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // =====================================================
+        // 7. نوافذ التعديل
         // =====================================================
         let editingMaterialId = null;
         let editingTransactionIndex = null;
@@ -509,7 +521,7 @@
         }
 
         // =====================================================
-        // 7. المودال العام
+        // 8. المودال العام
         // =====================================================
         function openModal(type) {
             const modal = document.getElementById('modal');
@@ -572,8 +584,9 @@
                     <input type="number" id="expenseAmount" placeholder="أدخل المبلغ">
                     <label>الوصف</label>
                     <input type="text" id="expenseNote" placeholder="تفاصيل المصروف">
-                    <label>رابط الصورة (اختياري)</label>
-                    <input type="text" id="expenseImage" placeholder="https://example.com/invoice.jpg">
+                    <label>رفع صورة الفاتورة</label>
+                    <input type="file" id="expenseImageFile" accept="image/*" onchange="previewImage(this, 'expensePreview')">
+                    <div id="expensePreview" class="image-preview-container"></div>
                     <label>رقم الهاتف</label>
                     <input type="text" id="expensePhone" placeholder="رقم هاتف المحل أو المورد">
                     <label>ملاحظات</label>
@@ -584,14 +597,19 @@
                     document.getElementById('customMaterialDiv').classList.toggle('hidden', this.value !== 'other');
                 });
                 
-                document.getElementById('modalConfirm').onclick = function() {
+                document.getElementById('modalConfirm').onclick = async function() {
                     const matSelect = document.getElementById('expenseMaterial');
                     let matId = parseInt(matSelect.value);
                     let amount = parseFloat(document.getElementById('expenseAmount').value);
                     const note = document.getElementById('expenseNote').value || 'مصروف';
-                    const image = document.getElementById('expenseImage').value || null;
                     const phone = document.getElementById('expensePhone').value || null;
                     const remarks = document.getElementById('expenseRemarks').value || null;
+                    const fileInput = document.getElementById('expenseImageFile');
+                    let imageBase64 = null;
+
+                    if (fileInput.files && fileInput.files.length > 0) {
+                        imageBase64 = await fileToBase64(fileInput.files[0]);
+                    }
 
                     if (matId === 'other' || isNaN(matId)) {
                         const customName = document.getElementById('customMaterialName').value.trim();
@@ -620,7 +638,7 @@
                         type: 'expense',
                         amount: amount,
                         note: `${matName}: ${note}`,
-                        image: image,
+                        image: imageBase64,
                         location: userLocation ? `${userLocation.lat}, ${userLocation.lon}` : null,
                         phone: phone,
                         remarks: remarks,
@@ -639,27 +657,34 @@
                     <input type="number" id="invoiceAmount" placeholder="أدخل المبلغ">
                     <label>وصف الفاتورة</label>
                     <textarea id="invoiceDesc" placeholder="تفاصيل الفاتورة"></textarea>
-                    <label>رابط الصورة</label>
-                    <input type="text" id="invoiceImage" placeholder="https://example.com/invoice.jpg">
+                    <label>رفع صورة الفاتورة</label>
+                    <input type="file" id="invoiceImageFile" accept="image/*" onchange="previewImage(this, 'invoicePreview')">
+                    <div id="invoicePreview" class="image-preview-container"></div>
                     <label>رقم الهاتف</label>
                     <input type="text" id="invoicePhone" placeholder="رقم هاتف المورد">
                     <label>الموقع (سيتم جلب الموقع تلقائياً)</label>
                     <input type="text" id="invoiceLocation" readonly>
                     <button class="btn btn-primary" onclick="getCurrentLocation()" style="margin-top:10px;">📍 جلب الموقع الحالي</button>
                 `;
-                document.getElementById('modalConfirm').onclick = function() {
+                document.getElementById('modalConfirm').onclick = async function() {
                     const amt = parseFloat(document.getElementById('invoiceAmount').value);
                     const desc = document.getElementById('invoiceDesc').value || 'فاتورة';
-                    const image = document.getElementById('invoiceImage').value || null;
                     const phone = document.getElementById('invoicePhone').value || null;
                     const loc = document.getElementById('invoiceLocation').value || (userLocation ? `${userLocation.lat}, ${userLocation.lon}` : null);
+                    const fileInput = document.getElementById('invoiceImageFile');
+                    let imageBase64 = null;
+                    
+                    if (fileInput.files && fileInput.files.length > 0) {
+                        imageBase64 = await fileToBase64(fileInput.files[0]);
+                    }
+                    
                     if (isNaN(amt) || amt <= 0) { showToast('يرجى إدخال مبلغ صحيح', 'error'); return; }
                     transactions.push({
                         date: new Date().toLocaleString('ar-EG'),
                         type: 'expense',
                         amount: amt,
                         note: `🧾 ${desc}`,
-                        image: image,
+                        image: imageBase64,
                         location: loc,
                         phone: phone,
                         remarks: 'فاتورة',
@@ -748,7 +773,29 @@
             modal.classList.add('active');
         }
 
-        // ====== دوال المواد ======
+        // =====================================================
+        // 9. معاينة الصورة
+        // =====================================================
+        function previewImage(input, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            if (input.files && input.files.length > 0) {
+                const file = input.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('preview-img');
+                    img.onclick = () => window.open(e.target.result, '_blank');
+                    container.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // =====================================================
+        // 10. دوال المواد
+        // =====================================================
         function addMaterial() {
             const name = document.getElementById('newMaterialName').value.trim();
             const price = parseFloat(document.getElementById('newMaterialPrice').value) || 0;
@@ -786,7 +833,9 @@
             showToast('🗑️ تم حذف المادة', 'success');
         }
 
-        // ====== دوال الصلاحيات ======
+        // =====================================================
+        // 11. دوال الصلاحيات
+        // =====================================================
         function loadUserPerms() {
             const pass = document.getElementById('userSelect').value;
             if (!pass) return;
@@ -819,7 +868,9 @@
             loadUserPerms();
         }
 
-        // ====== دوال المعاملات ======
+        // =====================================================
+        // 12. دوال المعاملات
+        // =====================================================
         function deleteTransaction(index) {
             if (!confirm('هل أنت متأكد من حذف هذه العملية؟')) return;
             transactions.splice(index, 1);
@@ -849,7 +900,9 @@
             closeModal();
         }
 
-        // ====== الموقع ======
+        // =====================================================
+        // 13. الموقع
+        // =====================================================
         function getCurrentLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
@@ -864,7 +917,9 @@
             }
         }
 
-        // ====== عرض العمليات ======
+        // =====================================================
+        // 14. عرض العمليات
+        // =====================================================
         function viewTransactions() {
             let msg = '📋 جميع العمليات:\n\n';
             transactions.forEach((t, i) => {
@@ -874,14 +929,18 @@
             alert(msg);
         }
 
-        // ====== إغلاق المودال ======
+        // =====================================================
+        // 15. إغلاق المودال
+        // =====================================================
         function closeModal() {
             document.getElementById('modal').classList.remove('active');
             document.getElementById('modalConfirm').style.display = 'block';
             document.querySelector('.modal-actions .btn-secondary').textContent = 'إلغاء';
         }
 
-        // ====== منع التلاعب ======
+        // =====================================================
+        // 16. منع التلاعب
+        // =====================================================
         document.addEventListener('keydown', function(e) {
             if (currentUser && currentUser.role === 'user') {
                 if (e.key === 'F12' || (e.ctrlKey && e.key === 'u') || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
@@ -891,8 +950,7 @@
             }
         });
 
-        // ====== التشغيل الابتدائي ======
-        console.log('✅ النظام المالي المتقدم جاهز');
+        console.log('✅ النظام المالي المتقدم جاهز مع رفع الصور');
         console.log('🔑 1234=مستخدم | 1111=مستخدم2 | 2222=مستخدم3 | 3333=مستخدم4 | 1992=مدير');
     </script>
 

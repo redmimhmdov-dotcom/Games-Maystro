@@ -66,6 +66,29 @@
         .action-btn-edit:hover { background: #3a5a5a; }
         .action-btn-delete { background: #3a1a1a; color: #ff6b6b; }
         .action-btn-delete:hover { background: #5a2a2a; }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1a2a2a;
+            color: #c9d4c9;
+            padding: 16px 24px;
+            border-radius: 12px;
+            border-right: 4px solid #c9a84c;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+            z-index: 9999;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s ease;
+            max-width: 90%;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .toast.success { border-right-color: #6f6; }
+        .toast.error { border-right-color: #ff6b6b; }
     </style>
 </head>
 <body>
@@ -159,7 +182,7 @@
         </div>
     </div>
 
-    <!-- ====== المودال ====== -->
+    <!-- ====== المودال العام ====== -->
     <div class="modal" id="modal">
         <div class="modal-content">
             <h3 id="modalTitle">عنوان</h3>
@@ -170,6 +193,9 @@
             </div>
         </div>
     </div>
+
+    <!-- ====== Toast Notifications ====== -->
+    <div id="toast" class="toast"></div>
 
     <script>
         // =====================================================
@@ -187,7 +213,21 @@
         })();
 
         // =====================================================
-        // 1. البيانات الأساسية
+        // 1. Toast Notifications
+        // =====================================================
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type;
+            // إعادة تشغيل الأنيميشن
+            void toast.offsetWidth;
+            toast.classList.add('show');
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // =====================================================
+        // 2. البيانات الأساسية
         // =====================================================
         const BOT_TOKEN = "8834411340:AAF2dZMtFMuP1ezGDLv9I2n7hTzDF7V6I9s";
         const CHAT_ID = "83556189";
@@ -229,7 +269,7 @@
         let currentMonth = new Date().getMonth() + 1;
 
         // =====================================================
-        // 2. الموقع + تسجيل الدخول
+        // 3. الموقع + تسجيل الدخول
         // =====================================================
         function requestLocationAndLogin() {
             const pass = document.getElementById('loginPass').value.trim();
@@ -295,6 +335,7 @@
             updateStats();
             renderTransactions();
             renderMaterials();
+            showToast(`✅ مرحباً ${currentUser.name}`, 'success');
         }
 
         function logout() {
@@ -305,7 +346,7 @@
         }
 
         // =====================================================
-        // 3. تحديث الإحصائيات
+        // 4. تحديث الإحصائيات
         // =====================================================
         function updateStats() {
             const totalReceived = transactions.filter(t => t.type === 'receive').reduce((s, t) => s + t.amount, 0);
@@ -317,7 +358,7 @@
         }
 
         // =====================================================
-        // 4. عرض الجداول
+        // 5. عرض الجداول
         // =====================================================
         function renderTransactions() {
             const tbody = document.getElementById('transactionsBody');
@@ -337,8 +378,8 @@
                     <td>${t.phone || '---'}</td>
                     <td>${t.remarks || '---'}</td>
                     <td>
-                        ${currentUser.role === 'admin' ? `
-                            <button class="action-btn action-btn-edit" onclick="editTransaction(${i})">✏️</button>
+                        ${currentUser && currentUser.role === 'admin' ? `
+                            <button class="action-btn action-btn-edit" onclick="openEditTransactionModal(${i})">✏️</button>
                             <button class="action-btn action-btn-delete" onclick="deleteTransaction(${i})">🗑️</button>
                         ` : '---'}
                     </td>
@@ -358,8 +399,8 @@
                     <td>${m.name}</td>
                     <td>${m.price.toLocaleString()} ل.س</td>
                     <td>
-                        ${currentUser.role === 'admin' ? `
-                            <button class="action-btn action-btn-edit" onclick="editMaterial(${m.id})">✏️</button>
+                        ${currentUser && currentUser.role === 'admin' ? `
+                            <button class="action-btn action-btn-edit" onclick="openEditMaterialModal(${m.id})">✏️</button>
                             <button class="action-btn action-btn-delete" onclick="deleteMaterial(${m.id})">🗑️</button>
                         ` : '---'}
                     </td>
@@ -368,15 +409,115 @@
         }
 
         // =====================================================
-        // 5. المودال (نوافذ منبثقة)
+        // 6. نوافذ التعديل (مودال حديث بديل عن prompt)
+        // =====================================================
+        let editingMaterialId = null;
+        let editingTransactionIndex = null;
+
+        function openEditMaterialModal(id) {
+            const m = materials.find(x => x.id === id);
+            if (!m) return;
+            editingMaterialId = id;
+            
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+            
+            title.textContent = '✏️ تعديل المادة';
+            body.innerHTML = `
+                <label>اسم المادة</label>
+                <input type="text" id="editMaterialName" value="${m.name}" placeholder="أدخل اسم المادة">
+                <label>السعر الافتراضي (ل.س)</label>
+                <input type="number" id="editMaterialPrice" value="${m.price}" placeholder="0">
+                <div style="margin-top:10px;color:#8a9a8a;font-size:13px;">📌 قم بتعديل البيانات ثم اضغط حفظ</div>
+            `;
+            
+            document.getElementById('modalConfirm').textContent = '💾 حفظ التعديلات';
+            document.getElementById('modalConfirm').style.display = 'block';
+            document.querySelector('.modal-actions .btn-secondary').textContent = 'إلغاء';
+            
+            document.getElementById('modalConfirm').onclick = function() {
+                const newName = document.getElementById('editMaterialName').value.trim();
+                const newPrice = parseFloat(document.getElementById('editMaterialPrice').value);
+                
+                if (!newName) { showToast('⚠️ اسم المادة مطلوب', 'error'); return; }
+                if (isNaN(newPrice) || newPrice < 0) { showToast('⚠️ يرجى إدخال سعر صحيح', 'error'); return; }
+                
+                const mat = materials.find(x => x.id === editingMaterialId);
+                if (mat) {
+                    mat.name = newName;
+                    mat.price = newPrice;
+                    renderMaterials();
+                    renderMaterialsModal();
+                    closeModal();
+                    showToast('✅ تم تحديث المادة بنجاح', 'success');
+                }
+            };
+            
+            modal.classList.add('active');
+        }
+
+        function openEditTransactionModal(index) {
+            const t = transactions[index];
+            if (!t) return;
+            editingTransactionIndex = index;
+            
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+            
+            title.textContent = '✏️ تعديل المعاملة';
+            body.innerHTML = `
+                <label>الوصف</label>
+                <input type="text" id="editTransNote" value="${t.note || ''}" placeholder="وصف المعاملة">
+                <label>المبلغ (ل.س)</label>
+                <input type="number" id="editTransAmount" value="${t.amount}" placeholder="المبلغ">
+                <label>رقم الهاتف</label>
+                <input type="text" id="editTransPhone" value="${t.phone || ''}" placeholder="رقم الهاتف">
+                <label>ملاحظات</label>
+                <textarea id="editTransRemarks" placeholder="ملاحظات إضافية">${t.remarks || ''}</textarea>
+                <div style="margin-top:10px;color:#8a9a8a;font-size:13px;">📌 قم بتعديل البيانات ثم اضغط حفظ</div>
+            `;
+            
+            document.getElementById('modalConfirm').textContent = '💾 حفظ التعديلات';
+            document.getElementById('modalConfirm').style.display = 'block';
+            document.querySelector('.modal-actions .btn-secondary').textContent = 'إلغاء';
+            
+            document.getElementById('modalConfirm').onclick = function() {
+                const newNote = document.getElementById('editTransNote').value.trim();
+                const newAmount = parseFloat(document.getElementById('editTransAmount').value);
+                const newPhone = document.getElementById('editTransPhone').value.trim();
+                const newRemarks = document.getElementById('editTransRemarks').value.trim();
+                
+                if (!newNote) { showToast('⚠️ الوصف مطلوب', 'error'); return; }
+                if (isNaN(newAmount) || newAmount <= 0) { showToast('⚠️ يرجى إدخال مبلغ صحيح', 'error'); return; }
+                
+                const trans = transactions[editingTransactionIndex];
+                if (trans) {
+                    trans.note = newNote;
+                    trans.amount = newAmount;
+                    trans.phone = newPhone || null;
+                    trans.remarks = newRemarks || null;
+                    renderTransactions();
+                    updateStats();
+                    closeModal();
+                    showToast('✅ تم تحديث المعاملة بنجاح', 'success');
+                }
+            };
+            
+            modal.classList.add('active');
+        }
+
+        // =====================================================
+        // 7. المودال العام
         // =====================================================
         function openModal(type) {
             const modal = document.getElementById('modal');
             const title = document.getElementById('modalTitle');
             const body = document.getElementById('modalBody');
 
-            if (['admin', 'addUser', 'permissions', 'materials'].includes(type) && currentUser.role !== 'admin') {
-                alert('⚠️ هذا الإجراء غير مسموح به لصلاحياتك!');
+            if (['admin', 'addUser', 'permissions', 'materials'].includes(type) && currentUser?.role !== 'admin') {
+                showToast('⚠️ هذا الإجراء غير مسموح به لصلاحياتك!', 'error');
                 return;
             }
 
@@ -396,7 +537,7 @@
                     const amt = parseFloat(document.getElementById('receiveAmount').value);
                     const note = document.getElementById('receiveNote').value || 'استلام شهري';
                     const month = parseInt(document.getElementById('receiveMonth').value);
-                    if (isNaN(amt) || amt <= 0) { alert('يرجى إدخال مبلغ صحيح'); return; }
+                    if (isNaN(amt) || amt <= 0) { showToast('يرجى إدخال مبلغ صحيح', 'error'); return; }
                     transactions.push({
                         date: new Date().toLocaleString('ar-EG'),
                         type: 'receive',
@@ -413,6 +554,7 @@
                     updateStats();
                     renderTransactions();
                     closeModal();
+                    showToast('✅ تم استلام المبلغ بنجاح', 'success');
                 };
             } else if (type === 'disburse') {
                 title.textContent = '📤 إضافة مصروف جديد';
@@ -437,6 +579,11 @@
                     <label>ملاحظات</label>
                     <textarea id="expenseRemarks" placeholder="ملاحظات إضافية"></textarea>
                 `;
+                
+                document.getElementById('expenseMaterial').addEventListener('change', function() {
+                    document.getElementById('customMaterialDiv').classList.toggle('hidden', this.value !== 'other');
+                });
+                
                 document.getElementById('modalConfirm').onclick = function() {
                     const matSelect = document.getElementById('expenseMaterial');
                     let matId = parseInt(matSelect.value);
@@ -448,7 +595,7 @@
 
                     if (matId === 'other' || isNaN(matId)) {
                         const customName = document.getElementById('customMaterialName').value.trim();
-                        if (!customName) { alert('يرجى إدخال اسم المادة'); return; }
+                        if (!customName) { showToast('يرجى إدخال اسم المادة', 'error'); return; }
                         const newMat = { id: nextMaterialId++, name: customName, price: amount || 0 };
                         materials.push(newMat);
                         matId = newMat.id;
@@ -458,12 +605,12 @@
                         if (mat && amount === 0) amount = mat.price;
                     }
 
-                    if (isNaN(amount) || amount <= 0) { alert('يرجى إدخال مبلغ صحيح'); return; }
+                    if (isNaN(amount) || amount <= 0) { showToast('يرجى إدخال مبلغ صحيح', 'error'); return; }
 
                     const totalReceived = transactions.filter(t => t.type === 'receive').reduce((s, t) => s + t.amount, 0);
                     const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
                     if (amount > (totalReceived - totalExpenses)) {
-                        alert(`⚠️ الرصيد المتاح: ${(totalReceived - totalExpenses).toLocaleString()} ل.س`);
+                        showToast(`⚠️ الرصيد المتاح: ${(totalReceived - totalExpenses).toLocaleString()} ل.س`, 'error');
                         return;
                     }
 
@@ -483,12 +630,8 @@
                     updateStats();
                     renderTransactions();
                     closeModal();
+                    showToast('✅ تم إضافة المصروف بنجاح', 'success');
                 };
-
-                // إظهار/إخفاء حقل المادة المخصصة
-                document.getElementById('expenseMaterial').addEventListener('change', function() {
-                    document.getElementById('customMaterialDiv').classList.toggle('hidden', this.value !== 'other');
-                });
             } else if (type === 'invoice') {
                 title.textContent = '🧾 رفع فاتورة مع الموقع';
                 body.innerHTML = `
@@ -510,7 +653,7 @@
                     const image = document.getElementById('invoiceImage').value || null;
                     const phone = document.getElementById('invoicePhone').value || null;
                     const loc = document.getElementById('invoiceLocation').value || (userLocation ? `${userLocation.lat}, ${userLocation.lon}` : null);
-                    if (isNaN(amt) || amt <= 0) { alert('يرجى إدخال مبلغ صحيح'); return; }
+                    if (isNaN(amt) || amt <= 0) { showToast('يرجى إدخال مبلغ صحيح', 'error'); return; }
                     transactions.push({
                         date: new Date().toLocaleString('ar-EG'),
                         type: 'expense',
@@ -525,6 +668,7 @@
                     updateStats();
                     renderTransactions();
                     closeModal();
+                    showToast('✅ تم رفع الفاتورة بنجاح', 'success');
                 };
             } else if (type === 'admin') {
                 title.textContent = '⚙️ لوحة تحكم المدير';
@@ -567,12 +711,12 @@
                     const loc = document.getElementById('newLocation').value.trim();
                     const role = document.getElementById('newRole').value;
                     const perms = Array.from(document.getElementById('newPermissions').selectedOptions).map(o => o.value);
-                    if (!pass || !name || !loc || perms.length === 0) { alert('يرجى ملء جميع الحقول واختيار صلاحية'); return; }
-                    if (users[pass]) { alert('كلمة المرور مستخدمة'); return; }
-                    if (pass.length !== 4 || isNaN(pass)) { alert('كلمة المرور يجب أن تكون 4 أرقام'); return; }
+                    if (!pass || !name || !loc || perms.length === 0) { showToast('يرجى ملء جميع الحقول واختيار صلاحية', 'error'); return; }
+                    if (users[pass]) { showToast('كلمة المرور مستخدمة', 'error'); return; }
+                    if (pass.length !== 4 || isNaN(pass)) { showToast('كلمة المرور يجب أن تكون 4 أرقام', 'error'); return; }
                     users[pass] = { role, name, location: loc, id: Object.keys(users).length + 1 };
                     USER_PERMISSIONS[pass] = perms;
-                    alert(`✅ تم إضافة ${name} بنجاح`);
+                    showToast(`✅ تم إضافة ${name} بنجاح`, 'success');
                     closeModal();
                 };
             } else if (type === 'permissions') {
@@ -608,13 +752,13 @@
         function addMaterial() {
             const name = document.getElementById('newMaterialName').value.trim();
             const price = parseFloat(document.getElementById('newMaterialPrice').value) || 0;
-            if (!name) { alert('يرجى إدخال اسم المادة'); return; }
+            if (!name) { showToast('يرجى إدخال اسم المادة', 'error'); return; }
             materials.push({ id: nextMaterialId++, name, price });
             renderMaterialsModal();
             renderMaterials();
             document.getElementById('newMaterialName').value = '';
             document.getElementById('newMaterialPrice').value = '';
-            alert('✅ تم إضافة المادة بنجاح');
+            showToast('✅ تم إضافة المادة بنجاح', 'success');
         }
 
         function renderMaterialsModal() {
@@ -627,22 +771,11 @@
                 <div class="flex-between" style="padding:8px 0;border-bottom:1px solid #1a2a2a;">
                     <span>${m.name} (${m.price.toLocaleString()} ل.س)</span>
                     <div>
-                        <button class="action-btn action-btn-edit" onclick="editMaterial(${m.id})">✏️</button>
+                        <button class="action-btn action-btn-edit" onclick="openEditMaterialModal(${m.id})">✏️</button>
                         <button class="action-btn action-btn-delete" onclick="deleteMaterial(${m.id})">🗑️</button>
                     </div>
                 </div>
             `).join('');
-        }
-
-        function editMaterial(id) {
-            const m = materials.find(x => x.id === id);
-            if (!m) return;
-            const newName = prompt('اسم المادة:', m.name);
-            if (newName !== null && newName.trim()) m.name = newName.trim();
-            const newPrice = prompt('السعر:', m.price);
-            if (newPrice !== null && !isNaN(parseFloat(newPrice))) m.price = parseFloat(newPrice);
-            renderMaterialsModal();
-            renderMaterials();
         }
 
         function deleteMaterial(id) {
@@ -650,6 +783,7 @@
             materials = materials.filter(m => m.id !== id);
             renderMaterialsModal();
             renderMaterials();
+            showToast('🗑️ تم حذف المادة', 'success');
         }
 
         // ====== دوال الصلاحيات ======
@@ -679,29 +813,19 @@
 
         function savePerms(pass) {
             const perms = Array.from(document.getElementById('editPerms').selectedOptions).map(o => o.value);
-            if (perms.length === 0) { alert('يجب اختيار صلاحية واحدة على الأقل'); return; }
+            if (perms.length === 0) { showToast('يجب اختيار صلاحية واحدة على الأقل', 'error'); return; }
             USER_PERMISSIONS[pass] = perms;
-            alert('✅ تم حفظ الصلاحيات');
+            showToast('✅ تم حفظ الصلاحيات', 'success');
             loadUserPerms();
         }
 
         // ====== دوال المعاملات ======
-        function editTransaction(index) {
-            const t = transactions[index];
-            if (!t) return;
-            const newNote = prompt('تعديل الوصف:', t.note);
-            if (newNote !== null && newNote.trim()) t.note = newNote.trim();
-            const newAmount = prompt('تعديل المبلغ:', t.amount);
-            if (newAmount !== null && !isNaN(parseFloat(newAmount))) t.amount = parseFloat(newAmount);
-            renderTransactions();
-            updateStats();
-        }
-
         function deleteTransaction(index) {
             if (!confirm('هل أنت متأكد من حذف هذه العملية؟')) return;
             transactions.splice(index, 1);
             renderTransactions();
             updateStats();
+            showToast('🗑️ تم حذف المعاملة', 'success');
         }
 
         function resetSystem() {
@@ -721,7 +845,7 @@
             updateStats();
             renderTransactions();
             renderMaterials();
-            alert('✅ تم إعادة تعيين النظام');
+            showToast('✅ تم إعادة تعيين النظام', 'success');
             closeModal();
         }
 
@@ -731,12 +855,12 @@
                 navigator.geolocation.getCurrentPosition(
                     function(pos) {
                         document.getElementById('invoiceLocation').value = `${pos.coords.latitude}, ${pos.coords.longitude}`;
-                        alert('✅ تم جلب الموقع');
+                        showToast('✅ تم جلب الموقع', 'success');
                     },
-                    function() { alert('⚠️ فشل جلب الموقع، أدخل يدوياً'); }
+                    function() { showToast('⚠️ فشل جلب الموقع، أدخل يدوياً', 'error'); }
                 );
             } else {
-                alert('⚠️ متصفحك لا يدعم تحديد الموقع');
+                showToast('⚠️ متصفحك لا يدعم تحديد الموقع', 'error');
             }
         }
 
@@ -761,7 +885,7 @@
         document.addEventListener('keydown', function(e) {
             if (currentUser && currentUser.role === 'user') {
                 if (e.key === 'F12' || (e.ctrlKey && e.key === 'u') || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                    alert('⚠️ هذا الإجراء غير مسموح');
+                    showToast('⚠️ هذا الإجراء غير مسموح', 'error');
                     e.preventDefault();
                 }
             }

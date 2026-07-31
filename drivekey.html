@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>النظام المالي المتقدم - وزارة الدفاع</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: #0a1a1a; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 16px; }
@@ -46,7 +48,7 @@
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 999; padding: 20px; }
         .modal.active { display: flex; }
-        .modal-content { background: #1a2a2a; padding: 25px; border-radius: 20px; width: 100%; max-width: 600px; border: 1px solid #2a4a4a; max-height: 90vh; overflow-y: auto; }
+        .modal-content { background: #1a2a2a; padding: 25px; border-radius: 20px; width: 100%; max-width: 700px; border: 1px solid #2a4a4a; max-height: 90vh; overflow-y: auto; }
         .modal-content h3 { color: #c9a84c; margin-bottom: 16px; }
 
         .hidden { display: none; }
@@ -92,6 +94,14 @@
         .preview-img { max-width: 100px; max-height: 100px; border-radius: 8px; margin-top: 8px; border: 1px solid #2a4a4a; }
         .image-preview-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
         .image-preview-container img { max-width: 80px; max-height: 80px; border-radius: 8px; border: 1px solid #2a4a4a; object-fit: cover; cursor: pointer; }
+
+        /* ====== خريطة Leaflet ====== */
+        #map { height: 300px; width: 100%; border-radius: 12px; border: 1px solid #2a4a4a; margin-top: 10px; z-index: 1; }
+        .leaflet-control-zoom { z-index: 2; }
+        .map-container { position: relative; }
+        .map-instruction { color: #8a9a8a; font-size: 13px; margin-bottom: 6px; }
+        #selectedLocationDisplay { background: #0a1a1a; padding: 8px 12px; border-radius: 8px; color: #c9d4c9; font-size: 13px; margin-top: 6px; border: 1px solid #2a4a4a; }
+        .map-btn { margin-top: 8px; }
     </style>
 </head>
 <body>
@@ -154,7 +164,7 @@
                                 <th>الوصف</th>
                                 <th>المبلغ</th>
                                 <th>الصورة</th>
-                                <th>الموقع</th>
+                                <th>موقع المحل</th>
                                 <th>رقم الهاتف</th>
                                 <th>ملاحظات</th>
                                 <th>إجراءات</th>
@@ -199,6 +209,9 @@
 
     <!-- ====== Toast Notifications ====== -->
     <div id="toast" class="toast"></div>
+
+    <!-- ====== Leaflet JS ====== -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
         // =====================================================
@@ -265,6 +278,9 @@
         let userLocation = null;
         let monthlyReceived = 0;
         let currentMonth = new Date().getMonth() + 1;
+        let mapInstance = null;
+        let selectedMarker = null;
+        let selectedLatLng = null;
 
         // =====================================================
         // 3. الموقع + تسجيل الدخول
@@ -374,7 +390,9 @@
                     <td>
                         ${t.image ? `<img src="${t.image}" class="img-thumb" onclick="window.open('${t.image}','_blank')" />` : '---'}
                     </td>
-                    <td>${t.location ? `<span class="location-tag">📍 ${t.location}</span>` : '---'}</td>
+                    <td>
+                        ${t.location ? `<span class="location-tag" onclick="window.open('https://www.google.com/maps?q=${t.location}','_blank')" style="cursor:pointer;">📍 ${t.location}</span>` : '---'}
+                    </td>
                     <td>${t.phone || '---'}</td>
                     <td>${t.remarks || '---'}</td>
                     <td>
@@ -421,7 +439,55 @@
         }
 
         // =====================================================
-        // 7. نوافذ التعديل
+        // 7. الخريطة - تحديد موقع المحل
+        // =====================================================
+        function initMap(containerId, lat = 33.5138, lon = 36.2765) {
+            if (mapInstance) {
+                mapInstance.remove();
+                mapInstance = null;
+            }
+            // تحديد موقع سوريا (دمشق) كموقع افتراضي
+            mapInstance = L.map(containerId).setView([lat, lon], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(mapInstance);
+
+            // إضافة علامة عند النقر
+            mapInstance.on('click', function(e) {
+                const latlng = e.latlng;
+                if (selectedMarker) {
+                    mapInstance.removeLayer(selectedMarker);
+                }
+                selectedMarker = L.marker([latlng.lat, latlng.lng]).addTo(mapInstance);
+                selectedLatLng = `${latlng.lat.toFixed(6)}, ${latlng.lng.toFixed(6)}`;
+                // تحديث حقل الموقع
+                const locInput = document.getElementById('shopLocation');
+                if (locInput) {
+                    locInput.value = selectedLatLng;
+                }
+                // تحديث النص المعروض
+                const display = document.getElementById('selectedLocationDisplay');
+                if (display) {
+                    display.textContent = `📍 الموقع المحدد: ${selectedLatLng} (اضغط للفتح في خرائط جوجل)`;
+                    display.onclick = () => window.open(`https://www.google.com/maps?q=${selectedLatLng}`, '_blank');
+                }
+                showToast('✅ تم تحديد موقع المحل', 'success');
+            });
+
+            // محاولة جلب موقع المستخدم لمركز الخريطة
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(pos) {
+                        mapInstance.setView([pos.coords.latitude, pos.coords.longitude], 15);
+                    },
+                    function() {},
+                    { enableHighAccuracy: true, timeout: 5000 }
+                );
+            }
+        }
+
+        // =====================================================
+        // 8. نوافذ التعديل
         // =====================================================
         let editingMaterialId = null;
         let editingTransactionIndex = null;
@@ -521,7 +587,7 @@
         }
 
         // =====================================================
-        // 8. المودال العام
+        // 9. المودال العام
         // =====================================================
         function openModal(type) {
             const modal = document.getElementById('modal');
@@ -556,7 +622,7 @@
                         amount: amt,
                         note: `${note} (الشهر ${month})`,
                         image: null,
-                        location: userLocation ? `${userLocation.lat}, ${userLocation.lon}` : null,
+                        location: null,
                         phone: null,
                         remarks: `شهر ${month}`,
                         user: currentUser.name,
@@ -569,7 +635,7 @@
                     showToast('✅ تم استلام المبلغ بنجاح', 'success');
                 };
             } else if (type === 'disburse') {
-                title.textContent = '📤 إضافة مصروف جديد';
+                title.textContent = '📤 إضافة مصروف جديد مع تحديد موقع المحل';
                 body.innerHTML = `
                     <label>المادة/المصروف</label>
                     <select id="expenseMaterial">
@@ -587,15 +653,27 @@
                     <label>رفع صورة الفاتورة</label>
                     <input type="file" id="expenseImageFile" accept="image/*" onchange="previewImage(this, 'expensePreview')">
                     <div id="expensePreview" class="image-preview-container"></div>
-                    <label>رقم الهاتف</label>
+                    <label>رقم هاتف المحل</label>
                     <input type="text" id="expensePhone" placeholder="رقم هاتف المحل أو المورد">
                     <label>ملاحظات</label>
                     <textarea id="expenseRemarks" placeholder="ملاحظات إضافية"></textarea>
+                    
+                    <div class="map-container">
+                        <p class="map-instruction">📍 اضغط على الخريطة لتحديد موقع المحل</p>
+                        <div id="map"></div>
+                        <div id="selectedLocationDisplay" style="background:#0a1a1a;padding:8px 12px;border-radius:8px;color:#c9d4c9;font-size:13px;margin-top:6px;border:1px solid #2a4a4a;">لم يتم تحديد موقع بعد</div>
+                        <input type="hidden" id="shopLocation" value="">
+                    </div>
                 `;
                 
                 document.getElementById('expenseMaterial').addEventListener('change', function() {
                     document.getElementById('customMaterialDiv').classList.toggle('hidden', this.value !== 'other');
                 });
+                
+                // تهيئة الخريطة بعد ظهور المودال
+                setTimeout(() => {
+                    initMap('map');
+                }, 300);
                 
                 document.getElementById('modalConfirm').onclick = async function() {
                     const matSelect = document.getElementById('expenseMaterial');
@@ -606,6 +684,7 @@
                     const remarks = document.getElementById('expenseRemarks').value || null;
                     const fileInput = document.getElementById('expenseImageFile');
                     let imageBase64 = null;
+                    const location = document.getElementById('shopLocation').value || null;
 
                     if (fileInput.files && fileInput.files.length > 0) {
                         imageBase64 = await fileToBase64(fileInput.files[0]);
@@ -639,7 +718,7 @@
                         amount: amount,
                         note: `${matName}: ${note}`,
                         image: imageBase64,
-                        location: userLocation ? `${userLocation.lat}, ${userLocation.lon}` : null,
+                        location: location,
                         phone: phone,
                         remarks: remarks,
                         user: currentUser.name,
@@ -648,10 +727,10 @@
                     updateStats();
                     renderTransactions();
                     closeModal();
-                    showToast('✅ تم إضافة المصروف بنجاح', 'success');
+                    showToast('✅ تم إضافة المصروف مع موقع المحل', 'success');
                 };
             } else if (type === 'invoice') {
-                title.textContent = '🧾 رفع فاتورة مع الموقع';
+                title.textContent = '🧾 رفع فاتورة مع موقع المحل';
                 body.innerHTML = `
                     <label>المبلغ (ل.س)</label>
                     <input type="number" id="invoiceAmount" placeholder="أدخل المبلغ">
@@ -660,17 +739,27 @@
                     <label>رفع صورة الفاتورة</label>
                     <input type="file" id="invoiceImageFile" accept="image/*" onchange="previewImage(this, 'invoicePreview')">
                     <div id="invoicePreview" class="image-preview-container"></div>
-                    <label>رقم الهاتف</label>
+                    <label>رقم هاتف المحل</label>
                     <input type="text" id="invoicePhone" placeholder="رقم هاتف المورد">
-                    <label>الموقع (سيتم جلب الموقع تلقائياً)</label>
-                    <input type="text" id="invoiceLocation" readonly>
-                    <button class="btn btn-primary" onclick="getCurrentLocation()" style="margin-top:10px;">📍 جلب الموقع الحالي</button>
+                    
+                    <div class="map-container">
+                        <p class="map-instruction">📍 اضغط على الخريطة لتحديد موقع المحل</p>
+                        <div id="invoiceMap"></div>
+                        <div id="invoiceSelectedLocation" style="background:#0a1a1a;padding:8px 12px;border-radius:8px;color:#c9d4c9;font-size:13px;margin-top:6px;border:1px solid #2a4a4a;">لم يتم تحديد موقع بعد</div>
+                        <input type="hidden" id="invoiceShopLocation" value="">
+                    </div>
                 `;
+                
+                // تهيئة خريطة الفاتورة
+                setTimeout(() => {
+                    initInvoiceMap();
+                }, 300);
+                
                 document.getElementById('modalConfirm').onclick = async function() {
                     const amt = parseFloat(document.getElementById('invoiceAmount').value);
                     const desc = document.getElementById('invoiceDesc').value || 'فاتورة';
                     const phone = document.getElementById('invoicePhone').value || null;
-                    const loc = document.getElementById('invoiceLocation').value || (userLocation ? `${userLocation.lat}, ${userLocation.lon}` : null);
+                    const location = document.getElementById('invoiceShopLocation').value || null;
                     const fileInput = document.getElementById('invoiceImageFile');
                     let imageBase64 = null;
                     
@@ -685,7 +774,7 @@
                         amount: amt,
                         note: `🧾 ${desc}`,
                         image: imageBase64,
-                        location: loc,
+                        location: location,
                         phone: phone,
                         remarks: 'فاتورة',
                         user: currentUser.name
@@ -693,7 +782,7 @@
                     updateStats();
                     renderTransactions();
                     closeModal();
-                    showToast('✅ تم رفع الفاتورة بنجاح', 'success');
+                    showToast('✅ تم رفع الفاتورة مع موقع المحل', 'success');
                 };
             } else if (type === 'admin') {
                 title.textContent = '⚙️ لوحة تحكم المدير';
@@ -773,8 +862,55 @@
             modal.classList.add('active');
         }
 
+        // ====== خريطة الفاتورة ======
+        let invoiceMapInstance = null;
+        let invoiceMarker = null;
+        let invoiceLatLng = null;
+
+        function initInvoiceMap() {
+            const container = document.getElementById('invoiceMap');
+            if (!container) return;
+            if (invoiceMapInstance) {
+                invoiceMapInstance.remove();
+                invoiceMapInstance = null;
+            }
+            invoiceMapInstance = L.map(container).setView([33.5138, 36.2765], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(invoiceMapInstance);
+
+            invoiceMapInstance.on('click', function(e) {
+                const latlng = e.latlng;
+                if (invoiceMarker) {
+                    invoiceMapInstance.removeLayer(invoiceMarker);
+                }
+                invoiceMarker = L.marker([latlng.lat, latlng.lng]).addTo(invoiceMapInstance);
+                invoiceLatLng = `${latlng.lat.toFixed(6)}, ${latlng.lng.toFixed(6)}`;
+                const locInput = document.getElementById('invoiceShopLocation');
+                if (locInput) {
+                    locInput.value = invoiceLatLng;
+                }
+                const display = document.getElementById('invoiceSelectedLocation');
+                if (display) {
+                    display.textContent = `📍 الموقع المحدد: ${invoiceLatLng} (اضغط للفتح في خرائط جوجل)`;
+                    display.onclick = () => window.open(`https://www.google.com/maps?q=${invoiceLatLng}`, '_blank');
+                }
+                showToast('✅ تم تحديد موقع المحل', 'success');
+            });
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(pos) {
+                        invoiceMapInstance.setView([pos.coords.latitude, pos.coords.longitude], 15);
+                    },
+                    function() {},
+                    { enableHighAccuracy: true, timeout: 5000 }
+                );
+            }
+        }
+
         // =====================================================
-        // 9. معاينة الصورة
+        // 10. معاينة الصورة
         // =====================================================
         function previewImage(input, containerId) {
             const container = document.getElementById(containerId);
@@ -794,7 +930,7 @@
         }
 
         // =====================================================
-        // 10. دوال المواد
+        // 11. دوال المواد
         // =====================================================
         function addMaterial() {
             const name = document.getElementById('newMaterialName').value.trim();
@@ -834,7 +970,7 @@
         }
 
         // =====================================================
-        // 11. دوال الصلاحيات
+        // 12. دوال الصلاحيات
         // =====================================================
         function loadUserPerms() {
             const pass = document.getElementById('userSelect').value;
@@ -869,7 +1005,7 @@
         }
 
         // =====================================================
-        // 12. دوال المعاملات
+        // 13. دوال المعاملات
         // =====================================================
         function deleteTransaction(index) {
             if (!confirm('هل أنت متأكد من حذف هذه العملية؟')) return;
@@ -901,29 +1037,12 @@
         }
 
         // =====================================================
-        // 13. الموقع
-        // =====================================================
-        function getCurrentLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    function(pos) {
-                        document.getElementById('invoiceLocation').value = `${pos.coords.latitude}, ${pos.coords.longitude}`;
-                        showToast('✅ تم جلب الموقع', 'success');
-                    },
-                    function() { showToast('⚠️ فشل جلب الموقع، أدخل يدوياً', 'error'); }
-                );
-            } else {
-                showToast('⚠️ متصفحك لا يدعم تحديد الموقع', 'error');
-            }
-        }
-
-        // =====================================================
         // 14. عرض العمليات
         // =====================================================
         function viewTransactions() {
             let msg = '📋 جميع العمليات:\n\n';
             transactions.forEach((t, i) => {
-                msg += `${i+1}. ${t.date} | ${t.type === 'receive' ? '📥' : '📤'} | ${t.amount} ل.س | ${t.note} | ${t.location || 'بدون موقع'}\n`;
+                msg += `${i+1}. ${t.date} | ${t.type === 'receive' ? '📥' : '📤'} | ${t.amount} ل.س | ${t.note} | موقع المحل: ${t.location || 'غير محدد'}\n`;
             });
             msg += `\n📊 المجموع: ${transactions.length} عملية`;
             alert(msg);
@@ -936,6 +1055,15 @@
             document.getElementById('modal').classList.remove('active');
             document.getElementById('modalConfirm').style.display = 'block';
             document.querySelector('.modal-actions .btn-secondary').textContent = 'إلغاء';
+            // تنظيف الخريطة عند الإغلاق
+            if (mapInstance) {
+                mapInstance.remove();
+                mapInstance = null;
+            }
+            if (invoiceMapInstance) {
+                invoiceMapInstance.remove();
+                invoiceMapInstance = null;
+            }
         }
 
         // =====================================================
@@ -950,7 +1078,7 @@
             }
         });
 
-        console.log('✅ النظام المالي المتقدم جاهز مع رفع الصور');
+        console.log('✅ النظام المالي المتقدم جاهز مع خريطة تحديد موقع المحل');
         console.log('🔑 1234=مستخدم | 1111=مستخدم2 | 2222=مستخدم3 | 3333=مستخدم4 | 1992=مدير');
     </script>
 

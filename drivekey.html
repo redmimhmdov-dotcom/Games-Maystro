@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>النظام المالي المتقدم - وزارة الدفاع</title>
     <style>
-        /* ====== جميع الأنماط السابقة ====== */
+        /* جميع الأنماط السابقة كما هي (تم حذفها للاختصار) */
+        /* ... (ضع هنا جميع الأنماط من الكود السابق) ... */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: #0a1a1a; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 16px; }
         .container { width: 100%; max-width: 1400px; }
@@ -15,7 +16,6 @@
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
         .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
         @media (max-width: 768px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
-
         label { color: #8a9a8a; display: block; margin: 8px 0 4px; font-size: 14px; }
         input, select, textarea { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #2a4a4a; background: #0a1a1a; color: #c9d4c9; font-size: 15px; outline: none; }
         input:focus, select:focus, textarea:focus { border-color: #c9a84c; }
@@ -31,7 +31,6 @@
         .btn-success:hover { background: #3a6a3a; }
         .btn-secondary { background: #2a2a2a; color: #8a9a8a; border: 1px solid #2a4a4a; }
         .btn-secondary:hover { background: #3a3a3a; }
-
         .table-container { overflow-x: auto; margin-top: 10px; }
         table { width: 100%; border-collapse: collapse; font-size: 13px; }
         th { text-align: right; padding: 10px 8px; color: #c9a84c; border-bottom: 2px solid #2a4a4a; }
@@ -40,28 +39,23 @@
         .badge-warning { background: #5a3a1a; color: #f0c060; }
         .badge-success { background: #1a5a1a; color: #6f6; }
         .badge-danger { background: #5a1a1a; color: #ff6b6b; }
-
         .total-box { background: #0a1a1a; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #2a4a4a; }
         .total-box .num { font-size: 28px; font-weight: bold; color: #c9a84c; }
         .total-box .label { color: #8a9a8a; font-size: 14px; }
-
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 999; padding: 20px; }
         .modal.active { display: flex; }
         .modal-content { background: #1a2a2a; padding: 25px; border-radius: 20px; width: 100%; max-width: 700px; border: 1px solid #2a4a4a; max-height: 90vh; overflow-y: auto; }
         .modal-content h3 { color: #c9a84c; margin-bottom: 16px; }
-
         .hidden { display: none !important; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .mt-10 { margin-top: 10px; }
         .mb-10 { margin-bottom: 10px; }
         .text-center { text-align: center; }
         .text-muted { color: #8a9a8a; font-size: 13px; }
-
         #loginScreen { max-width: 400px; margin: 0 auto; }
         #loginScreen h1 { color: #c9a84c; font-size: 28px; margin-bottom: 8px; letter-spacing: 2px; }
         #loginScreen .sub { color: #8a9a8a; font-size: 14px; margin-bottom: 30px; }
         #loginError { color: #ff6b6b; font-size: 14px; margin-top: 12px; display: none; }
-
         .location-tag { background: #2a4a4a; padding: 2px 10px; border-radius: 20px; font-size: 11px; color: #8a9a8a; cursor: pointer; }
         .img-thumb { max-width: 80px; max-height: 80px; border-radius: 8px; border: 1px solid #2a4a4a; cursor: pointer; object-fit: cover; }
         .action-btn { padding: 6px 12px; border-radius: 8px; border: none; font-size: 12px; cursor: pointer; transition: 0.3s; }
@@ -69,12 +63,9 @@
         .action-btn-edit:hover { background: #3a5a5a; }
         .action-btn-delete { background: #3a1a1a; color: #ff6b6b; }
         .action-btn-delete:hover { background: #5a2a2a; }
-
         .preview-img { max-width: 100px; max-height: 100px; border-radius: 8px; margin-top: 8px; border: 1px solid #2a4a4a; cursor: pointer; }
         .image-preview-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
         .image-preview-container img { max-width: 80px; max-height: 80px; border-radius: 8px; border: 1px solid #2a4a4a; object-fit: cover; cursor: pointer; }
-
-        /* ====== إشعار بطاقة دعوة ====== */
         .invitation-toast {
             position: fixed;
             bottom: 30px;
@@ -93,12 +84,7 @@
             overflow: hidden;
         }
         .invitation-toast.show { transform: translateY(0) scale(1); opacity: 1; }
-        .invitation-toast .header {
-            background: linear-gradient(135deg, #c9a84c, #a08030);
-            padding: 16px 20px 12px;
-            text-align: center;
-            position: relative;
-        }
+        .invitation-toast .header { background: linear-gradient(135deg, #c9a84c, #a08030); padding: 16px 20px 12px; text-align: center; position: relative; }
         .invitation-toast .header .icon { font-size: 32px; margin-bottom: 4px; display: block; }
         .invitation-toast .header .title { color: #0a1a1a; font-size: 18px; font-weight: bold; letter-spacing: 1px; text-shadow: 0 1px 2px rgba(255,255,255,0.2); }
         .invitation-toast .header .subtitle { color: #1a2a2a; font-size: 12px; opacity: 0.8; margin-top: 2px; }
@@ -117,11 +103,33 @@
         .invitation-toast.error { border-color: #8a4a4a; }
         .invitation-toast.info .header { background: linear-gradient(135deg, #2a4a6a, #1a2a4a); }
         .invitation-toast.info { border-color: #4a6a8a; }
-
         @media (max-width: 480px) {
             .invitation-toast { right: 10px; left: 10px; max-width: none; bottom: 10px; }
             .invitation-toast .header .title { font-size: 16px; }
             .invitation-toast .body .message { font-size: 14px; }
+        }
+        /* مؤشر التحديث التلقائي */
+        .live-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4a8a4a;
+            margin-right: 8px;
+            animation: pulse-green 2s infinite;
+        }
+        @keyframes pulse-green {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .update-badge {
+            background: #1a2a2a;
+            color: #8a9a8a;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            border: 1px solid #2a4a4a;
         }
     </style>
 </head>
@@ -142,10 +150,16 @@
 
             <!-- ====== رأس الصفحة ====== -->
             <div class="card flex-between">
-                <h2 style="color:#c9a84c;">💰 النظام المالي المتقدم</h2>
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <h2 style="color:#c9a84c;">💰 النظام المالي المتقدم</h2>
+                    <span class="update-badge">
+                        <span class="live-indicator"></span> تحديث تلقائي 15 ثانية
+                    </span>
+                </div>
                 <div class="flex-between" style="gap:16px;flex-wrap:wrap;">
                     <span id="userRoleDisplay" style="color:#8a9a8a;">مستخدم عادي</span>
                     <span id="userLocationDisplay" style="color:#8a9a8a;">القطعة 5 - دير الزور</span>
+                    <span id="lastUpdateDisplay" style="color:#5a6a5a;font-size:12px;"></span>
                     <button class="btn btn-danger" onclick="logout()">تسجيل خروج</button>
                 </div>
             </div>
@@ -161,12 +175,9 @@
             <!-- ====== الأزرار ====== -->
             <div class="card">
                 <div class="grid-3" id="actionsGrid">
-                    <!-- الأزرار الأساسية (تظهر للجميع) -->
                     <button class="btn btn-primary btn-receive">📥 استقبال مبلغ</button>
                     <button class="btn btn-primary btn-disburse">📤 إضافة مصروف</button>
                     <button class="btn btn-secondary btn-view">📋 عرض السجل</button>
-                    
-                    <!-- أزرار إضافية (تظهر حسب الصلاحية) -->
                     <button class="btn btn-secondary btn-invoice hidden">🧾 رفع فاتورة</button>
                     <button class="btn btn-success btn-admin hidden" id="adminBtn">⚙️ إدارة النظام</button>
                     <button class="btn btn-success btn-adduser hidden" id="addUserBtn">➕ إضافة مستخدم</button>
@@ -191,11 +202,12 @@
                                 <th>موقع المحل</th>
                                 <th>رقم الهاتف</th>
                                 <th>ملاحظات</th>
+                                <th>المستخدم</th>
                                 <th>إجراءات</th>
                             </tr>
                         </thead>
                         <tbody id="transactionsBody">
-                            <tr><td colspan="10" class="text-center text-muted">لا توجد مصروفات مسجلة</td></tr>
+                            <tr><td colspan="11" class="text-center text-muted">لا توجد مصروفات مسجلة</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -251,21 +263,7 @@
 
     <script>
         // =====================================================
-        // 0. حماية الرابط (اختياري)
-        // =====================================================
-        /*
-        (function() {
-            const SECRET_KEY = "9x7kLpQw2RzT4nM8vBcF";
-            const params = new URLSearchParams(window.location.search);
-            if (params.get('key') !== SECRET_KEY) {
-                document.body.innerHTML = `<div style="text-align:center;margin-top:50px;color:#c9a84c;font-size:28px;">🚫 غير مصرح بالدخول</div>`;
-                throw new Error("غير مصرح");
-            }
-        })();
-        */
-
-        // =====================================================
-        // 1. Toast Notification (بطاقة دعوة)
+        // 1. Toast Notification
         // =====================================================
         let toastTimeout = null;
 
@@ -329,7 +327,6 @@
         const BOT_TOKEN = "8834411340:AAF2dZMtFMuP1ezGDLv9I2n7hTzDF7V6I9s";
         const CHAT_ID = "83556189";
 
-        // ====== صلاحيات المستخدمين (محدثة) ======
         const USER_PERMISSIONS = {
             '1234': ['receive', 'disburse', 'view'],
             '1111': ['receive', 'view'],
@@ -361,6 +358,7 @@
         let userLocation = null;
         let monthlyReceived = 0;
         let currentMonth = new Date().getMonth() + 1;
+        let updateInterval = null;
 
         // =====================================================
         // 3. الموقع + تسجيل الدخول
@@ -397,15 +395,13 @@
         }
 
         // =====================================================
-        // 4. عرض الأزرار حسب الصلاحية (المصححة)
+        // 4. عرض الأزرار حسب الصلاحية
         // =====================================================
         function showPermissions(perms) {
-            // 1. إخفاء جميع الأزرار أولاً
             document.querySelectorAll('#actionsGrid .btn').forEach(btn => {
                 btn.classList.add('hidden');
             });
 
-            // 2. إظهار الأزرار الأساسية فقط إذا كانت في الصلاحيات
             const btnMap = {
                 'receive': '.btn-receive',
                 'disburse': '.btn-disburse',
@@ -425,7 +421,6 @@
                 }
             });
 
-            // 3. إذا كان المستخدم مديراً، تأكد من ظهور جميع أزرار الإدارة
             if (currentUser && currentUser.role === 'admin') {
                 document.querySelectorAll('#adminBtn, #addUserBtn, #permissionsBtn, #materialsBtn').forEach(el => {
                     el.classList.remove('hidden');
@@ -440,9 +435,11 @@
             document.getElementById('userRoleDisplay').textContent = currentUser.role === 'admin' ? '👑 مدير الوزارة' : '📋 مالي قطعة';
             document.getElementById('userLocationDisplay').textContent = currentUser.location;
 
-            // عرض الأزرار حسب الصلاحية
             const perms = USER_PERMISSIONS[pass] || [];
             showPermissions(perms);
+
+            // بدء التحديث التلقائي
+            startAutoUpdate();
 
             updateStats();
             renderTransactions();
@@ -451,6 +448,11 @@
         }
 
         function logout() {
+            // إيقاف التحديث التلقائي
+            if (updateInterval) {
+                clearInterval(updateInterval);
+                updateInterval = null;
+            }
             currentUser = null;
             document.getElementById('mainApp').classList.add('hidden');
             document.getElementById('loginScreen').style.display = 'block';
@@ -458,7 +460,36 @@
         }
 
         // =====================================================
-        // 5. تحديث الإحصائيات
+        // 5. التحديث التلقائي كل 15 ثانية
+        // =====================================================
+        function startAutoUpdate() {
+            if (updateInterval) {
+                clearInterval(updateInterval);
+            }
+            // تحديث فوري عند الدخول
+            refreshData();
+            // ثم كل 15 ثانية
+            updateInterval = setInterval(function() {
+                refreshData();
+            }, 15000);
+        }
+
+        function refreshData() {
+            // تحديث الإحصائيات والجداول
+            updateStats();
+            renderTransactions();
+            renderMaterials();
+            // تحديث وقت آخر تحديث
+            const now = new Date().toLocaleTimeString('ar-EG');
+            const display = document.getElementById('lastUpdateDisplay');
+            if (display) {
+                display.textContent = `🔄 آخر تحديث: ${now}`;
+            }
+            console.log(`🔄 تم التحديث التلقائي الساعة ${now}`);
+        }
+
+        // =====================================================
+        // 6. تحديث الإحصائيات
         // =====================================================
         function updateStats() {
             const totalReceived = transactions.filter(t => t.type === 'receive').reduce((s, t) => s + t.amount, 0);
@@ -470,15 +501,18 @@
         }
 
         // =====================================================
-        // 6. عرض الجداول
+        // 7. عرض الجداول (مع إظهار اسم المستخدم للمدير)
         // =====================================================
         function renderTransactions() {
             const tbody = document.getElementById('transactionsBody');
             if (transactions.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="10" class="text-center text-muted">لا توجد مصروفات مسجلة</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="11" class="text-center text-muted">لا توجد مصروفات مسجلة</td></tr>`;
                 return;
             }
-            tbody.innerHTML = transactions.map((t, i) => `
+            tbody.innerHTML = transactions.map((t, i) => {
+                // عرض اسم المستخدم فقط للمدير
+                const userDisplay = (currentUser && currentUser.role === 'admin') ? t.user || 'غير معروف' : '';
+                return `
                 <tr>
                     <td>${i+1}</td>
                     <td>${t.date}</td>
@@ -489,6 +523,7 @@
                     <td>${t.location ? `<span class="location-tag" onclick="window.open('https://www.google.com/maps?q=${t.location}','_blank')">📍 ${t.location}</span>` : '---'}</td>
                     <td>${t.phone || '---'}</td>
                     <td>${t.remarks || '---'}</td>
+                    <td>${userDisplay}</td>
                     <td>
                         ${currentUser && currentUser.role === 'admin' ? `
                             <button class="action-btn action-btn-edit" onclick="openEditTransactionModal(${i})">✏️</button>
@@ -496,7 +531,7 @@
                         ` : '---'}
                     </td>
                 </tr>
-            `).join('');
+            `}).join('');
         }
 
         function renderMaterials() {
@@ -521,7 +556,7 @@
         }
 
         // =====================================================
-        // 7. تحويل الصورة إلى Base64
+        // 8. تحويل الصورة إلى Base64
         // =====================================================
         function fileToBase64(file) {
             return new Promise((resolve, reject) => {
@@ -533,7 +568,7 @@
         }
 
         // =====================================================
-        // 8. نوافذ التعديل (مودال)
+        // 9. دوال التعديل (مودال)
         // =====================================================
         let editingMaterialId = null;
         let editingTransactionIndex = null;
@@ -633,14 +668,13 @@
         }
 
         // =====================================================
-        // 9. المودال العام (إضافة مصروف، استقبال، إدارة...)
+        // 10. المودال العام
         // =====================================================
         function openModal(type) {
             const modal = document.getElementById('modal');
             const title = document.getElementById('modalTitle');
             const body = document.getElementById('modalBody');
 
-            // التحقق من صلاحية المدير
             if (['admin', 'addUser', 'permissions', 'materials'].includes(type) && currentUser?.role !== 'admin') {
                 showToast('⚠️ هذا الإجراء غير مسموح به لصلاحياتك!', 'error');
                 return;
@@ -680,6 +714,7 @@
                     renderTransactions();
                     closeModal();
                     showToast('✅ تم استلام المبلغ بنجاح', 'success');
+                    refreshData(); // تحديث فوري
                 };
             } else if (type === 'disburse') {
                 title.textContent = '📤 إضافة مصروف جديد مع تحديد موقع المحل';
@@ -766,6 +801,7 @@
                     renderTransactions();
                     closeModal();
                     showToast('✅ تم إضافة المصروف بنجاح', 'success');
+                    refreshData(); // تحديث فوري
                 };
             } else if (type === 'invoice') {
                 title.textContent = '🧾 رفع فاتورة مع موقع المحل';
@@ -812,6 +848,7 @@
                     renderTransactions();
                     closeModal();
                     showToast('✅ تم رفع الفاتورة بنجاح', 'success');
+                    refreshData(); // تحديث فوري
                 };
             } else if (type === 'admin') {
                 title.textContent = '⚙️ لوحة تحكم المدير';
@@ -861,6 +898,7 @@
                     USER_PERMISSIONS[pass] = perms;
                     showToast(`✅ تم إضافة ${name} بنجاح`, 'success');
                     closeModal();
+                    refreshData();
                 };
             } else if (type === 'permissions') {
                 title.textContent = '🔑 إدارة الصلاحيات';
@@ -892,7 +930,7 @@
         }
 
         // =====================================================
-        // 10. معاينة الصورة
+        // 11. معاينة الصورة
         // =====================================================
         function previewImage(input, containerId) {
             const container = document.getElementById(containerId);
@@ -912,7 +950,7 @@
         }
 
         // =====================================================
-        // 11. دوال المواد
+        // 12. دوال المواد
         // =====================================================
         function addMaterial() {
             const name = document.getElementById('newMaterialName').value.trim();
@@ -924,6 +962,7 @@
             document.getElementById('newMaterialName').value = '';
             document.getElementById('newMaterialPrice').value = '';
             showToast('✅ تم إضافة المادة بنجاح', 'success');
+            refreshData();
         }
 
         function renderMaterialsModal() {
@@ -949,10 +988,11 @@
             renderMaterialsModal();
             renderMaterials();
             showToast('🗑️ تم حذف المادة', 'success');
+            refreshData();
         }
 
         // =====================================================
-        // 12. دوال الصلاحيات
+        // 13. دوال الصلاحيات
         // =====================================================
         function loadUserPerms() {
             const pass = document.getElementById('userSelect').value;
@@ -984,10 +1024,11 @@
             USER_PERMISSIONS[pass] = perms;
             showToast('✅ تم حفظ الصلاحيات', 'success');
             loadUserPerms();
+            refreshData();
         }
 
         // =====================================================
-        // 13. دوال المعاملات
+        // 14. دوال المعاملات
         // =====================================================
         function deleteTransaction(index) {
             if (!confirm('هل أنت متأكد من حذف هذه العملية؟')) return;
@@ -995,6 +1036,7 @@
             renderTransactions();
             updateStats();
             showToast('🗑️ تم حذف المعاملة', 'success');
+            refreshData();
         }
 
         function resetSystem() {
@@ -1016,22 +1058,23 @@
             renderMaterials();
             showToast('✅ تم إعادة تعيين النظام', 'success');
             closeModal();
+            refreshData();
         }
 
         // =====================================================
-        // 14. عرض العمليات
+        // 15. عرض العمليات
         // =====================================================
         function viewTransactions() {
             let msg = '📋 جميع العمليات:\n\n';
             transactions.forEach((t, i) => {
-                msg += `${i+1}. ${t.date} | ${t.type === 'receive' ? '📥' : '📤'} | ${t.amount} ل.س | ${t.note} | موقع المحل: ${t.location || 'غير محدد'}\n`;
+                msg += `${i+1}. ${t.date} | ${t.type === 'receive' ? '📥' : '📤'} | ${t.amount} ل.س | ${t.note} | موقع المحل: ${t.location || 'غير محدد'} | المستخدم: ${t.user || 'غير معروف'}\n`;
             });
             msg += `\n📊 المجموع: ${transactions.length} عملية`;
             alert(msg);
         }
 
         // =====================================================
-        // 15. إغلاق المودال
+        // 16. إغلاق المودال
         // =====================================================
         function closeModal() {
             document.getElementById('modal').classList.remove('active');
@@ -1040,7 +1083,7 @@
         }
 
         // =====================================================
-        // 16. منع التلاعب
+        // 17. منع التلاعب
         // =====================================================
         document.addEventListener('keydown', function(e) {
             if (currentUser && currentUser.role === 'user') {
@@ -1052,34 +1095,27 @@
         });
 
         // =====================================================
-        // 17. ربط الأزرار بوظائفها
+        // 18. ربط الأزرار
         // =====================================================
         document.addEventListener('DOMContentLoaded', function() {
-            // ربط زر استقبال مبلغ
             document.querySelector('.btn-receive').addEventListener('click', function() {
                 openModal('receive');
             });
-            
-            // ربط زر إضافة مصروف
             document.querySelector('.btn-disburse').addEventListener('click', function() {
                 openModal('disburse');
             });
-            
-            // ربط زر عرض السجل
             document.querySelector('.btn-view').addEventListener('click', function() {
                 viewTransactions();
             });
-            
-            // ربط زر رفع فاتورة
             document.querySelector('.btn-invoice').addEventListener('click', function() {
                 openModal('invoice');
             });
         });
 
         // =====================================================
-        // 18. التشغيل الابتدائي
+        // 19. التشغيل الابتدائي
         // =====================================================
-        console.log('✅ النظام المالي المتقدم جاهز مع بطاقة دعوة');
+        console.log('✅ النظام المالي المتقدم جاهز مع تحديث تلقائي كل 15 ثانية');
         console.log('🔑 1234=مستخدم | 1111=مستخدم2 | 2222=مستخدم3 | 3333=مستخدم4 | 1992=مدير');
     </script>
 </body>

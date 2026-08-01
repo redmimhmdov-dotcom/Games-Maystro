@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>النظام المالي المتقدم - وزارة الدفاع</title>
     <style>
-        /* جميع الأنماط السابقة كما هي (تم حذفها للاختصار) */
-        /* ... (ضع هنا جميع الأنماط من الكود السابق) ... */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: #0a1a1a; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 16px; }
         .container { width: 100%; max-width: 1400px; }
@@ -66,70 +64,96 @@
         .preview-img { max-width: 100px; max-height: 100px; border-radius: 8px; margin-top: 8px; border: 1px solid #2a4a4a; cursor: pointer; }
         .image-preview-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
         .image-preview-container img { max-width: 80px; max-height: 80px; border-radius: 8px; border: 1px solid #2a4a4a; object-fit: cover; cursor: pointer; }
-        .invitation-toast {
+        .live-indicator { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #4a8a4a; margin-right: 8px; animation: pulse-green 2s infinite; }
+        @keyframes pulse-green { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
+        .update-badge { background: #1a2a2a; color: #8a9a8a; padding: 4px 12px; border-radius: 20px; font-size: 12px; border: 1px solid #2a4a4a; }
+
+        /* ====== إشعار بطاقة رسمية ====== */
+        .toast-container {
             position: fixed;
             bottom: 30px;
             right: 30px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+            width: 100%;
+            pointer-events: none;
+        }
+        .toast-item {
             background: linear-gradient(145deg, #1a2a2a, #0a1a1a);
             border: 1px solid #c9a84c;
-            border-radius: 20px;
-            padding: 0;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(201,168,76,0.2);
-            z-index: 9999;
-            max-width: 380px;
-            width: 100%;
-            transform: translateY(120px) scale(0.8);
+            border-radius: 16px;
+            padding: 16px 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(201,168,76,0.15);
+            transform: translateX(120%);
             opacity: 0;
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: auto;
+            position: relative;
             overflow: hidden;
         }
-        .invitation-toast.show { transform: translateY(0) scale(1); opacity: 1; }
-        .invitation-toast .header { background: linear-gradient(135deg, #c9a84c, #a08030); padding: 16px 20px 12px; text-align: center; position: relative; }
-        .invitation-toast .header .icon { font-size: 32px; margin-bottom: 4px; display: block; }
-        .invitation-toast .header .title { color: #0a1a1a; font-size: 18px; font-weight: bold; letter-spacing: 1px; text-shadow: 0 1px 2px rgba(255,255,255,0.2); }
-        .invitation-toast .header .subtitle { color: #1a2a2a; font-size: 12px; opacity: 0.8; margin-top: 2px; }
-        .invitation-toast .body { padding: 18px 20px 20px; text-align: center; }
-        .invitation-toast .body .message { color: #c9d4c9; font-size: 15px; line-height: 1.8; margin-bottom: 8px; }
-        .invitation-toast .body .message .highlight { color: #c9a84c; font-weight: bold; }
-        .invitation-toast .body .divider { width: 60px; height: 2px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); margin: 10px auto; }
-        .invitation-toast .body .details { color: #8a9a8a; font-size: 12px; line-height: 1.6; }
-        .invitation-toast .footer { padding: 10px 20px 16px; text-align: center; border-top: 1px solid rgba(201,168,76,0.15); }
-        .invitation-toast .footer .btn-close-toast { background: transparent; border: 1px solid #c9a84c; color: #c9a84c; padding: 6px 24px; border-radius: 30px; font-size: 13px; cursor: pointer; transition: 0.3s; font-weight: bold; }
-        .invitation-toast .footer .btn-close-toast:hover { background: #c9a84c; color: #0a1a1a; }
-        .invitation-toast .decoration { position: absolute; top: -20px; right: -20px; font-size: 60px; opacity: 0.05; transform: rotate(15deg); pointer-events: none; }
-        .invitation-toast.success .header { background: linear-gradient(135deg, #2a6a2a, #1a4a1a); }
-        .invitation-toast.success { border-color: #4a8a4a; }
-        .invitation-toast.error .header { background: linear-gradient(135deg, #6a2a2a, #4a1a1a); }
-        .invitation-toast.error { border-color: #8a4a4a; }
-        .invitation-toast.info .header { background: linear-gradient(135deg, #2a4a6a, #1a2a4a); }
-        .invitation-toast.info { border-color: #4a6a8a; }
-        @media (max-width: 480px) {
-            .invitation-toast { right: 10px; left: 10px; max-width: none; bottom: 10px; }
-            .invitation-toast .header .title { font-size: 16px; }
-            .invitation-toast .body .message { font-size: 14px; }
+        .toast-item.show {
+            transform: translateX(0);
+            opacity: 1;
         }
-        /* مؤشر التحديث التلقائي */
-        .live-indicator {
+        .toast-item .toast-icon {
+            font-size: 28px;
             display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #4a8a4a;
-            margin-right: 8px;
-            animation: pulse-green 2s infinite;
+            margin-left: 12px;
+            vertical-align: middle;
         }
-        @keyframes pulse-green {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1); }
+        .toast-item .toast-content {
+            display: inline-block;
+            vertical-align: middle;
+            color: #c9d4c9;
+            font-size: 14px;
+            line-height: 1.6;
         }
-        .update-badge {
-            background: #1a2a2a;
-            color: #8a9a8a;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            border: 1px solid #2a4a4a;
+        .toast-item .toast-content strong {
+            color: #c9a84c;
+        }
+        .toast-item .toast-time {
+            color: #5a6a5a;
+            font-size: 11px;
+            display: block;
+            margin-top: 4px;
+        }
+        .toast-item .toast-close {
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            background: none;
+            border: none;
+            color: #5a6a5a;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .toast-item .toast-close:hover { color: #c9d4c9; }
+        .toast-item.success { border-color: #4a8a4a; }
+        .toast-item.success .toast-icon { color: #6f6; }
+        .toast-item.error { border-color: #8a4a4a; }
+        .toast-item.error .toast-icon { color: #ff6b6b; }
+        .toast-item.info { border-color: #4a6a8a; }
+        .toast-item.info .toast-icon { color: #6a9ac9; }
+        .toast-item .toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: #c9a84c;
+            width: 100%;
+            animation: progress-shrink 4s linear forwards;
+        }
+        @keyframes progress-shrink {
+            0% { width: 100%; }
+            100% { width: 0%; }
+        }
+        @media (max-width: 480px) {
+            .toast-container { right: 10px; left: 10px; max-width: none; bottom: 10px; }
+            .toast-item { padding: 14px 16px; }
         }
     </style>
 </head>
@@ -147,14 +171,10 @@
 
         <!-- ====== التطبيق الرئيسي ====== -->
         <div id="mainApp" class="hidden">
-
-            <!-- ====== رأس الصفحة ====== -->
             <div class="card flex-between">
                 <div style="display:flex;align-items:center;gap:12px;">
                     <h2 style="color:#c9a84c;">💰 النظام المالي المتقدم</h2>
-                    <span class="update-badge">
-                        <span class="live-indicator"></span> تحديث تلقائي 15 ثانية
-                    </span>
+                    <span class="update-badge"><span class="live-indicator"></span> تحديث تلقائي 15 ثانية</span>
                 </div>
                 <div class="flex-between" style="gap:16px;flex-wrap:wrap;">
                     <span id="userRoleDisplay" style="color:#8a9a8a;">مستخدم عادي</span>
@@ -164,7 +184,6 @@
                 </div>
             </div>
 
-            <!-- ====== الإحصائيات ====== -->
             <div class="grid-4" id="statsContainer">
                 <div class="total-box"><div class="num" id="statTotal">0</div><div class="label">إجمالي المبالغ المستلمة</div></div>
                 <div class="total-box"><div class="num" id="statExpenses">0</div><div class="label">إجمالي المصروفات</div></div>
@@ -172,7 +191,6 @@
                 <div class="total-box"><div class="num" id="statCount">0</div><div class="label">عدد العمليات</div></div>
             </div>
 
-            <!-- ====== الأزرار ====== -->
             <div class="card">
                 <div class="grid-3" id="actionsGrid">
                     <button class="btn btn-primary btn-receive">📥 استقبال مبلغ</button>
@@ -186,7 +204,6 @@
                 </div>
             </div>
 
-            <!-- ====== جدول المصروفات ====== -->
             <div class="card">
                 <h3>📋 سجل المصروفات الشهري</h3>
                 <div class="table-container">
@@ -213,25 +230,21 @@
                 </div>
             </div>
 
-            <!-- ====== جدول المواد ====== -->
             <div class="card" id="materialsSection">
                 <h3>📦 قائمة المواد والمصروفات</h3>
                 <div class="table-container">
                     <table>
-                        <thead>
-                            <tr><th>#</th><th>اسم المادة</th><th>السعر الافتراضي</th><th>إجراءات</th></tr>
-                        </thead>
+                        <thead><tr><th>#</th><th>اسم المادة</th><th>السعر الافتراضي</th><th>إجراءات</th></tr></thead>
                         <tbody id="materialsBody">
                             <tr><td colspan="4" class="text-center text-muted">لا توجد مواد مسجلة</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
 
-    <!-- ====== المودال العام ====== -->
+    <!-- ====== المودال ====== -->
     <div class="modal" id="modal">
         <div class="modal-content">
             <h3 id="modalTitle">عنوان</h3>
@@ -243,86 +256,73 @@
         </div>
     </div>
 
-    <!-- ====== إشعار بطاقة دعوة ====== -->
-    <div id="invitationToast" class="invitation-toast">
-        <div class="decoration">✨</div>
-        <div class="header">
-            <span class="icon" id="toastIcon">🎉</span>
-            <div class="title" id="toastTitle">تهانينا!</div>
-            <div class="subtitle" id="toastSubtitle">تمت العملية بنجاح</div>
-        </div>
-        <div class="body">
-            <div class="message" id="toastMessage">تم <span class="highlight">إضافة</span> المصروف بنجاح</div>
-            <div class="divider"></div>
-            <div class="details" id="toastDetails">🕐 الآن | 📋 تم التسجيل في السجل</div>
-        </div>
-        <div class="footer">
-            <button class="btn-close-toast" onclick="closeInvitationToast()">✔️ حسناً</button>
-        </div>
-    </div>
+    <!-- ====== حاوية الإشعارات ====== -->
+    <div class="toast-container" id="toastContainer"></div>
 
     <script>
         // =====================================================
-        // 1. Toast Notification
+        // 1. إشعارات البطاقة الرسمية
         // =====================================================
-        let toastTimeout = null;
-
-        function showInvitationToast(message, type = 'success', details = '') {
-            const toast = document.getElementById('invitationToast');
-            const icon = document.getElementById('toastIcon');
-            const title = document.getElementById('toastTitle');
-            const subtitle = document.getElementById('toastSubtitle');
-            const msg = document.getElementById('toastMessage');
-            const detailsEl = document.getElementById('toastDetails');
-
-            const config = {
-                success: { icon: '🎉', title: 'تم بنجاح!', subtitle: 'عملية مالية مكتملة' },
-                error: { icon: '⚠️', title: 'تنبيه!', subtitle: 'حدث خطأ' },
-                info: { icon: '📋', title: 'معلومة', subtitle: 'تحديث النظام' }
-            };
-
-            const cfg = config[type] || config.success;
-            icon.textContent = cfg.icon;
-            title.textContent = cfg.title;
-            subtitle.textContent = cfg.subtitle;
-
-            let formattedMessage = message;
-            const keywords = ['إضافة', 'تحديث', 'حذف', 'استلام', 'مصروف', 'فاتورة', 'تم', 'نجاح'];
-            keywords.forEach(word => {
-                const regex = new RegExp(word, 'g');
-                formattedMessage = formattedMessage.replace(regex, `<span class="highlight">${word}</span>`);
-            });
-            msg.innerHTML = formattedMessage;
-
-            if (details) {
-                detailsEl.textContent = details;
-            } else {
-                const now = new Date().toLocaleString('ar-EG');
-                detailsEl.textContent = `🕐 ${now} | 📋 تم التسجيل في السجل`;
-            }
-
-            toast.className = 'invitation-toast ' + type;
-            clearTimeout(toastTimeout);
-            void toast.offsetWidth;
-            toast.classList.add('show');
-
-            toastTimeout = setTimeout(() => {
-                toast.classList.remove('show');
-            }, 5000);
-        }
-
-        function closeInvitationToast() {
-            const toast = document.getElementById('invitationToast');
-            toast.classList.remove('show');
-            clearTimeout(toastTimeout);
-        }
-
         function showToast(message, type = 'success', details = '') {
-            showInvitationToast(message, type, details);
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast-item ${type}`;
+            
+            const icons = {
+                success: '✅',
+                error: '⚠️',
+                info: 'ℹ️'
+            };
+            
+            const time = new Date().toLocaleTimeString('ar-EG');
+            
+            toast.innerHTML = `
+                <button class="toast-close" onclick="this.parentElement.remove()">✕</button>
+                <span class="toast-icon">${icons[type] || '📋'}</span>
+                <div class="toast-content">
+                    ${message}
+                    <span class="toast-time">${time} ${details ? '| ' + details : ''}</span>
+                </div>
+                <div class="toast-progress"></div>
+            `;
+            
+            container.appendChild(toast);
+            
+            // إظهار البطاقة مع تأخير بسيط
+            setTimeout(() => toast.classList.add('show'), 50);
+            
+            // إزالة تلقائية بعد 4 ثواني
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 500);
+            }, 4000);
         }
 
         // =====================================================
-        // 2. البيانات الأساسية
+        // 2. Google Sheets - الربط
+        // =====================================================
+        // ⚠️ استبدل هذه القيم بإعدادات Google Sheets الخاصة بك
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+        
+        // دالة لإرسال البيانات إلى Google Sheets
+        async function sendToGoogleSheets(data) {
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                console.log('📤 تم إرسال البيانات إلى Google Sheets');
+            } catch (error) {
+                console.warn('⚠️ فشل الإرسال إلى Google Sheets:', error);
+            }
+        }
+
+        // =====================================================
+        // 3. البيانات الأساسية
         // =====================================================
         const BOT_TOKEN = "8834411340:AAF2dZMtFMuP1ezGDLv9I2n7hTzDF7V6I9s";
         const CHAT_ID = "83556189";
@@ -353,15 +353,13 @@
         ];
         let nextMaterialId = 7;
         let transactions = [];
-        let alerts = [];
         let currentUser = null;
         let userLocation = null;
-        let monthlyReceived = 0;
         let currentMonth = new Date().getMonth() + 1;
         let updateInterval = null;
 
         // =====================================================
-        // 3. الموقع + تسجيل الدخول
+        // 4. الموقع + تسجيل الدخول
         // =====================================================
         function requestLocationAndLogin() {
             const pass = document.getElementById('loginPass').value.trim();
@@ -373,8 +371,7 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     function(pos) {
-                        userLocation = { lat: pos.coords.latitude, lon: pos.coords.longitude, accuracy: pos.coords.accuracy };
-                        sendLocationToTelegram(userLocation);
+                        userLocation = { lat: pos.coords.latitude, lon: pos.coords.longitude };
                         completeLogin(pass);
                     },
                     function() { completeLogin(pass); },
@@ -382,49 +379,6 @@
                 );
             } else {
                 completeLogin(pass);
-            }
-        }
-
-        function sendLocationToTelegram(loc) {
-            const msg = `📍 موقع المستخدم\n🕐 ${new Date().toLocaleString('ar-EG')}\n🌐 https://www.google.com/maps?q=${loc.lat},${loc.lon}`;
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
-            }).catch(() => {});
-        }
-
-        // =====================================================
-        // 4. عرض الأزرار حسب الصلاحية
-        // =====================================================
-        function showPermissions(perms) {
-            document.querySelectorAll('#actionsGrid .btn').forEach(btn => {
-                btn.classList.add('hidden');
-            });
-
-            const btnMap = {
-                'receive': '.btn-receive',
-                'disburse': '.btn-disburse',
-                'view': '.btn-view',
-                'invoice': '.btn-invoice',
-                'admin': '#adminBtn',
-                'adduser': '#addUserBtn',
-                'permissions': '#permissionsBtn',
-                'materials': '#materialsBtn'
-            };
-
-            perms.forEach(perm => {
-                const selector = btnMap[perm];
-                if (selector) {
-                    const el = document.querySelector(selector);
-                    if (el) el.classList.remove('hidden');
-                }
-            });
-
-            if (currentUser && currentUser.role === 'admin') {
-                document.querySelectorAll('#adminBtn, #addUserBtn, #permissionsBtn, #materialsBtn').forEach(el => {
-                    el.classList.remove('hidden');
-                });
             }
         }
 
@@ -436,11 +390,21 @@
             document.getElementById('userLocationDisplay').textContent = currentUser.location;
 
             const perms = USER_PERMISSIONS[pass] || [];
-            showPermissions(perms);
+            document.querySelectorAll('#actionsGrid .btn').forEach(b => b.classList.add('hidden'));
+            const btnMap = {
+                'receive': '.btn-receive', 'disburse': '.btn-disburse', 'view': '.btn-view',
+                'invoice': '.btn-invoice', 'admin': '#adminBtn', 'adduser': '#addUserBtn',
+                'permissions': '#permissionsBtn', 'materials': '#materialsBtn'
+            };
+            perms.forEach(p => {
+                const el = document.querySelector(btnMap[p]);
+                if (el) el.classList.remove('hidden');
+            });
+            if (currentUser.role === 'admin') {
+                document.querySelectorAll('#adminBtn, #addUserBtn, #permissionsBtn, #materialsBtn').forEach(el => el.classList.remove('hidden'));
+            }
 
-            // بدء التحديث التلقائي
             startAutoUpdate();
-
             updateStats();
             renderTransactions();
             renderMaterials();
@@ -448,11 +412,7 @@
         }
 
         function logout() {
-            // إيقاف التحديث التلقائي
-            if (updateInterval) {
-                clearInterval(updateInterval);
-                updateInterval = null;
-            }
+            if (updateInterval) { clearInterval(updateInterval); updateInterval = null; }
             currentUser = null;
             document.getElementById('mainApp').classList.add('hidden');
             document.getElementById('loginScreen').style.display = 'block';
@@ -460,36 +420,25 @@
         }
 
         // =====================================================
-        // 5. التحديث التلقائي كل 15 ثانية
+        // 5. التحديث التلقائي
         // =====================================================
         function startAutoUpdate() {
-            if (updateInterval) {
-                clearInterval(updateInterval);
-            }
-            // تحديث فوري عند الدخول
+            if (updateInterval) clearInterval(updateInterval);
             refreshData();
-            // ثم كل 15 ثانية
-            updateInterval = setInterval(function() {
-                refreshData();
-            }, 15000);
+            updateInterval = setInterval(refreshData, 15000);
         }
 
         function refreshData() {
-            // تحديث الإحصائيات والجداول
             updateStats();
             renderTransactions();
             renderMaterials();
-            // تحديث وقت آخر تحديث
             const now = new Date().toLocaleTimeString('ar-EG');
             const display = document.getElementById('lastUpdateDisplay');
-            if (display) {
-                display.textContent = `🔄 آخر تحديث: ${now}`;
-            }
-            console.log(`🔄 تم التحديث التلقائي الساعة ${now}`);
+            if (display) display.textContent = `🔄 آخر تحديث: ${now}`;
         }
 
         // =====================================================
-        // 6. تحديث الإحصائيات
+        // 6. دوال العرض
         // =====================================================
         function updateStats() {
             const totalReceived = transactions.filter(t => t.type === 'receive').reduce((s, t) => s + t.amount, 0);
@@ -500,19 +449,13 @@
             document.getElementById('statCount').textContent = transactions.length;
         }
 
-        // =====================================================
-        // 7. عرض الجداول (مع إظهار اسم المستخدم للمدير)
-        // =====================================================
         function renderTransactions() {
             const tbody = document.getElementById('transactionsBody');
             if (transactions.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="11" class="text-center text-muted">لا توجد مصروفات مسجلة</td></tr>`;
                 return;
             }
-            tbody.innerHTML = transactions.map((t, i) => {
-                // عرض اسم المستخدم فقط للمدير
-                const userDisplay = (currentUser && currentUser.role === 'admin') ? t.user || 'غير معروف' : '';
-                return `
+            tbody.innerHTML = transactions.map((t, i) => `
                 <tr>
                     <td>${i+1}</td>
                     <td>${t.date}</td>
@@ -523,15 +466,13 @@
                     <td>${t.location ? `<span class="location-tag" onclick="window.open('https://www.google.com/maps?q=${t.location}','_blank')">📍 ${t.location}</span>` : '---'}</td>
                     <td>${t.phone || '---'}</td>
                     <td>${t.remarks || '---'}</td>
-                    <td>${userDisplay}</td>
-                    <td>
-                        ${currentUser && currentUser.role === 'admin' ? `
-                            <button class="action-btn action-btn-edit" onclick="openEditTransactionModal(${i})">✏️</button>
-                            <button class="action-btn action-btn-delete" onclick="deleteTransaction(${i})">🗑️</button>
-                        ` : '---'}
-                    </td>
+                    <td>${currentUser && currentUser.role === 'admin' ? (t.user || 'غير معروف') : ''}</td>
+                    <td>${currentUser && currentUser.role === 'admin' ? `
+                        <button class="action-btn action-btn-edit" onclick="openEditTransactionModal(${i})">✏️</button>
+                        <button class="action-btn action-btn-delete" onclick="deleteTransaction(${i})">🗑️</button>
+                    ` : '---'}</td>
                 </tr>
-            `}).join('');
+            `).join('');
         }
 
         function renderMaterials() {
@@ -545,31 +486,25 @@
                     <td>${i+1}</td>
                     <td>${m.name}</td>
                     <td>${m.price.toLocaleString()} ل.س</td>
-                    <td>
-                        ${currentUser && currentUser.role === 'admin' ? `
-                            <button class="action-btn action-btn-edit" onclick="openEditMaterialModal(${m.id})">✏️</button>
-                            <button class="action-btn action-btn-delete" onclick="deleteMaterial(${m.id})">🗑️</button>
-                        ` : '---'}
-                    </td>
+                    <td>${currentUser && currentUser.role === 'admin' ? `
+                        <button class="action-btn action-btn-edit" onclick="openEditMaterialModal(${m.id})">✏️</button>
+                        <button class="action-btn action-btn-delete" onclick="deleteMaterial(${m.id})">🗑️</button>
+                    ` : '---'}</td>
                 </tr>
             `).join('');
         }
 
         // =====================================================
-        // 8. تحويل الصورة إلى Base64
+        // 7. المودال والعمليات
         // =====================================================
         function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
             });
         }
 
-        // =====================================================
-        // 9. دوال التعديل (مودال)
-        // =====================================================
         let editingMaterialId = null;
         let editingTransactionIndex = null;
 
@@ -577,42 +512,25 @@
             const m = materials.find(x => x.id === id);
             if (!m) return;
             editingMaterialId = id;
-            
             const modal = document.getElementById('modal');
-            const title = document.getElementById('modalTitle');
-            const body = document.getElementById('modalBody');
-            
-            title.textContent = '✏️ تعديل المادة';
-            body.innerHTML = `
+            document.getElementById('modalTitle').textContent = '✏️ تعديل المادة';
+            document.getElementById('modalBody').innerHTML = `
                 <label>اسم المادة</label>
-                <input type="text" id="editMaterialName" value="${m.name}" placeholder="أدخل اسم المادة">
+                <input type="text" id="editMaterialName" value="${m.name}">
                 <label>السعر الافتراضي (ل.س)</label>
-                <input type="number" id="editMaterialPrice" value="${m.price}" placeholder="0">
-                <div style="margin-top:10px;color:#8a9a8a;font-size:13px;">📌 قم بتعديل البيانات ثم اضغط حفظ</div>
+                <input type="number" id="editMaterialPrice" value="${m.price}">
             `;
-            
-            document.getElementById('modalConfirm').textContent = '💾 حفظ التعديلات';
+            document.getElementById('modalConfirm').textContent = '💾 حفظ';
             document.getElementById('modalConfirm').style.display = 'block';
             document.querySelector('.modal-actions .btn-secondary').textContent = 'إلغاء';
-            
             document.getElementById('modalConfirm').onclick = function() {
                 const newName = document.getElementById('editMaterialName').value.trim();
                 const newPrice = parseFloat(document.getElementById('editMaterialPrice').value);
-                
                 if (!newName) { showToast('⚠️ اسم المادة مطلوب', 'error'); return; }
                 if (isNaN(newPrice) || newPrice < 0) { showToast('⚠️ يرجى إدخال سعر صحيح', 'error'); return; }
-                
                 const mat = materials.find(x => x.id === editingMaterialId);
-                if (mat) {
-                    mat.name = newName;
-                    mat.price = newPrice;
-                    renderMaterials();
-                    renderMaterialsModal();
-                    closeModal();
-                    showToast('✅ تم تحديث المادة بنجاح', 'success');
-                }
+                if (mat) { mat.name = newName; mat.price = newPrice; renderMaterials(); renderMaterialsModal(); closeModal(); showToast('✅ تم تحديث المادة', 'success'); refreshData(); }
             };
-            
             modal.classList.add('active');
         }
 
@@ -620,152 +538,91 @@
             const t = transactions[index];
             if (!t) return;
             editingTransactionIndex = index;
-            
             const modal = document.getElementById('modal');
-            const title = document.getElementById('modalTitle');
-            const body = document.getElementById('modalBody');
-            
-            title.textContent = '✏️ تعديل المعاملة';
-            body.innerHTML = `
+            document.getElementById('modalTitle').textContent = '✏️ تعديل المعاملة';
+            document.getElementById('modalBody').innerHTML = `
                 <label>الوصف</label>
-                <input type="text" id="editTransNote" value="${t.note || ''}" placeholder="وصف المعاملة">
+                <input type="text" id="editTransNote" value="${t.note || ''}">
                 <label>المبلغ (ل.س)</label>
-                <input type="number" id="editTransAmount" value="${t.amount}" placeholder="المبلغ">
+                <input type="number" id="editTransAmount" value="${t.amount}">
                 <label>رقم الهاتف</label>
-                <input type="text" id="editTransPhone" value="${t.phone || ''}" placeholder="رقم الهاتف">
+                <input type="text" id="editTransPhone" value="${t.phone || ''}">
                 <label>ملاحظات</label>
-                <textarea id="editTransRemarks" placeholder="ملاحظات إضافية">${t.remarks || ''}</textarea>
-                <div style="margin-top:10px;color:#8a9a8a;font-size:13px;">📌 قم بتعديل البيانات ثم اضغط حفظ</div>
+                <textarea id="editTransRemarks">${t.remarks || ''}</textarea>
             `;
-            
-            document.getElementById('modalConfirm').textContent = '💾 حفظ التعديلات';
+            document.getElementById('modalConfirm').textContent = '💾 حفظ';
             document.getElementById('modalConfirm').style.display = 'block';
             document.querySelector('.modal-actions .btn-secondary').textContent = 'إلغاء';
-            
             document.getElementById('modalConfirm').onclick = function() {
                 const newNote = document.getElementById('editTransNote').value.trim();
                 const newAmount = parseFloat(document.getElementById('editTransAmount').value);
-                const newPhone = document.getElementById('editTransPhone').value.trim();
-                const newRemarks = document.getElementById('editTransRemarks').value.trim();
-                
                 if (!newNote) { showToast('⚠️ الوصف مطلوب', 'error'); return; }
                 if (isNaN(newAmount) || newAmount <= 0) { showToast('⚠️ يرجى إدخال مبلغ صحيح', 'error'); return; }
-                
                 const trans = transactions[editingTransactionIndex];
-                if (trans) {
-                    trans.note = newNote;
-                    trans.amount = newAmount;
-                    trans.phone = newPhone || null;
-                    trans.remarks = newRemarks || null;
-                    renderTransactions();
-                    updateStats();
-                    closeModal();
-                    showToast('✅ تم تحديث المعاملة بنجاح', 'success');
-                }
+                if (trans) { trans.note = newNote; trans.amount = newAmount; trans.phone = document.getElementById('editTransPhone').value.trim() || null; trans.remarks = document.getElementById('editTransRemarks').value.trim() || null; renderTransactions(); updateStats(); closeModal(); showToast('✅ تم تحديث المعاملة', 'success'); refreshData(); }
             };
-            
             modal.classList.add('active');
         }
 
-        // =====================================================
-        // 10. المودال العام
-        // =====================================================
         function openModal(type) {
+            if (['admin', 'addUser', 'permissions', 'materials'].includes(type) && currentUser?.role !== 'admin') {
+                showToast('⚠️ غير مسموح', 'error');
+                return;
+            }
             const modal = document.getElementById('modal');
             const title = document.getElementById('modalTitle');
             const body = document.getElementById('modalBody');
 
-            if (['admin', 'addUser', 'permissions', 'materials'].includes(type) && currentUser?.role !== 'admin') {
-                showToast('⚠️ هذا الإجراء غير مسموح به لصلاحياتك!', 'error');
-                return;
-            }
-
             if (type === 'receive') {
-                title.textContent = '📥 استقبال مبلغ مالي للشهر';
+                title.textContent = '📥 استقبال مبلغ مالي';
                 body.innerHTML = `
                     <label>المبلغ المستلم (ل.س)</label>
-                    <input type="number" id="receiveAmount" placeholder="أدخل المبلغ المستلم لهذا الشهر">
+                    <input type="number" id="receiveAmount" placeholder="أدخل المبلغ">
                     <label>البيان</label>
-                    <input type="text" id="receiveNote" placeholder="مصدر المبلغ (مثال: مخصصات الشهر)">
+                    <input type="text" id="receiveNote" placeholder="مصدر المبلغ">
                     <label>الشهر</label>
-                    <select id="receiveMonth">
-                        ${Array.from({length:12}, (_,i) => `<option value="${i+1}" ${i+1===currentMonth?'selected':''}>الشهر ${i+1}</option>`).join('')}
-                    </select>
+                    <select id="receiveMonth">${Array.from({length:12}, (_,i) => `<option value="${i+1}" ${i+1===currentMonth?'selected':''}>الشهر ${i+1}</option>`).join('')}</select>
                 `;
                 document.getElementById('modalConfirm').onclick = function() {
                     const amt = parseFloat(document.getElementById('receiveAmount').value);
                     const note = document.getElementById('receiveNote').value || 'استلام شهري';
                     const month = parseInt(document.getElementById('receiveMonth').value);
-                    if (isNaN(amt) || amt <= 0) { showToast('يرجى إدخال مبلغ صحيح', 'error'); return; }
-                    transactions.push({
-                        date: new Date().toLocaleString('ar-EG'),
-                        type: 'receive',
-                        amount: amt,
-                        note: `${note} (الشهر ${month})`,
-                        image: null,
-                        location: null,
-                        phone: null,
-                        remarks: `شهر ${month}`,
-                        user: currentUser.name,
-                        month: month
-                    });
-                    monthlyReceived += amt;
-                    updateStats();
-                    renderTransactions();
-                    closeModal();
-                    showToast('✅ تم استلام المبلغ بنجاح', 'success');
-                    refreshData(); // تحديث فوري
+                    if (isNaN(amt) || amt <= 0) { showToast('⚠️ مبلغ غير صحيح', 'error'); return; }
+                    const newTrans = { date: new Date().toLocaleString('ar-EG'), type: 'receive', amount: amt, note: `${note} (شهر ${month})`, image: null, location: null, phone: null, remarks: `شهر ${month}`, user: currentUser.name };
+                    transactions.push(newTrans);
+                    sendToGoogleSheets(newTrans);
+                    updateStats(); renderTransactions(); closeModal(); showToast(`✅ تم استلام ${amt.toLocaleString()} ل.س`, 'success'); refreshData();
                 };
             } else if (type === 'disburse') {
-                title.textContent = '📤 إضافة مصروف جديد مع تحديد موقع المحل';
+                title.textContent = '📤 إضافة مصروف جديد';
                 body.innerHTML = `
                     <label>المادة/المصروف</label>
-                    <select id="expenseMaterial">
-                        ${materials.map(m => `<option value="${m.id}">${m.name} (${m.price.toLocaleString()} ل.س)</option>`).join('')}
-                        <option value="other">أخرى (أدخل يدوياً)</option>
-                    </select>
-                    <div id="customMaterialDiv" class="hidden">
-                        <label>اسم المادة الجديدة</label>
-                        <input type="text" id="customMaterialName" placeholder="أدخل اسم المادة">
-                    </div>
-                    <label>المبلغ (ل.س)</label>
-                    <input type="number" id="expenseAmount" placeholder="أدخل المبلغ">
-                    <label>الوصف</label>
-                    <input type="text" id="expenseNote" placeholder="تفاصيل المصروف">
-                    <label>رفع صورة الفاتورة</label>
-                    <input type="file" id="expenseImageFile" accept="image/*" onchange="previewImage(this, 'expensePreview')">
-                    <div id="expensePreview" class="image-preview-container"></div>
-                    <label>رقم هاتف المحل</label>
-                    <input type="text" id="expensePhone" placeholder="رقم هاتف المحل أو المورد">
-                    <label>ملاحظات</label>
-                    <textarea id="expenseRemarks" placeholder="ملاحظات إضافية"></textarea>
-                    <label>موقع المحل (الإحداثيات)</label>
-                    <input type="text" id="shopLocation" placeholder="مثال: 33.5138, 36.2765">
-                    <small style="color:#8a9a8a;">يمكنك إدخال إحداثيات المحل يدوياً</small>
+                    <select id="expenseMaterial">${materials.map(m => `<option value="${m.id}">${m.name} (${m.price.toLocaleString()} ل.س)</option>`).join('')}<option value="other">أخرى</option></select>
+                    <div id="customMaterialDiv" class="hidden"><label>اسم المادة الجديدة</label><input type="text" id="customMaterialName"></div>
+                    <label>المبلغ (ل.س)</label><input type="number" id="expenseAmount">
+                    <label>الوصف</label><input type="text" id="expenseNote">
+                    <label>صورة الفاتورة</label><input type="file" id="expenseImageFile" accept="image/*" onchange="previewImage(this,'expensePreview')"><div id="expensePreview" class="image-preview-container"></div>
+                    <label>رقم هاتف المحل</label><input type="text" id="expensePhone">
+                    <label>ملاحظات</label><textarea id="expenseRemarks"></textarea>
+                    <label>موقع المحل (إحداثيات)</label><input type="text" id="shopLocation" placeholder="33.5138, 36.2765">
                 `;
-                
                 document.getElementById('expenseMaterial').addEventListener('change', function() {
                     document.getElementById('customMaterialDiv').classList.toggle('hidden', this.value !== 'other');
                 });
-                
                 document.getElementById('modalConfirm').onclick = async function() {
-                    const matSelect = document.getElementById('expenseMaterial');
-                    let matId = parseInt(matSelect.value);
+                    let matId = parseInt(document.getElementById('expenseMaterial').value);
                     let amount = parseFloat(document.getElementById('expenseAmount').value);
                     const note = document.getElementById('expenseNote').value || 'مصروف';
                     const phone = document.getElementById('expensePhone').value || null;
                     const remarks = document.getElementById('expenseRemarks').value || null;
+                    const location = document.getElementById('shopLocation').value.trim() || null;
                     const fileInput = document.getElementById('expenseImageFile');
                     let imageBase64 = null;
-                    const location = document.getElementById('shopLocation').value.trim() || null;
-
-                    if (fileInput.files && fileInput.files.length > 0) {
-                        imageBase64 = await fileToBase64(fileInput.files[0]);
-                    }
+                    if (fileInput.files && fileInput.files.length > 0) imageBase64 = await fileToBase64(fileInput.files[0]);
 
                     if (matId === 'other' || isNaN(matId)) {
                         const customName = document.getElementById('customMaterialName').value.trim();
-                        if (!customName) { showToast('يرجى إدخال اسم المادة', 'error'); return; }
+                        if (!customName) { showToast('⚠️ أدخل اسم المادة', 'error'); return; }
                         const newMat = { id: nextMaterialId++, name: customName, price: amount || 0 };
                         materials.push(newMat);
                         matId = newMat.id;
@@ -774,52 +631,25 @@
                         const mat = materials.find(m => m.id === matId);
                         if (mat && amount === 0) amount = mat.price;
                     }
-
-                    if (isNaN(amount) || amount <= 0) { showToast('يرجى إدخال مبلغ صحيح', 'error'); return; }
-
+                    if (isNaN(amount) || amount <= 0) { showToast('⚠️ مبلغ غير صحيح', 'error'); return; }
                     const totalReceived = transactions.filter(t => t.type === 'receive').reduce((s, t) => s + t.amount, 0);
                     const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
-                    if (amount > (totalReceived - totalExpenses)) {
-                        showToast(`⚠️ الرصيد المتاح: ${(totalReceived - totalExpenses).toLocaleString()} ل.س`, 'error');
-                        return;
-                    }
-
+                    if (amount > (totalReceived - totalExpenses)) { showToast(`⚠️ الرصيد المتاح: ${(totalReceived - totalExpenses).toLocaleString()} ل.س`, 'error'); return; }
                     const matName = materials.find(m => m.id === matId)?.name || 'مادة غير معروفة';
-                    transactions.push({
-                        date: new Date().toLocaleString('ar-EG'),
-                        type: 'expense',
-                        amount: amount,
-                        note: `${matName}: ${note}`,
-                        image: imageBase64,
-                        location: location,
-                        phone: phone,
-                        remarks: remarks,
-                        user: currentUser.name,
-                        materialId: matId
-                    });
-                    updateStats();
-                    renderTransactions();
-                    closeModal();
-                    showToast('✅ تم إضافة المصروف بنجاح', 'success');
-                    refreshData(); // تحديث فوري
+                    const newTrans = { date: new Date().toLocaleString('ar-EG'), type: 'expense', amount: amount, note: `${matName}: ${note}`, image: imageBase64, location: location, phone: phone, remarks: remarks, user: currentUser.name };
+                    transactions.push(newTrans);
+                    sendToGoogleSheets(newTrans);
+                    updateStats(); renderTransactions(); closeModal(); showToast(`✅ تم إضافة المصروف`, 'success'); refreshData();
                 };
             } else if (type === 'invoice') {
-                title.textContent = '🧾 رفع فاتورة مع موقع المحل';
+                title.textContent = '🧾 رفع فاتورة';
                 body.innerHTML = `
-                    <label>المبلغ (ل.س)</label>
-                    <input type="number" id="invoiceAmount" placeholder="أدخل المبلغ">
-                    <label>وصف الفاتورة</label>
-                    <textarea id="invoiceDesc" placeholder="تفاصيل الفاتورة"></textarea>
-                    <label>رفع صورة الفاتورة</label>
-                    <input type="file" id="invoiceImageFile" accept="image/*" onchange="previewImage(this, 'invoicePreview')">
-                    <div id="invoicePreview" class="image-preview-container"></div>
-                    <label>رقم هاتف المحل</label>
-                    <input type="text" id="invoicePhone" placeholder="رقم هاتف المورد">
-                    <label>موقع المحل (الإحداثيات)</label>
-                    <input type="text" id="invoiceShopLocation" placeholder="مثال: 33.5138, 36.2765">
-                    <small style="color:#8a9a8a;">يمكنك إدخال إحداثيات المحل يدوياً</small>
+                    <label>المبلغ (ل.س)</label><input type="number" id="invoiceAmount">
+                    <label>وصف الفاتورة</label><textarea id="invoiceDesc"></textarea>
+                    <label>صورة الفاتورة</label><input type="file" id="invoiceImageFile" accept="image/*" onchange="previewImage(this,'invoicePreview')"><div id="invoicePreview" class="image-preview-container"></div>
+                    <label>رقم هاتف المحل</label><input type="text" id="invoicePhone">
+                    <label>موقع المحل (إحداثيات)</label><input type="text" id="invoiceShopLocation" placeholder="33.5138, 36.2765">
                 `;
-                
                 document.getElementById('modalConfirm').onclick = async function() {
                     const amt = parseFloat(document.getElementById('invoiceAmount').value);
                     const desc = document.getElementById('invoiceDesc').value || 'فاتورة';
@@ -827,63 +657,35 @@
                     const location = document.getElementById('invoiceShopLocation').value.trim() || null;
                     const fileInput = document.getElementById('invoiceImageFile');
                     let imageBase64 = null;
-                    
-                    if (fileInput.files && fileInput.files.length > 0) {
-                        imageBase64 = await fileToBase64(fileInput.files[0]);
-                    }
-                    
-                    if (isNaN(amt) || amt <= 0) { showToast('يرجى إدخال مبلغ صحيح', 'error'); return; }
-                    transactions.push({
-                        date: new Date().toLocaleString('ar-EG'),
-                        type: 'expense',
-                        amount: amt,
-                        note: `🧾 ${desc}`,
-                        image: imageBase64,
-                        location: location,
-                        phone: phone,
-                        remarks: 'فاتورة',
-                        user: currentUser.name
-                    });
-                    updateStats();
-                    renderTransactions();
-                    closeModal();
-                    showToast('✅ تم رفع الفاتورة بنجاح', 'success');
-                    refreshData(); // تحديث فوري
+                    if (fileInput.files && fileInput.files.length > 0) imageBase64 = await fileToBase64(fileInput.files[0]);
+                    if (isNaN(amt) || amt <= 0) { showToast('⚠️ مبلغ غير صحيح', 'error'); return; }
+                    const newTrans = { date: new Date().toLocaleString('ar-EG'), type: 'expense', amount: amt, note: `🧾 ${desc}`, image: imageBase64, location: location, phone: phone, remarks: 'فاتورة', user: currentUser.name };
+                    transactions.push(newTrans);
+                    sendToGoogleSheets(newTrans);
+                    updateStats(); renderTransactions(); closeModal(); showToast(`✅ تم رفع الفاتورة`, 'success'); refreshData();
                 };
             } else if (type === 'admin') {
                 title.textContent = '⚙️ لوحة تحكم المدير';
                 body.innerHTML = `
-                    <p style="color:#8a9a8a;margin-bottom:10px;">إدارة عامة للنظام</p>
                     <div class="grid-2">
                         <button class="btn btn-primary" onclick="closeModal();openModal('materials')">📦 إدارة المواد</button>
                         <button class="btn btn-primary" onclick="closeModal();openModal('addUser')">➕ إضافة مستخدم</button>
                         <button class="btn btn-primary" onclick="closeModal();openModal('permissions')">🔑 صلاحيات</button>
                         <button class="btn btn-danger" onclick="resetSystem()">🔄 إعادة تعيين النظام</button>
                     </div>
-                    <label style="margin-top:15px;">إجمالي المستخدمين: ${Object.keys(users).length}</label>
+                    <label>إجمالي المستخدمين: ${Object.keys(users).length}</label>
                     <label>إجمالي العمليات: ${transactions.length}</label>
                 `;
                 document.getElementById('modalConfirm').style.display = 'none';
                 document.querySelector('.modal-actions .btn-secondary').textContent = 'إغلاق';
             } else if (type === 'addUser') {
-                title.textContent = '➕ إضافة مستخدم جديد';
+                title.textContent = '➕ إضافة مستخدم';
                 body.innerHTML = `
-                    <label>كلمة المرور (4 أرقام)</label>
-                    <input type="text" id="newPass" placeholder="مثال: 7777" maxlength="4">
-                    <label>الاسم</label>
-                    <input type="text" id="newName" placeholder="مثال: مالي القطعة 8">
-                    <label>الموقع</label>
-                    <input type="text" id="newLocation" placeholder="مثال: دير الزور">
-                    <label>الدور</label>
-                    <select id="newRole"><option value="user">مستخدم عادي</option><option value="admin">مدير</option></select>
-                    <label>الصلاحيات</label>
-                    <select id="newPermissions" multiple style="height:100px;">
-                        <option value="receive">📥 استقبال</option>
-                        <option value="disburse">📤 مصروفات</option>
-                        <option value="invoice">🧾 فاتورة</option>
-                        <option value="view">📋 عرض</option>
-                    </select>
-                    <small style="color:#8a9a8a;">اضغط Ctrl+اختيار لتحديد عدة صلاحيات</small>
+                    <label>كلمة المرور (4 أرقام)</label><input type="text" id="newPass" maxlength="4">
+                    <label>الاسم</label><input type="text" id="newName">
+                    <label>الموقع</label><input type="text" id="newLocation">
+                    <label>الدور</label><select id="newRole"><option value="user">مستخدم</option><option value="admin">مدير</option></select>
+                    <label>الصلاحيات</label><select id="newPermissions" multiple style="height:100px;"><option value="receive">📥 استقبال</option><option value="disburse">📤 مصروفات</option><option value="invoice">🧾 فاتورة</option><option value="view">📋 عرض</option></select>
                 `;
                 document.getElementById('modalConfirm').onclick = function() {
                     const pass = document.getElementById('newPass').value.trim();
@@ -891,36 +693,29 @@
                     const loc = document.getElementById('newLocation').value.trim();
                     const role = document.getElementById('newRole').value;
                     const perms = Array.from(document.getElementById('newPermissions').selectedOptions).map(o => o.value);
-                    if (!pass || !name || !loc || perms.length === 0) { showToast('يرجى ملء جميع الحقول واختيار صلاحية', 'error'); return; }
-                    if (users[pass]) { showToast('كلمة المرور مستخدمة', 'error'); return; }
-                    if (pass.length !== 4 || isNaN(pass)) { showToast('كلمة المرور يجب أن تكون 4 أرقام', 'error'); return; }
+                    if (!pass || !name || !loc || perms.length === 0) { showToast('⚠️ املأ جميع الحقول', 'error'); return; }
+                    if (users[pass]) { showToast('⚠️ كلمة المرور مستخدمة', 'error'); return; }
+                    if (pass.length !== 4 || isNaN(pass)) { showToast('⚠️ كلمة المرور 4 أرقام', 'error'); return; }
                     users[pass] = { role, name, location: loc, id: Object.keys(users).length + 1 };
                     USER_PERMISSIONS[pass] = perms;
-                    showToast(`✅ تم إضافة ${name} بنجاح`, 'success');
+                    showToast(`✅ تم إضافة ${name}`, 'success');
                     closeModal();
-                    refreshData();
                 };
             } else if (type === 'permissions') {
                 title.textContent = '🔑 إدارة الصلاحيات';
-                let html = `<label>اختر مستخدم</label><select id="userSelect" onchange="loadUserPerms()">
-                    <option value="">-- اختر --</option>`;
-                Object.keys(users).forEach(p => {
-                    html += `<option value="${p}">${users[p].name} (${p})</option>`;
-                });
-                html += `</select><div id="permsContainer" style="margin-top:15px;"><p class="text-muted">اختر مستخدم لعرض صلاحياته</p></div>`;
+                let html = `<label>اختر مستخدم</label><select id="userSelect" onchange="loadUserPerms()"><option value="">-- اختر --</option>`;
+                Object.keys(users).forEach(p => { html += `<option value="${p}">${users[p].name} (${p})</option>`; });
+                html += `</select><div id="permsContainer" style="margin-top:15px;"><p class="text-muted">اختر مستخدم</p></div>`;
                 body.innerHTML = html;
                 document.getElementById('modalConfirm').style.display = 'none';
                 document.querySelector('.modal-actions .btn-secondary').textContent = 'إغلاق';
             } else if (type === 'materials') {
-                title.textContent = '📦 إدارة المواد والمصروفات';
+                title.textContent = '📦 إدارة المواد';
                 body.innerHTML = `
-                    <label>اسم المادة الجديدة</label>
-                    <input type="text" id="newMaterialName" placeholder="مثال: قرطاسية">
-                    <label>السعر الافتراضي</label>
-                    <input type="number" id="newMaterialPrice" placeholder="0">
-                    <button class="btn btn-primary" onclick="addMaterial()" style="margin-top:10px;">➕ إضافة مادة</button>
-                    <hr style="border-color:#2a4a4a;margin:15px 0;">
-                    <div id="materialsList"></div>
+                    <label>اسم المادة</label><input type="text" id="newMaterialName">
+                    <label>السعر الافتراضي</label><input type="number" id="newMaterialPrice">
+                    <button class="btn btn-primary" onclick="addMaterial()" style="margin-top:10px;">➕ إضافة</button>
+                    <hr><div id="materialsList"></div>
                 `;
                 document.getElementById('modalConfirm').style.display = 'none';
                 document.querySelector('.modal-actions .btn-secondary').textContent = 'إغلاق';
@@ -929,71 +724,27 @@
             modal.classList.add('active');
         }
 
-        // =====================================================
-        // 11. معاينة الصورة
-        // =====================================================
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            document.getElementById('modalConfirm').style.display = 'block';
+            document.querySelector('.modal-actions .btn-secondary').textContent = 'إلغاء';
+        }
+
         function previewImage(input, containerId) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
             if (input.files && input.files.length > 0) {
-                const file = input.files[0];
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const img = document.createElement('img');
                     img.src = e.target.result;
                     img.classList.add('preview-img');
-                    img.onclick = () => window.open(e.target.result, '_blank');
                     container.appendChild(img);
                 };
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(input.files[0]);
             }
         }
 
-        // =====================================================
-        // 12. دوال المواد
-        // =====================================================
-        function addMaterial() {
-            const name = document.getElementById('newMaterialName').value.trim();
-            const price = parseFloat(document.getElementById('newMaterialPrice').value) || 0;
-            if (!name) { showToast('يرجى إدخال اسم المادة', 'error'); return; }
-            materials.push({ id: nextMaterialId++, name, price });
-            renderMaterialsModal();
-            renderMaterials();
-            document.getElementById('newMaterialName').value = '';
-            document.getElementById('newMaterialPrice').value = '';
-            showToast('✅ تم إضافة المادة بنجاح', 'success');
-            refreshData();
-        }
-
-        function renderMaterialsModal() {
-            const container = document.getElementById('materialsList');
-            if (materials.length === 0) {
-                container.innerHTML = '<p class="text-muted">لا توجد مواد مسجلة</p>';
-                return;
-            }
-            container.innerHTML = materials.map(m => `
-                <div class="flex-between" style="padding:8px 0;border-bottom:1px solid #1a2a2a;">
-                    <span>${m.name} (${m.price.toLocaleString()} ل.س)</span>
-                    <div>
-                        <button class="action-btn action-btn-edit" onclick="openEditMaterialModal(${m.id})">✏️</button>
-                        <button class="action-btn action-btn-delete" onclick="deleteMaterial(${m.id})">🗑️</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function deleteMaterial(id) {
-            if (!confirm('هل أنت متأكد من حذف هذه المادة؟')) return;
-            materials = materials.filter(m => m.id !== id);
-            renderMaterialsModal();
-            renderMaterials();
-            showToast('🗑️ تم حذف المادة', 'success');
-            refreshData();
-        }
-
-        // =====================================================
-        // 13. دوال الصلاحيات
-        // =====================================================
         function loadUserPerms() {
             const pass = document.getElementById('userSelect').value;
             if (!pass) return;
@@ -1003,11 +754,9 @@
             container.innerHTML = `
                 <div style="background:#0a1a1a;padding:15px;border-radius:12px;">
                     <p><strong>${user.name}</strong> (${user.location})</p>
-                    <p class="text-muted">الصلاحيات الحالية:</p>
-                    <ul style="color:#c9d4c9;list-style:none;padding:0;">
-                        ${perms.map(p => `<li>✅ ${p}</li>`).join('') || '<li style="color:#5a6a5a;">لا توجد صلاحيات</li>'}
-                    </ul>
-                    <select id="editPerms" multiple style="height:120px;width:100%;margin-top:10px;">
+                    <p class="text-muted">الصلاحيات:</p>
+                    <ul>${perms.map(p => `<li>✅ ${p}</li>`).join('')}</ul>
+                    <select id="editPerms" multiple style="height:120px;width:100%;">
                         <option value="receive" ${perms.includes('receive')?'selected':''}>📥 استقبال</option>
                         <option value="disburse" ${perms.includes('disburse')?'selected':''}>📤 مصروفات</option>
                         <option value="invoice" ${perms.includes('invoice')?'selected':''}>🧾 فاتورة</option>
@@ -1020,18 +769,50 @@
 
         function savePerms(pass) {
             const perms = Array.from(document.getElementById('editPerms').selectedOptions).map(o => o.value);
-            if (perms.length === 0) { showToast('يجب اختيار صلاحية واحدة على الأقل', 'error'); return; }
+            if (perms.length === 0) { showToast('⚠️ اختر صلاحية', 'error'); return; }
             USER_PERMISSIONS[pass] = perms;
             showToast('✅ تم حفظ الصلاحيات', 'success');
             loadUserPerms();
+        }
+
+        function addMaterial() {
+            const name = document.getElementById('newMaterialName').value.trim();
+            const price = parseFloat(document.getElementById('newMaterialPrice').value) || 0;
+            if (!name) { showToast('⚠️ أدخل اسم المادة', 'error'); return; }
+            materials.push({ id: nextMaterialId++, name, price });
+            renderMaterialsModal();
+            renderMaterials();
+            document.getElementById('newMaterialName').value = '';
+            document.getElementById('newMaterialPrice').value = '';
+            showToast('✅ تم إضافة المادة', 'success');
             refreshData();
         }
 
-        // =====================================================
-        // 14. دوال المعاملات
-        // =====================================================
+        function renderMaterialsModal() {
+            const container = document.getElementById('materialsList');
+            if (materials.length === 0) { container.innerHTML = '<p class="text-muted">لا توجد مواد</p>'; return; }
+            container.innerHTML = materials.map(m => `
+                <div class="flex-between" style="padding:8px 0;border-bottom:1px solid #1a2a2a;">
+                    <span>${m.name} (${m.price.toLocaleString()} ل.س)</span>
+                    <div>
+                        <button class="action-btn action-btn-edit" onclick="openEditMaterialModal(${m.id})">✏️</button>
+                        <button class="action-btn action-btn-delete" onclick="deleteMaterial(${m.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteMaterial(id) {
+            if (!confirm('حذف المادة؟')) return;
+            materials = materials.filter(m => m.id !== id);
+            renderMaterialsModal();
+            renderMaterials();
+            showToast('🗑️ تم حذف المادة', 'success');
+            refreshData();
+        }
+
         function deleteTransaction(index) {
-            if (!confirm('هل أنت متأكد من حذف هذه العملية؟')) return;
+            if (!confirm('حذف المعاملة؟')) return;
             transactions.splice(index, 1);
             renderTransactions();
             updateStats();
@@ -1040,83 +821,43 @@
         }
 
         function resetSystem() {
-            if (!confirm('⚠️ هل أنت متأكد من إعادة تعيين جميع البيانات؟')) return;
-            if (!confirm('تأكيد نهائي: سيتم حذف جميع العمليات والمواد المضافة!')) return;
+            if (!confirm('⚠️ إعادة تعيين النظام؟')) return;
             transactions = [];
-            materials = [
-                { id: 1, name: 'ماكولات وشراب', price: 0 },
-                { id: 2, name: 'شراء اغراض', price: 0 },
-                { id: 3, name: 'مصروف شخصي', price: 0 },
-                { id: 4, name: 'كهرباء', price: 0 },
-                { id: 5, name: 'صحية', price: 0 },
-                { id: 6, name: 'صيانة', price: 0 }
-            ];
+            materials = [{ id: 1, name: 'ماكولات وشراب', price: 0 }, { id: 2, name: 'شراء اغراض', price: 0 }, { id: 3, name: 'مصروف شخصي', price: 0 }, { id: 4, name: 'كهرباء', price: 0 }, { id: 5, name: 'صحية', price: 0 }, { id: 6, name: 'صيانة', price: 0 }];
             nextMaterialId = 7;
-            monthlyReceived = 0;
-            updateStats();
-            renderTransactions();
-            renderMaterials();
-            showToast('✅ تم إعادة تعيين النظام', 'success');
+            updateStats(); renderTransactions(); renderMaterials();
+            showToast('✅ تم إعادة التعيين', 'success');
             closeModal();
             refreshData();
         }
 
-        // =====================================================
-        // 15. عرض العمليات
-        // =====================================================
         function viewTransactions() {
             let msg = '📋 جميع العمليات:\n\n';
             transactions.forEach((t, i) => {
-                msg += `${i+1}. ${t.date} | ${t.type === 'receive' ? '📥' : '📤'} | ${t.amount} ل.س | ${t.note} | موقع المحل: ${t.location || 'غير محدد'} | المستخدم: ${t.user || 'غير معروف'}\n`;
+                msg += `${i+1}. ${t.date} | ${t.type === 'receive' ? '📥' : '📤'} | ${t.amount} ل.س | ${t.note} | المستخدم: ${t.user || 'غير معروف'}\n`;
             });
-            msg += `\n📊 المجموع: ${transactions.length} عملية`;
+            msg += `\n📊 المجموع: ${transactions.length}`;
             alert(msg);
         }
 
-        // =====================================================
-        // 16. إغلاق المودال
-        // =====================================================
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-            document.getElementById('modalConfirm').style.display = 'block';
-            document.querySelector('.modal-actions .btn-secondary').textContent = 'إلغاء';
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.btn-receive').addEventListener('click', () => openModal('receive'));
+            document.querySelector('.btn-disburse').addEventListener('click', () => openModal('disburse'));
+            document.querySelector('.btn-view').addEventListener('click', viewTransactions);
+            document.querySelector('.btn-invoice').addEventListener('click', () => openModal('invoice'));
+        });
 
-        // =====================================================
-        // 17. منع التلاعب
-        // =====================================================
         document.addEventListener('keydown', function(e) {
             if (currentUser && currentUser.role === 'user') {
                 if (e.key === 'F12' || (e.ctrlKey && e.key === 'u') || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                    showToast('⚠️ هذا الإجراء غير مسموح', 'error');
+                    showToast('⚠️ غير مسموح', 'error');
                     e.preventDefault();
                 }
             }
         });
 
-        // =====================================================
-        // 18. ربط الأزرار
-        // =====================================================
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelector('.btn-receive').addEventListener('click', function() {
-                openModal('receive');
-            });
-            document.querySelector('.btn-disburse').addEventListener('click', function() {
-                openModal('disburse');
-            });
-            document.querySelector('.btn-view').addEventListener('click', function() {
-                viewTransactions();
-            });
-            document.querySelector('.btn-invoice').addEventListener('click', function() {
-                openModal('invoice');
-            });
-        });
-
-        // =====================================================
-        // 19. التشغيل الابتدائي
-        // =====================================================
-        console.log('✅ النظام المالي المتقدم جاهز مع تحديث تلقائي كل 15 ثانية');
-        console.log('🔑 1234=مستخدم | 1111=مستخدم2 | 2222=مستخدم3 | 3333=مستخدم4 | 1992=مدير');
+        console.log('✅ النظام المالي جاهز مع Google Sheets وإشعارات محسنة');
+        console.log('🔑 1234=مستخدم | 1992=مدير');
     </script>
 </body>
 </html>

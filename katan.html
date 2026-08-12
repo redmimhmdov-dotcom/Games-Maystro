@@ -9,6 +9,7 @@
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family: 'Cairo', sans-serif; background: #0b0a09; color: #ece6dc; }
 
+        /* شاشة الترحيب - تم توسيع الشعار */
         #splash {
             position: fixed; inset:0; z-index:9999;
             background: #0b0a09;
@@ -21,9 +22,16 @@
             100% { opacity:0; visibility:hidden; }
         }
         .splash-logo { text-align: center; }
+        .splash-logo img {
+            width: 250px; /* حجم أكبر للشعار */
+            margin-bottom: 20px;
+            border-radius: 24px;
+            box-shadow: 0 0 60px #b58a5b77;
+        }
         .splash-text { font-family:'Orbitron',sans-serif; font-size:48px; font-weight:700; color:#fff; letter-spacing:2px; }
         .splash-sub { color:#b58a5b; font-size:16px; letter-spacing:4px; }
 
+        /* باقي الأنماط (الهيدر، المنتجات، النوافذ، الخ) - تم تحسينها */
         header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 16px 40px; background: #1a1714dd; backdrop-filter:blur(8px);
@@ -41,7 +49,6 @@
             25% { transform: rotate(-2deg) scale(1.02); }
             75% { transform: rotate(2deg) scale(1.02); }
         }
-
         .header-left { display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
         .datetime { font-family:'Orbitron',sans-serif; font-size:14px; color:#b58a5b; background:#00000055; padding:6px 14px; border-radius:40px; border:1px solid #b58a5b33; }
         .btn-contact, .btn-order {
@@ -56,9 +63,7 @@
             border-bottom:1px solid #b58a5b33; min-height:54px;
             font-size:18px; color:#ece6dc;
         }
-        #typewriter::after {
-            content: "|"; animation: blink 0.7s infinite;
-        }
+        #typewriter::after { content: "|"; animation: blink 0.7s infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
         .products { padding:50px 40px; max-width:1400px; margin:auto; }
@@ -119,7 +124,7 @@
             color:#b58a5b; cursor:pointer;
         }
         .admin-content label { display:block; margin:12px 0 4px; color:#b58a5b; font-weight:600; }
-        .admin-content input, .admin-content button, .modal input, .modal select, .modal textarea {
+        .admin-content input, .admin-content select, .admin-content button, .modal input, .modal select, .modal textarea {
             width:100%; padding:12px; margin:6px 0; border-radius:12px;
             background:#0b0a09; border:1px solid #b58a5b55; color:#fff;
             font-family:'Cairo',sans-serif;
@@ -136,16 +141,9 @@
             display:flex; align-items:center; justify-content:center;
             cursor:pointer;
         }
-        #lightbox img {
-            max-width:90%; max-height:90%; border-radius:16px;
-            box-shadow:0 0 60px #b58a5b66;
-        }
-        #lightbox span {
-            position:absolute; top:20px; left:30px;
-            font-size:48px; color:#b58a5b; font-weight:300; cursor:pointer;
-        }
+        #lightbox img { max-width:90%; max-height:90%; border-radius:16px; box-shadow:0 0 60px #b58a5b66; }
+        #lightbox span { position:absolute; top:20px; left:30px; font-size:48px; color:#b58a5b; font-weight:300; cursor:pointer; }
 
-        /* المنتجات في لوحة التحكم */
         .admin-product-item {
             display:flex; align-items:center; gap:12px;
             background:#0b0a09; padding:10px; border-radius:12px;
@@ -168,6 +166,7 @@
             .header-left { width:100%; justify-content:center; flex-wrap:wrap; }
             .products { padding:30px 16px; }
             .splash-text { font-size:32px; }
+            .splash-logo img { width: 180px; }
         }
         @media (max-width:480px) {
             .product-grid { grid-template-columns:1fr; }
@@ -179,7 +178,7 @@
     <!-- ===== شاشة الترحيب ===== -->
     <div id="splash">
         <div class="splash-logo">
-            <img src="https://i.ibb.co/jZ4PMRdD/شعار-القطان-page-0001.jpg" alt="Katanbuild" width="140" style="margin-bottom:10px; border-radius:16px; box-shadow:0 0 40px #b58a5b55;" />
+            <img src="https://i.ibb.co/jZ4PMRdD/شعار-القطان-page-0001.jpg" alt="Katanbuild" />
             <span class="splash-text">Katanbuild</span>
             <span class="splash-sub">INNOVATIVE BUILDING PRODUCTS</span>
         </div>
@@ -207,11 +206,8 @@
 
         <section class="products">
             <h2>منتجاتنا</h2>
-            <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">الكل</button>
-                <button class="filter-btn" data-filter="ceramic">سيراميك</button>
-                <button class="filter-btn" data-filter="tile">بلاط</button>
-                <button class="filter-btn" data-filter="robot">روبوتات</button>
+            <div class="filter-buttons" id="filterButtons">
+                <!-- سيتم توليد أزرار التصنيفات تلقائياً بواسطة JavaScript -->
             </div>
             <div class="product-grid" id="productGrid"></div>
         </section>
@@ -260,17 +256,22 @@
         <div class="admin-content">
             <span class="close" onclick="closeAdmin()">&times;</span>
             <h2>🔐 لوحة التحكم - إدارة المنتجات</h2>
-            
+
             <!-- نموذج الإضافة -->
             <form id="adminForm" onsubmit="event.preventDefault(); addProduct();">
                 <h3 style="color:#b58a5b; margin:10px 0;">➕ إضافة منتج جديد</h3>
                 <input type="text" id="newImg" placeholder="رابط الصورة (مباشر)" required />
-                <input type="text" id="newName" placeholder="اسم المنتج" required />
+                <input type="text" id="newName" placeholder="اسم المنتج (مثل: كاروفيكس)" required />
                 <input type="text" id="newDesc" placeholder="وصف مختصر" required />
                 <select id="newCategory" required>
-                    <option value="ceramic">سيراميك</option>
-                    <option value="tile">بلاط</option>
-                    <option value="robot">روبوت</option>
+                    <option value="">-- اختر التصنيف الرئيسي --</option>
+                    <option value="لاصق ديكور">لاصق ديكور</option>
+                    <option value="لاصق مسابح">لاصق مسابح</option>
+                    <option value="لاصق غرانيت">لاصق غرانيت</option>
+                    <option value="لاصق سيراميك">لاصق سيراميك</option>
+                    <option value="لاصق خارجي">لاصق خارجي</option>
+                    <option value="طينة">طينة</option>
+                    <option value="روبة">روبة</option>
                 </select>
                 <button type="submit">➕ إضافة منتج</button>
             </form>
@@ -306,24 +307,19 @@
             if (stored) {
                 products = JSON.parse(stored);
             } else {
-                // البيانات الافتراضية (مرة واحدة فقط)
+                // البيانات الافتراضية حسب المسميات الجديدة
                 products = [
-                    { id: 1, name: 'لاصق سيراميك – Forever Fix', desc: 'ألماني الصنع – مقاوم للماء', category: 'ceramic', img: '12_KThread_1786521559866_52058416972149.png' },
-                    { id: 2, name: 'لاصق بلاط – Everest Stone', desc: 'لجميع أنواع البلاط – مقاوم للماء', category: 'tile', img: '13_KThread_1786521559906_52064347410837.png' },
-                    { id: 3, name: 'LAZURD FIX – لاصق متعدد', desc: 'للسيراميك، الزجاج، الرخام', category: 'tile', img: '11_KThread_1786521559847_52052350730653.png' },
-                    { id: 4, name: 'منتج 4', desc: 'وصف المنتج الرابع', category: 'ceramic', img: '22_KThread_1786521560293_51987040997085.png' },
-                    { id: 5, name: 'منتج 5', desc: 'وصف المنتج الخامس', category: 'tile', img: '24_KThread_1786521560310_51976944685707.png' },
-                    { id: 6, name: 'منتج 6', desc: 'وصف المنتج السادس', category: 'robot', img: '25_KThread_1786521560320_51970752412212.png' },
-                    { id: 7, name: 'منتج 7', desc: 'وصف المنتج السابع', category: 'ceramic', img: '26_KThread_1786521560330_51964172756447.png' },
-                    { id: 8, name: 'منتج 8', desc: 'وصف المنتج الثامن', category: 'tile', img: '27_KThread_1786521560356_51956764715914.png' },
-                    { id: 9, name: 'منتج 9', desc: 'وصف المنتج التاسع', category: 'ceramic', img: '28_KThread_1786521560365_51948556911420.png' },
-                    { id: 10, name: 'منتج 10', desc: 'وصف المنتج العاشر', category: 'robot', img: '2_KThread_1786521478361_51798118075681.png' },
-                    { id: 11, name: 'منتج 11', desc: 'وصف المنتج الحادي عشر', category: 'tile', img: '39_KThread_1786521561014_51861300854405.png' }
+                    { id: 1, name: 'كاروفيكس', desc: 'لاصق ديكور عالي الجودة', category: 'لاصق ديكور', img: 'https://i.ibb.co/Mk0y0k2h/1.png' },
+                    { id: 2, name: 'منتج مسابح 1', desc: 'لاصق مسابح مقاوم للماء', category: 'لاصق مسابح', img: 'https://i.ibb.co/Mk0y0k2h/1.png' },
+                    { id: 3, name: 'غرانيت برو', desc: 'لاصق غرانيت فاخر', category: 'لاصق غرانيت', img: 'https://i.ibb.co/Mk0y0k2h/1.png' },
+                    { id: 4, name: 'سيراميك بلس', desc: 'لاصق سيراميك ممتاز', category: 'لاصق سيراميك', img: 'https://i.ibb.co/Mk0y0k2h/1.png' },
+                    { id: 5, name: 'خارجي إكس', desc: 'لاصق خارجي متين', category: 'لاصق خارجي', img: 'https://i.ibb.co/Mk0y0k2h/1.png' },
+                    { id: 6, name: 'طينة ناعمة', desc: 'طينة عالية النقاء', category: 'طينة', img: 'https://i.ibb.co/Mk0y0k2h/1.png' },
+                    { id: 7, name: 'روبة ذكية', desc: 'روبة متطورة للتنظيف', category: 'روبة', img: 'https://i.ibb.co/Mk0y0k2h/1.png' }
                 ];
                 saveData();
             }
-            
-            // تحميل الإعدادات
+
             const savedContact = localStorage.getItem('katanbuild_contact');
             if (savedContact) contactInfo = savedContact;
             const savedMsg = localStorage.getItem('katanbuild_typewriter');
@@ -343,17 +339,18 @@
         const datetimeEl = document.getElementById('datetime');
         const typewriterEl = document.getElementById('typewriter');
         const productSelect = document.getElementById('productSelect');
-        const filterBtns = document.querySelectorAll('.filter-btn');
+        const filterContainer = document.getElementById('filterButtons');
         const adminList = document.getElementById('adminProductList');
 
         // ===== تهيئة الصفحة =====
         loadData();
-        
+
         setTimeout(() => {
             splash.style.display = 'none';
             main.style.display = 'block';
             updateClock();
             setInterval(updateClock, 1000);
+            renderFilters();
             renderProducts('all');
             populateSelect();
             renderAdminList();
@@ -366,6 +363,25 @@
             const d = now.toLocaleDateString('ar-EG', { weekday:'short', year:'numeric', month:'short', day:'numeric' });
             const t = now.toLocaleTimeString('ar-EG', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
             datetimeEl.textContent = `${d} | ${t}`;
+        }
+
+        // ===== عرض أزرار التصنيفات =====
+        function renderFilters() {
+            const categories = [...new Set(products.map(p => p.category))];
+            let html = `<button class="filter-btn active" data-filter="all">الكل</button>`;
+            categories.forEach(cat => {
+                html += `<button class="filter-btn" data-filter="${cat}">${cat}</button>`;
+            });
+            filterContainer.innerHTML = html;
+
+            // إعادة ربط الأحداث
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    renderProducts(this.dataset.filter);
+                });
+            });
         }
 
         // ===== عرض المنتجات =====
@@ -387,15 +403,6 @@
             productSelect.innerHTML = '<option value="">اختر المنتج</option>' +
                 products.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
         }
-
-        // ===== الفلاتر =====
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                renderProducts(this.dataset.filter);
-            });
-        });
 
         // ===== Lightbox =====
         function openLightbox(imgSrc) {
@@ -475,9 +482,10 @@
             const name = document.getElementById('newName').value.trim();
             const desc = document.getElementById('newDesc').value.trim();
             const category = document.getElementById('newCategory').value;
-            if (!img || !name || !desc) { alert('يرجى ملء جميع الحقول'); return; }
+            if (!img || !name || !desc || !category) { alert('يرجى ملء جميع الحقول'); return; }
             products.push({ id: Date.now(), name, desc, category, img });
             saveData();
+            renderFilters();
             renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');
             populateSelect();
             renderAdminList();
@@ -489,6 +497,7 @@
             if (!confirm('هل أنت متأكد من حذف هذا المنتج؟')) return;
             products = products.filter(p => p.id !== id);
             saveData();
+            renderFilters();
             renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');
             populateSelect();
             renderAdminList();
@@ -504,9 +513,10 @@
             if (newName !== null) p.name = newName.trim();
             const newDesc = prompt('الوصف الجديد:', p.desc);
             if (newDesc !== null) p.desc = newDesc.trim();
-            const newCat = prompt('الفئة الجديدة (ceramic/tile/robot):', p.category);
+            const newCat = prompt('التصنيف الجديد (لاصق ديكور، لاصق مسابح، الخ):', p.category);
             if (newCat !== null) p.category = newCat.trim();
             saveData();
+            renderFilters();
             renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');
             populateSelect();
             renderAdminList();

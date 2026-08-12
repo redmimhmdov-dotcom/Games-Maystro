@@ -136,7 +136,6 @@
         }
         .product-card .btn-detail:hover { background:#b58a5b; color:#0b0a09; }
 
-        /* صورة احتياطية أنيقة عند فشل التحميل */
         .product-card .img-placeholder {
             width:100%; height:200px;
             display:flex; align-items:center; justify-content:center;
@@ -298,17 +297,17 @@
             <form id="adminForm" onsubmit="event.preventDefault(); addProduct();">
                 <h3 style="color:#b58a5b; margin:10px 0;">➕ إضافة منتج جديد</h3>
                 <input type="text" id="newImg" placeholder="رابط الصورة (مباشر)" required />
-                <input type="text" id="newName" placeholder="اسم المنتج (مثل: كاروفيكس)" required />
+                <input type="text" id="newName" placeholder="اسم المنتج" required />
                 <input type="text" id="newDesc" placeholder="الوصف (مثل: لاصق ديكور)" required />
                 <select id="newCategory" required>
                     <option value="">-- اختر التصنيف الرئيسي --</option>
                     <option value="لاصق ديكور">لاصق ديكور</option>
                     <option value="لاصق مسابح">لاصق مسابح</option>
                     <option value="لاصق غرانيت">لاصق غرانيت</option>
-                    <option value="لاصق سيراميك">لاصق سيراميك</option>
                     <option value="لاصق خارجي">لاصق خارجي</option>
                     <option value="طينة">طينة</option>
                     <option value="روبة">روبة</option>
+                    <option value="عوازل">عوازل</option>
                 </select>
                 <button type="submit">➕ إضافة منتج</button>
             </form>
@@ -333,39 +332,85 @@
     </div>
 
     <script>
-        // ===== البيانات والتخزين =====
+        // ===== التصنيفات المسموحة =====
+        const ALLOWED_CATEGORIES = [
+            'لاصق ديكور',
+            'لاصق مسابح',
+            'لاصق غرانيت',
+            'لاصق خارجي',
+            'طينة',
+            'روبة',
+            'عوازل'
+        ];
+
+        // ===== البيانات الافتراضية (جميع المنتجات مرتبة حسب الأقسام) =====
+        const DEFAULT_PRODUCTS = [
+            // ===== لاصق ديكور =====
+            { id: 1, name: 'الأقرع فيكس', desc: 'لاصق ديكور عالي الجودة', category: 'لاصق ديكور', img: 'https://i.ibb.co/DBpH9TC/الاقرع-ديكور-فيكس.jpg' },
+            { id: 2, name: 'ايفرست', desc: 'لاصق ديكور ممتاز', category: 'لاصق ديكور', img: 'https://i.ibb.co/TDFPJ7LT/ايفرست.jpg' },
+            { id: 3, name: 'بروسيل احمر', desc: 'لاصق ديكور احمر', category: 'لاصق ديكور', img: 'https://i.ibb.co/35m6YGQ0/بروسيل-احمر.jpg' },
+            { id: 4, name: 'فوريفر فيكس', desc: 'لاصق ديكور فاخر', category: 'لاصق ديكور', img: 'https://i.ibb.co/GfSkd10Y/فوريفر-فيكس.jpg' },
+            { id: 5, name: 'كاربوفيكس', desc: 'لاصق ديكور متخصص', category: 'لاصق ديكور', img: 'https://i.ibb.co/7N0RWnvP/كاربوفيكس.jpg' },
+            { id: 6, name: 'كلايتور', desc: 'لاصق ديكور قوي', category: 'لاصق ديكور', img: 'https://i.ibb.co/BVQ2Yfg2/كلايتور.jpg' },
+            { id: 7, name: 'لازورد', desc: 'لاصق ديكور أزرق', category: 'لاصق ديكور', img: 'https://i.ibb.co/xthHpF5G/لازورد.jpg' },
+
+            // ===== لاصق مسابح =====
+            { id: 8, name: 'أكوا فيكس', desc: 'لاصق مسابح مقاوم للماء', category: 'لاصق مسابح', img: 'https://i.ibb.co/VYWHvTpS/اكوا-فيكس.jpg' },
+            { id: 9, name: 'الباسل', desc: 'لاصق مسابح عالي الجودة', category: 'لاصق مسابح', img: 'https://i.ibb.co/zHjWrC9M/الباسل.jpg' },
+            { id: 10, name: 'الترا بوند ازرق', desc: 'لاصق مسابح أزرق', category: 'لاصق مسابح', img: 'https://i.ibb.co/NgFkRVRL/الترا-بوند-ازرق.jpg' },
+            { id: 11, name: 'الترا غريب اكسترا', desc: 'لاصق مسابح ممتاز', category: 'لاصق مسابح', img: 'https://i.ibb.co/35FdwgSL/الترا-غريب-اكسترا.jpg' },
+            { id: 12, name: 'آن ازرق', desc: 'لاصق مسابح أزرق', category: 'لاصق مسابح', img: 'https://i.ibb.co/zhJvWCdx/آن-ازرق.jpg' },
+            { id: 13, name: 'أونكس فيكس', desc: 'لاصق مسابح فاخر', category: 'لاصق مسابح', img: 'https://i.ibb.co/992BBQX7/أونكس-فيكس.jpg' },
+            { id: 14, name: 'بروسيل مسابح', desc: 'لاصق مسابح احترافي', category: 'لاصق مسابح', img: 'https://i.ibb.co/JWs3tZrj/بروسيل-مسابح.jpg' },
+            { id: 15, name: 'عباس', desc: 'لاصق مسابح متخصص', category: 'لاصق مسابح', img: 'https://i.ibb.co/Jj0wY6rV/عباس.jpg' },
+
+            // ===== لاصق غرانيت =====
+            { id: 16, name: 'الترا بوند اخضر', desc: 'لاصق غرانيت أخضر', category: 'لاصق غرانيت', img: 'https://i.ibb.co/3y56Fx4p/الترا-بوند-اخضر.jpg' },
+            { id: 17, name: 'الترا جريب', desc: 'لاصق غرانيت ممتاز', category: 'لاصق غرانيت', img: 'https://i.ibb.co/YFvHRxQh/الترا-جريب.jpg' },
+            { id: 18, name: 'بروسيل اخضر', desc: 'لاصق غرانيت أخضر', category: 'لاصق غرانيت', img: 'https://i.ibb.co/s96mf8zR/بروسيل-اخضر.jpg' },
+            { id: 19, name: 'توب فيكس', desc: 'لاصق غرانيت فاخر', category: 'لاصق غرانيت', img: 'https://i.ibb.co/twSLHwgC/توب-فيكس.jpg' },
+            { id: 20, name: 'سبان فيكس', desc: 'لاصق غرانيت متخصص', category: 'لاصق غرانيت', img: 'https://i.ibb.co/XZHZ3YF3/سبان-فيكس.jpg' },
+            { id: 21, name: 'سلامات فيكس', desc: 'لاصق غرانيت قوي', category: 'لاصق غرانيت', img: 'https://i.ibb.co/B210rXJ9/سلامات-فيكس.jpg' },
+            { id: 22, name: 'شربجي', desc: 'لاصق غرانيت احترافي', category: 'لاصق غرانيت', img: 'https://i.ibb.co/pvtp7pWW/شربجي.jpg' },
+            { id: 23, name: 'كلوبال فيكس', desc: 'لاصق غرانيت عالمي', category: 'لاصق غرانيت', img: 'https://i.ibb.co/fV9ph6mK/كلوبال-فيكس.jpg' },
+            { id: 24, name: 'ليث ازرق', desc: 'لاصق غرانيت أزرق', category: 'لاصق غرانيت', img: 'https://i.ibb.co/CKNMFZBC/ليث-ازرق.jpg' },
+            { id: 25, name: 'ناولو فيكس', desc: 'لاصق غرانيت فاخر', category: 'لاصق غرانيت', img: 'https://i.ibb.co/rL94Rv8/ناولو-فيكس.jpg' },
+
+            // ===== لاصق خارجي =====
+            { id: 26, name: 'الترا بوند اورنج', desc: 'لاصق خارجي برتقالي', category: 'لاصق خارجي', img: 'https://i.ibb.co/dz2TJw6/الترا-بوند-اورنج.jpg' },
+            { id: 27, name: 'الترا بوند ذهبي', desc: 'لاصق خارجي ذهبي', category: 'لاصق خارجي', img: 'https://i.ibb.co/jZPVc56C/الترا-بوند-ذهبي.jpg' },
+            { id: 28, name: 'مارفيل', desc: 'لاصق خارجي ممتاز', category: 'لاصق خارجي', img: 'https://i.ibb.co/B2Y414rf/مارفيل.jpg' },
+
+            // ===== طينة =====
+            { id: 29, name: 'الترا بوند طينة اكرليكية', desc: 'طينة اكريليكية عالية الجودة', category: 'طينة', img: 'https://i.ibb.co/hxWRDJb7/الترا-بوند-طينة-اكرليكية.jpg' },
+            { id: 30, name: 'الترا بوند طينة بلاستيكية', desc: 'طينة بلاستيكية متينة', category: 'طينة', img: 'https://i.ibb.co/JWT5rBsr/الترا-بوند-طينة-بلاستيكية.jpg' },
+            { id: 31, name: 'سولايد ميكس', desc: 'طينة سولايد ميكس', category: 'طينة', img: 'https://i.ibb.co/ZpT7rgpH/سولايد-ميكس.jpg' },
+            { id: 32, name: 'سولايد ميكس اسمنتية', desc: 'طينة اسمنتية 50 كغ', category: 'طينة', img: 'https://i.ibb.co/LzWJ1dXG/سولايد-ميكس-اسمنتية.jpg' },
+            { id: 33, name: 'طينة غرانيت', desc: 'طينة غرانيت فاخرة', category: 'طينة', img: 'https://i.ibb.co/mr2CNfwM/طينة-غرانيت.jpg' },
+
+            // ===== روبة =====
+            { id: 34, name: 'الترا جريب', desc: 'روبة عالية الجودة', category: 'روبة', img: 'https://i.ibb.co/GfBQ9LxV/الترا-جريب.jpg' },
+            { id: 35, name: 'جراولت اصلاح الترا بوند', desc: 'روبة اصلاح الترا بوند', category: 'روبة', img: 'https://i.ibb.co/B5FQmxt8/جراولت-اصلاح-الترا-بوند.jpg' },
+
+            // ===== عوازل =====
+            { id: 36, name: 'عازل بلاستيكي', desc: 'عازل بلاستيكي عالي الجودة', category: 'عوازل', img: 'https://i.ibb.co/qhxdYSC/عازل-بلاستيكي.jpg' },
+            { id: 37, name: 'عازل حجر شفاف', desc: 'عازل حجر شفاف ممتاز', category: 'عوازل', img: 'https://i.ibb.co/zV0GwTQy/عازل-حجر-شفاف.jpg' },
+            { id: 38, name: 'عازل مركبين', desc: 'عازل مركبين فاخر', category: 'عوازل', img: 'https://i.ibb.co/7dSKY11t/عازل-مركبين.jpg' }
+        ];
+
+        // ===== المتغيرات العامة =====
         let products = [];
         let whatsappNumber = '0952725590';
         let typewriterMsg = 'مرحباً بكم في Katanbuild – حلول بناء مبتكرة ذات جودة ألمانية.';
         let splashMsg = 'جودة ألمانية في كل منتج';
 
-        // ===== التصنيفات المسموحة (عربية فقط) =====
-        const ALLOWED_CATEGORIES = [
-            'لاصق ديكور',
-            'لاصق مسابح',
-            'لاصق غرانيت',
-            'لاصق سيراميك',
-            'لاصق خارجي',
-            'طينة',
-            'روبة'
-        ];
-
-        // ===== تحميل البيانات من LocalStorage =====
+        // ===== تحميل البيانات =====
         function loadData() {
             const stored = localStorage.getItem('katanbuild_products');
             if (stored) {
                 products = JSON.parse(stored);
             } else {
-                // البيانات الافتراضية بالمسميات العربية فقط
-                products = [
-                    { id: 1, name: 'كاروفيكس', desc: 'لاصق ديكور عالي الجودة', category: 'لاصق ديكور', img: 'https://i.ibb.co/Mk0y0k2h/1.png' },
-                    { id: 2, name: 'مادة عازلة', desc: 'لاصق مسابح مقاوم للماء', category: 'لاصق مسابح', img: 'https://i.ibb.co/Mk0y0k2h/1.png' },
-                    { id: 3, name: 'غرانيت برو', desc: 'لاصق غرانيت فاخر', category: 'لاصق غرانيت', img: 'https://i.ibb.co/Mk0y0k2h/1.png' },
-                    { id: 4, name: 'سيراميك بلس', desc: 'لاصق سيراميك ممتاز', category: 'لاصق سيراميك', img: 'https://i.ibb.co/Mk0y0k2h/1.png' },
-                    { id: 5, name: 'خارجي إكس', desc: 'لاصق خارجي متين', category: 'لاصق خارجي', img: 'https://i.ibb.co/Mk0y0k2h/1.png' },
-                    { id: 6, name: 'طينة ناعمة', desc: 'طينة عالية النقاء', category: 'طينة', img: 'https://i.ibb.co/Mk0y0k2h/1.png' },
-                    { id: 7, name: 'روبوت كلين', desc: 'روبة متطورة للتنظيف', category: 'روبة', img: 'https://i.ibb.co/Mk0y0k2h/1.png' }
-                ];
+                products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
                 saveData();
             }
 
@@ -421,11 +466,9 @@
             datetimeEl.textContent = `${d} | ${t}`;
         }
 
-        // ===== عرض أزرار التصنيفات (عربية فقط) =====
+        // ===== عرض أزرار التصنيفات =====
         function renderFilters() {
-            // استخراج التصنيفات من المنتجات الموجودة
             const categories = [...new Set(products.map(p => p.category))];
-            // فلترة التصنيفات لتكون فقط ضمن المسموح
             const validCategories = categories.filter(cat => ALLOWED_CATEGORIES.includes(cat));
             
             let html = `<button class="filter-btn active" data-filter="all">الكل</button>`;
@@ -443,7 +486,7 @@
             });
         }
 
-        // ===== عرض المنتجات مع معالج صور محسّن =====
+        // ===== عرض المنتجات =====
         function renderProducts(category = 'all') {
             const filtered = category === 'all' ? products : products.filter(p => p.category === category);
             
@@ -543,7 +586,7 @@
 
         function closeAdmin() { document.getElementById('adminPanel').style.display = 'none'; }
 
-        // ===== إدارة المنتجات في لوحة التحكم =====
+        // ===== إدارة المنتجات =====
         function renderAdminList() {
             adminList.innerHTML = products.map(p => `
                 <div class="admin-product-item" onclick="editProductImage(${p.id})">

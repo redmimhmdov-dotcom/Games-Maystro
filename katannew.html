@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Katanbuild | المعرض الذكي - نيون خلفي وزجاجي شفاف</title>
+    <title>KATANBUILD | المعرض الهندسي الذكي - Ultra Glass & Neon Edition</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,59 +13,60 @@
     <style>
         :root {
             --bg-night: #02040a;
-            --card-glass: rgba(10, 15, 29, 0.45); /* خلفية شفافة تتيح رؤية الشعار */
+            /* خلفية زجاجية فائقة الشفافية لتتيح ظهور شعار النيون المضيء */
+            --card-glass: rgba(10, 15, 29, 0.38); 
             --accent-gold: #ffd700;
             --accent-glow: #ffe566;
             --accent-star: #8ab4f8;
             --text-light: #e6edf3;
-            --border-glow: rgba(255, 215, 0, 0.3);
+            --border-glow: rgba(255, 215, 0, 0.28);
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
         
         body { 
             font-family: 'Cairo', sans-serif; 
-            background: radial-gradient(ellipse at bottom, #0d1322 0%, #02040a 100%);
+            background: radial-gradient(ellipse at bottom, #0a0e1a 0%, #02040a 100%);
             color: var(--text-light);
             overflow-x: hidden;
             position: relative;
             min-height: 100vh;
         }
 
-        /* ===== 🌟 1. شعار الخلفية (Watermark) مع تأثير النيون الترددي كل 1 ثانية ===== */
+        /* ===== 🌟 1. شعار خلفية الواجهة بالكامل (Neon Watermark Glow) ===== */
         .watermark-logo {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80vw;
-            max-width: 800px;
+            width: 85vw;
+            max-width: 950px;
             height: auto;
             pointer-events: none;
             z-index: 0;
-            opacity: 0.25; /* رفع الشفافية لتكون مرئية خلف العناصر الشفافة */
-            /* نبض النيون الأصفر كل ثانية */
+            opacity: 0.3;
+            /* توهج النيون الذهبي المتكرر كل ثانية */
             animation: watermarkNeonPulse 1s infinite alternate ease-in-out;
         }
 
         @keyframes watermarkNeonPulse {
             0% {
-                opacity: 0.18;
-                filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.3)) saturate(100%);
+                opacity: 0.20;
+                filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3)) saturate(100%);
             }
             100% {
-                opacity: 0.35;
-                filter: drop-shadow(0 0 50px rgba(255, 215, 0, 0.95)) drop-shadow(0 0 20px rgba(255, 229, 102, 0.8)) saturate(160%);
+                opacity: 0.42;
+                filter: drop-shadow(0 0 65px rgba(255, 215, 0, 0.95)) drop-shadow(0 0 25px rgba(255, 229, 102, 0.85)) saturate(180%);
             }
         }
 
-        /* خلفية النجوم */
+        /* خلفية النجوم المتحركة */
         #bgCanvas {
             position: fixed; top:0; left:0; width:100vw; height:100vh;
-            pointer-events: none; z-index: 0; opacity: 0.7;
+            pointer-events: none; z-index: 0; opacity: 0.75;
         }
 
-        /* ===== 🎬 2. الشاشة الترحيبية مع أنيميشن الشعار المتحرك والآلة الكاتبة ===== */
+        /* ===== 🎬 2. الشاشة الترحيبية الكاملة (Splash Screen with Typewriter) ===== */
         #splash {
             position: fixed; inset:0; z-index:9999;
             background: radial-gradient(circle at center, #080e1a 0%, #010205 100%);
@@ -92,9 +93,8 @@
             width: 140px; height: 140px; border-radius: 50%;
             padding: 5px; background: rgba(10, 15, 29, 0.8);
             border: 2px solid var(--accent-gold);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+            box-shadow: 0 0 35px rgba(255, 215, 0, 0.7);
             z-index: 2;
-            /* أنيميشن التمرير من اليسار إلى اليمين ثم الصعود للأعلى */
             animation: logoSlideAndRise 3.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
         .splash-logo-box img {
@@ -103,10 +103,10 @@
 
         @keyframes logoSlideAndRise {
             0% {
-                transform: translateX(-350px) translateY(40px) scale(0.9);
+                transform: translateX(-380px) translateY(40px) scale(0.85);
             }
             60% {
-                transform: translateX(350px) translateY(40px) scale(1);
+                transform: translateX(380px) translateY(40px) scale(1);
             }
             100% {
                 transform: translateX(0) translateY(-20px) scale(1.1);
@@ -126,13 +126,13 @@
         }
 
         .splash-title {
-            font-family: 'Orbitron', sans-serif; font-size: 32px; font-weight: 900;
+            font-family: 'Orbitron', sans-serif; font-size: 34px; font-weight: 900;
             color: #fff; letter-spacing: 2px; margin-bottom: 10px;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+            text-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
         }
 
         .typewriter-container {
-            font-size: 18px; color: var(--accent-star); font-weight: 600;
+            font-size: 19px; color: var(--accent-star); font-weight: 600;
             min-height: 30px; display: flex; align-items: center; justify-content: center;
         }
         .typewriter-text::after {
@@ -140,25 +140,26 @@
         }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 
-        /* ===== الهيدر ===== */
+        /* ===== 🏛️ 3. هيدر الموقع الشفاف العريض ===== */
         header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 18px 40px; 
-            background: rgba(4, 7, 15, 0.5); 
+            padding: 18px 5%; 
+            background: rgba(4, 7, 15, 0.45); 
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-glow); 
             position: sticky; top:0; z-index:100;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
         .logo { display:flex; align-items:center; gap:14px; cursor:pointer; }
-        .logo img { border-radius: 50%; border: 1px solid var(--accent-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
-        .logo-text { font-family:'Orbitron', sans-serif; font-weight:900; font-size:24px; color:#fff; letter-spacing: 1px; }
-        .logo-sub { font-size:9px; color:var(--accent-star); letter-spacing:3px; display:block; }
+        .logo img { border-radius: 50%; border: 1px solid var(--accent-gold); box-shadow: 0 0 12px rgba(255, 215, 0, 0.5); }
+        .logo-text { font-family:'Orbitron', sans-serif; font-weight:900; font-size:26px; color:#fff; letter-spacing: 1px; }
+        .logo-sub { font-size:10px; color:var(--accent-star); letter-spacing:3px; display:block; }
         
         .header-actions { display:flex; align-items:center; gap:12px; }
         .btn-cyber {
-            background: rgba(255, 215, 0, 0.15);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 215, 0, 0.12);
+            backdrop-filter: blur(12px);
             border: 1px solid var(--accent-gold); color: #fff;
             padding: 12px 24px; border-radius: 12px; font-weight: 700;
             cursor: pointer; transition: 0.3s ease; font-size: 14px;
@@ -167,42 +168,43 @@
         }
         .btn-cyber:hover {
             background: var(--accent-gold); color: #000;
-            box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.85);
             transform: translateY(-2px);
         }
 
-        .container { max-width: 1400px; margin: auto; padding: 35px 20px; position: relative; z-index: 1; }
+        /* الحاوية العريضة التي تمتد على كامل الموقع */
+        .container { max-width: 95%; margin: auto; padding: 35px 10px; position: relative; z-index: 1; }
 
-        /* ===== المساعد الهندسي الذكي ===== */
+        /* ===== 🤖 4. المساعد الهندسي الشفاف ===== */
         .smart-assistant-card {
             background: var(--card-glass);
             border: 1px solid var(--border-glow);
             border-radius: 22px; padding: 25px 30px; margin-bottom: 40px;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
             box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
         .assistant-title {
-            font-size: 20px; font-weight: 800; color: var(--accent-gold);
+            font-size: 21px; font-weight: 800; color: var(--accent-gold);
             margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
         }
         .assistant-chips { display: flex; gap: 12px; flex-wrap: wrap; }
         .chip {
-            background: rgba(2, 4, 10, 0.5); border: 1px solid rgba(138, 180, 248, 0.25);
-            color: #d1d5db; padding: 10px 20px; border-radius: 30px; cursor: pointer;
+            background: rgba(2, 4, 10, 0.45); border: 1px solid rgba(138, 180, 248, 0.25);
+            color: #d1d5db; padding: 11px 22px; border-radius: 30px; cursor: pointer;
             font-size: 14px; transition: 0.3s; font-weight: 600;
             backdrop-filter: blur(8px);
         }
         .chip:hover, .chip.active {
             background: linear-gradient(135deg, var(--accent-gold), #997a15);
             color: #000; font-weight: 800; border-color: #fff;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
             transform: translateY(-2px);
         }
 
-        /* ===== حاسبة الاحتياجات ===== */
+        /* ===== 🧮 5. حاسبة الكميات للمشاريع الشفافة ===== */
         .calculator-section {
-            background: rgba(10, 15, 29, 0.4);
+            background: rgba(10, 15, 29, 0.35);
             border: 1px solid var(--border-glow);
             border-radius: 22px; padding: 35px; margin-bottom: 45px;
             display: grid; grid-template-columns: 1fr 1fr; gap: 35px;
@@ -222,7 +224,7 @@
             outline: none; border-color: var(--accent-gold); box-shadow: 0 0 15px rgba(255,215,0,0.5);
         }
         .calc-result-box {
-            background: rgba(4, 7, 15, 0.65); border-radius: 18px;
+            background: rgba(4, 7, 15, 0.55); border-radius: 18px;
             border: 1px dashed var(--accent-gold); padding: 25px;
             display: flex; flex-direction: column; justify-content: center;
             backdrop-filter: blur(12px);
@@ -230,54 +232,68 @@
         .res-item { display: flex; justify-content: space-between; margin-bottom: 14px; font-size: 16px; }
         .res-value { font-weight: 800; color: var(--accent-gold); font-size: 20px; }
 
-        /* ===== الكتالوج والشبكة ===== */
+        /* ===== 📦 6. الفلترة الممتدة ===== */
         .filter-bar { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 30px; }
         .filter-btn {
             background: rgba(255,255,255,0.05); border: 1px solid var(--border-glow);
-            color: #fff; padding: 10px 24px; border-radius: 30px; white-space: nowrap;
+            color: #fff; padding: 11px 26px; border-radius: 30px; white-space: nowrap;
             cursor: pointer; transition: 0.3s; font-size: 14px; font-weight: 600;
             backdrop-filter: blur(8px);
         }
         .filter-btn.active, .filter-btn:hover {
             background: var(--accent-gold); color: #000; font-weight: 800;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
         }
 
+        /* شبكة عريضة تتكيف مع الشاشات الكاملة */
         .product-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 30px;
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 30px;
         }
         
-        /* ===== 🖼️ 3. بطاقات المنتجات الشفافة والمضببة (Glassmorphism Effect) ===== */
+        /* ===== 🖼️ 7. بطاقات المنتجات الشفافة مع مسح الليزر الضوئي (Laser Scan Effect) ===== */
         .product-card {
-            background: var(--card-glass); /* خلفية نصف شفافة */
+            background: var(--card-glass);
             border-radius: 20px;
-            border: 1px solid rgba(255, 215, 0, 0.25); 
+            border: 1px solid rgba(255, 215, 0, 0.22); 
             overflow: hidden;
             transition: 0.4s ease; display: flex; flex-direction: column; justify-content: space-between;
             position: relative; 
-            /* تأثير الضباب التكيفي (Glassmorphism Blur) */
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: -100%; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(255, 215, 0, 0.15), transparent);
+            transition: 0.7s ease;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .product-card:hover::before {
+            top: 100%; /* تأثير مسح الليزر من الأعلى للأسفل */
+        }
+
         .product-card:hover {
             transform: translateY(-8px) scale(1.02);
             border-color: #ffd700;
-            background: rgba(10, 15, 29, 0.65);
+            background: rgba(10, 15, 29, 0.6);
             box-shadow: 0 0 30px rgba(255, 215, 0, 0.5), inset 0 0 15px rgba(255, 215, 0, 0.2);
             z-index: 10;
         }
 
-        /* حاوية الصورة خفيفة الشفافية */
         .img-container { 
-            height: 240px; position: relative; 
-            background: rgba(2, 4, 10, 0.2); 
+            height: 250px; position: relative; 
+            background: rgba(2, 4, 10, 0.15); 
             overflow: hidden; display: flex; align-items: center; justify-content: center;
             padding: 15px;
         }
 
-        /* صور المنتجات بحدة عالية وتأثير متباين ممتازة */
         .product-card img {
             max-width: 100%; max-height: 100%;
             object-fit: contain;
@@ -287,8 +303,8 @@
         }
         .product-card img.loaded { opacity: 1; }
         .product-card:hover img {
-            transform: scale(1.1) rotate(1deg);
-            filter: contrast(130%) saturate(125%) drop-shadow(0px 12px 20px rgba(255, 215, 0, 0.5));
+            transform: scale(1.11) rotate(1deg);
+            filter: contrast(130%) saturate(125%) drop-shadow(0px 12px 20px rgba(255, 215, 0, 0.55));
         }
         
         .badge-cat {
@@ -304,16 +320,16 @@
         .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
         .btn-card-action {
             padding: 10px; border-radius: 10px; border: 1px solid var(--border-glow);
-            background: rgba(2, 4, 10, 0.6); color: #fff; font-size: 13px; font-weight: 700;
+            background: rgba(2, 4, 10, 0.55); color: #fff; font-size: 13px; font-weight: 700;
             cursor: pointer; transition: 0.3s; font-family: 'Cairo';
             backdrop-filter: blur(5px);
         }
         .btn-card-action:hover { background: var(--accent-gold); color: #000; box-shadow: 0 0 15px rgba(255,215,0,0.6); }
 
-        /* ===== النوافذ المنبثقة الشفافة ===== */
+        /* ===== 🔍 8. النوافذ المنبثقة الشفافة ===== */
         .modal {
             position: fixed; inset: 0; z-index: 1000;
-            background: rgba(1, 2, 5, 0.85); backdrop-filter: blur(15px);
+            background: rgba(1, 2, 5, 0.85); backdrop-filter: blur(16px);
             display: none; align-items: center; justify-content: center;
         }
         .modal-content {
@@ -335,13 +351,13 @@
 </head>
 <body>
 
-    <!-- 🌟 الشعار المدمج بالخلفية مع النيون الأصفر المتوهج كل 1 ثانية -->
+    <!-- 🌟 الشعار المدمج بالخلفية المضيء بالنيون على كامل الموقع -->
     <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" class="watermark-logo" alt="Background Neon Watermark" />
 
     <!-- خلفية النجوم -->
     <canvas id="bgCanvas"></canvas>
 
-    <!-- ===== 🎬 الشاشة الترحيبية (الشعار يمر من اليسار لليمين ويرتفع + آلة كاتبة) ===== -->
+    <!-- ===== 🎬 الشاشة الترحيبية ===== -->
     <div id="splash">
         <div class="splash-container">
             <div class="splash-logo-box">
@@ -356,13 +372,13 @@
         </div>
     </div>
 
-    <!-- ===== الهيدر الشفاف ===== -->
+    <!-- ===== الهيدر ===== -->
     <header>
         <div class="logo">
-            <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" height="42" width="42" />
+            <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" height="45" width="45" />
             <div>
                 <span class="logo-text">KATANBUILD</span>
-                <span class="logo-sub">GLASS & NEON EDITION</span>
+                <span class="logo-sub">ULTRA GLASS & NEON EDITION</span>
             </div>
         </div>
         <div class="header-actions">
@@ -424,11 +440,11 @@
             </div>
         </div>
 
-        <!-- ===== الفلترة التمريرية ===== -->
+        <!-- ===== الفلترة ===== -->
         <h2 style="margin-bottom:18px; border-right:4px solid var(--accent-gold); padding-right:12px;">📦 كتالوج المنتجات المعروضة</h2>
         <div class="filter-bar" id="filterBar"></div>
 
-        <!-- شبكة المنتجات الـ 38 ذات البطاقات الزجاجية الشفافة -->
+        <!-- شبكة المنتجات الـ 38 الممتدة على كامل الشاشة -->
         <div class="product-grid" id="productGrid"></div>
 
     </div>
@@ -490,12 +506,10 @@
         }
 
         window.addEventListener('load', () => {
-            // تشغيل الآلة الكاتبة عند ظهور النص بعد انقضاء أنيميشن مرور الشعار
             setTimeout(() => {
                 typeWriter();
             }, 2200);
 
-            // إخفاء الشاشة الترحيبية بسلاسة
             setTimeout(() => {
                 document.getElementById('splash').classList.add('fade-out');
             }, 6200);
@@ -539,7 +553,7 @@
             }
         }
 
-        for (let i = 0; i < 80; i++) stars.push(new Star());
+        for (let i = 0; i < 90; i++) stars.push(new Star());
 
         function animateStars() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -548,7 +562,7 @@
         }
         animateStars();
 
-        // بيانات المنتجات الـ 38
+        // بيانات المنتجات الـ 38 كاملة
         const PRODUCTS = [
             { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/DBpH9TC/الاقرع-ديكور-فيكس.jpg', ad: 95, wat: 75, flex: 85 },
             { id: 2, name: 'ايفرست', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/TDFPJ7LT/ايفرست.jpg', ad: 92, wat: 70, flex: 80 },

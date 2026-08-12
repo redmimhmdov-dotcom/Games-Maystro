@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Katanbuild | المعرض الذكي لمواد البناء</title>
+    <title>Katanbuild | المعرض الذكي - ثيم الليل والنجوم</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,34 +12,57 @@
 
     <style>
         :root {
-            --bg-dark: #050506;
-            --card-bg: rgba(18, 15, 12, 0.85);
-            --accent-gold: #d4af37;
-            --accent-glow: #e2b755;
-            --text-light: #ece6dc;
-            --border-glow: rgba(212, 175, 55, 0.35);
+            --bg-night: #02040a;
+            --card-bg: rgba(10, 15, 29, 0.75);
+            --accent-gold: #e2b755;
+            --accent-star: #8ab4f8;
+            --text-light: #e6edf3;
+            --border-glow: rgba(226, 183, 85, 0.25);
+            --star-glow: rgba(138, 180, 248, 0.6);
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
         
         body { 
             font-family: 'Cairo', sans-serif; 
-            background: var(--bg-dark); 
+            background: radial-gradient(ellipse at bottom, #0d1322 0%, #02040a 100%);
             color: var(--text-light);
             overflow-x: hidden;
             position: relative;
+            min-height: 100vh;
         }
 
-        /* خلفية الجزيئات */
+        /* ===== الشعار الشفاف في الخلفية (Watermark) ===== */
+        .watermark-logo {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 75vw;
+            max-width: 750px;
+            height: auto;
+            opacity: 0.07; /* نسبة الشفافية */
+            pointer-events: none; /* حتى لا يعيق الضغط على العناصر */
+            z-index: 0;
+            filter: drop-shadow(0 0 50px rgba(226, 183, 85, 0.4)) grayscale(20%);
+            animation: logoPulse 8s infinite ease-in-out;
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.06; }
+            50% { transform: translate(-50%, -50%) scale(1.03); opacity: 0.09; }
+        }
+
+        /* خلفية النجوم والكون */
         #bgCanvas {
             position: fixed; top:0; left:0; width:100vw; height:100vh;
-            pointer-events: none; z-index: 0; opacity: 0.6;
+            pointer-events: none; z-index: 0; opacity: 0.85;
         }
 
-        /* ===== 1. الشاشة الترحيبية السينمائية المحدثة ===== */
+        /* ===== الشاشة الترحيبية السينمائية ===== */
         #splash {
             position: fixed; inset:0; z-index:9999;
-            background: radial-gradient(circle at center, #110e0a 0%, #030303 100%);
+            background: radial-gradient(circle at center, #080e1a 0%, #010205 100%);
             display: flex; align-items: center; justify-content: center;
             opacity: 1; transition: opacity 1s ease, visibility 1s ease;
         }
@@ -53,55 +76,54 @@
             max-width: 800px; padding: 20px;
         }
         .splash-img-wrapper {
-            width: 220px; height: 220px; border-radius: 25px;
-            padding: 10px; background: rgba(212, 175, 55, 0.05);
+            width: 200px; height: 200px; border-radius: 50%;
+            padding: 8px; background: rgba(138, 180, 248, 0.05);
             border: 2px solid var(--accent-gold);
-            box-shadow: 0 0 60px rgba(212, 175, 55, 0.3), inset 0 0 30px rgba(212, 175, 55, 0.15);
-            margin-bottom: 25px; animation: floatAnim 3s infinite ease-in-out;
+            box-shadow: 0 0 50px rgba(226, 183, 85, 0.4), inset 0 0 20px rgba(138, 180, 248, 0.3);
+            margin-bottom: 25px; animation: floatAnim 4s infinite ease-in-out;
         }
         .splash-img-wrapper img {
-            width: 100%; height: 100%; object-fit: cover; border-radius: 18px;
+            width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
         }
 
         @keyframes floatAnim {
-            0%, 100% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-10px) scale(1.02); }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
         }
 
         .splash-title {
-            font-family: 'Orbitron', sans-serif; font-size: 32px; font-weight: 900;
-            color: #fff; letter-spacing: 2px; margin-bottom: 10px;
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            font-family: 'Orbitron', sans-serif; font-size: 34px; font-weight: 900;
+            color: #fff; letter-spacing: 3px; margin-bottom: 12px;
+            text-shadow: 0 0 25px rgba(226, 183, 85, 0.6);
         }
 
-        /* تأثير الآلة الكاتبة */
         .typewriter-container {
-            font-size: 18px; color: var(--accent-glow); font-weight: 600;
+            font-size: 18px; color: var(--accent-star); font-weight: 600;
             min-height: 30px; display: flex; align-items: center; justify-content: center;
         }
         .typewriter-text::after {
-            content: '|'; animation: blink 0.7s infinite; color: var(--accent-gold); margin-right: 4px;
+            content: '✨'; animation: blink 0.8s infinite; margin-right: 5px;
         }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 
-        /* ===== الهيدر الزجاجي الفاخر ===== */
+        /* ===== الهيدر الزجاجي الليلة ===== */
         header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 18px 40px; 
-            background: rgba(8, 7, 6, 0.85); 
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-glow); 
+            background: rgba(4, 7, 15, 0.8); 
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(226, 183, 85, 0.2); 
             position: sticky; top:0; z-index:100;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
         }
         .logo { display:flex; align-items:center; gap:14px; cursor:pointer; }
-        .logo img { border-radius: 10px; border: 1px solid var(--border-glow); }
+        .logo img { border-radius: 50%; border: 1px solid var(--accent-gold); box-shadow: 0 0 10px rgba(226, 183, 85, 0.3); }
         .logo-text { font-family:'Orbitron', sans-serif; font-weight:900; font-size:24px; color:#fff; letter-spacing: 1px; }
-        .logo-sub { font-size:9px; color:var(--accent-glow); letter-spacing:3px; display:block; }
+        .logo-sub { font-size:9px; color:var(--accent-star); letter-spacing:3px; display:block; }
         
         .header-actions { display:flex; align-items:center; gap:12px; }
         .btn-cyber {
-            background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(0,0,0,0.8));
+            background: linear-gradient(135deg, rgba(226, 183, 85, 0.15), rgba(10,15,29,0.9));
             border: 1px solid var(--accent-gold); color: #fff;
             padding: 12px 24px; border-radius: 12px; font-weight: 700;
             cursor: pointer; transition: 0.3s ease; font-size: 14px;
@@ -110,19 +132,19 @@
         }
         .btn-cyber:hover {
             background: var(--accent-gold); color: #000;
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+            box-shadow: 0 0 25px rgba(226, 183, 85, 0.6);
             transform: translateY(-2px);
         }
 
         .container { max-width: 1400px; margin: auto; padding: 35px 20px; position: relative; z-index: 1; }
 
-        /* ===== 1. المساعد الهندسي الذكي ===== */
+        /* ===== المساعد الهندسي الذكي ===== */
         .smart-assistant-card {
             background: var(--card-bg);
             border: 1px solid var(--border-glow);
             border-radius: 22px; padding: 25px 30px; margin-bottom: 40px;
             backdrop-filter: blur(15px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
         }
         .assistant-title {
             font-size: 20px; font-weight: 800; color: var(--accent-gold);
@@ -130,37 +152,38 @@
         }
         .assistant-chips { display: flex; gap: 12px; flex-wrap: wrap; }
         .chip {
-            background: rgba(0,0,0,0.6); border: 1px solid rgba(212, 175, 55, 0.2);
-            color: #ddd; padding: 10px 20px; border-radius: 30px; cursor: pointer;
+            background: rgba(2, 4, 10, 0.7); border: 1px solid rgba(138, 180, 248, 0.2);
+            color: #d1d5db; padding: 10px 20px; border-radius: 30px; cursor: pointer;
             font-size: 14px; transition: 0.3s; font-weight: 600;
         }
         .chip:hover, .chip.active {
             background: linear-gradient(135deg, var(--accent-gold), #997a15);
             color: #000; font-weight: 800; border-color: #fff;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            box-shadow: 0 0 20px rgba(226, 183, 85, 0.5);
             transform: translateY(-2px);
         }
 
-        /* ===== 2. حاسبة الاحتياجات والميزانية ===== */
+        /* ===== حاسبة الاحتياجات ===== */
         .calculator-section {
-            background: linear-gradient(135deg, rgba(22,18,14,0.95), rgba(8,8,8,0.98));
-            border: 1px solid var(--accent-gold);
+            background: linear-gradient(135deg, rgba(10,15,29,0.9), rgba(2,4,10,0.95));
+            border: 1px solid var(--border-glow);
             border-radius: 22px; padding: 35px; margin-bottom: 45px;
             display: grid; grid-template-columns: 1fr 1fr; gap: 35px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.9);
+            backdrop-filter: blur(12px);
         }
         @media (max-width: 900px) { .calculator-section { grid-template-columns: 1fr; } }
         
         .calc-inputs input, .calc-inputs select {
             width: 100%; padding: 14px; margin-top: 8px; margin-bottom: 20px;
-            background: #080808; border: 1px solid var(--border-glow);
+            background: rgba(2,4,10,0.8); border: 1px solid var(--border-glow);
             color: #fff; border-radius: 12px; font-family: 'Cairo'; font-size: 15px;
         }
         .calc-inputs input:focus, .calc-inputs select:focus {
-            outline: none; border-color: var(--accent-gold); box-shadow: 0 0 12px rgba(212,175,55,0.4);
+            outline: none; border-color: var(--accent-gold); box-shadow: 0 0 15px rgba(226,183,85,0.4);
         }
         .calc-result-box {
-            background: rgba(0,0,0,0.7); border-radius: 18px;
+            background: rgba(4, 7, 15, 0.85); border-radius: 18px;
             border: 1px dashed var(--accent-gold); padding: 25px;
             display: flex; flex-direction: column; justify-content: center;
         }
@@ -170,13 +193,13 @@
         /* ===== الكتالوج والشبكة ===== */
         .filter-bar { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 30px; }
         .filter-btn {
-            background: rgba(255,255,255,0.04); border: 1px solid var(--border-glow);
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border-glow);
             color: #fff; padding: 10px 24px; border-radius: 30px; white-space: nowrap;
             cursor: pointer; transition: 0.3s; font-size: 14px; font-weight: 600;
         }
         .filter-btn.active, .filter-btn:hover {
             background: var(--accent-gold); color: #000; font-weight: 800;
-            box-shadow: 0 0 18px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 0 20px rgba(226, 183, 85, 0.4);
         }
 
         .product-grid {
@@ -186,17 +209,17 @@
             background: var(--card-bg); border-radius: 20px;
             border: 1px solid var(--border-glow); overflow: hidden;
             transition: 0.4s ease; display: flex; flex-direction: column; justify-content: space-between;
-            position: relative; backdrop-filter: blur(8px);
+            position: relative; backdrop-filter: blur(10px);
         }
         .product-card:hover {
             transform: translateY(-10px); border-color: var(--accent-gold);
-            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.25);
+            box-shadow: 0 20px 40px rgba(138, 180, 248, 0.2);
         }
 
         /* حاوية الصورة */
         .img-container { 
             height: 250px; position: relative; 
-            background: radial-gradient(circle, #2a241e 0%, #050505 100%); 
+            background: radial-gradient(circle, #101728 0%, #02040a 100%); 
             overflow: hidden; display: flex; align-items: center; justify-content: center;
             padding: 15px;
         }
@@ -204,20 +227,19 @@
         .product-card img {
             max-width: 100%; max-height: 100%;
             object-fit: contain;
-            image-rendering: -webkit-optimize-contrast;
-            filter: drop-shadow(0px 10px 20px rgba(0,0,0,0.8)) contrast(106%);
-            transition: transform 0.5s ease, filter 0.5s ease;
+            filter: drop-shadow(0px 10px 20px rgba(0,0,0,0.9));
+            transition: transform 0.5s ease;
             opacity: 0;
         }
         .product-card img.loaded { opacity: 1; }
         .product-card:hover img {
             transform: scale(1.1) rotate(1deg);
-            filter: drop-shadow(0px 15px 25px rgba(212, 175, 55, 0.4)) contrast(110%);
+            filter: drop-shadow(0px 15px 25px rgba(226, 183, 85, 0.4));
         }
         
         .badge-cat {
             position: absolute; top: 14px; right: 14px; z-index: 2;
-            background: rgba(0,0,0,0.85); color: var(--accent-gold);
+            background: rgba(2, 4, 10, 0.85); color: var(--accent-gold);
             padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 700;
             border: 1px solid var(--border-glow); backdrop-filter: blur(5px);
         }
@@ -228,7 +250,7 @@
         .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
         .btn-card-action {
             padding: 10px; border-radius: 10px; border: 1px solid var(--border-glow);
-            background: rgba(0,0,0,0.5); color: #fff; font-size: 13px; font-weight: 700;
+            background: rgba(2, 4, 10, 0.6); color: #fff; font-size: 13px; font-weight: 700;
             cursor: pointer; transition: 0.3s; font-family: 'Cairo';
         }
         .btn-card-action:hover { background: var(--accent-gold); color: #000; }
@@ -236,35 +258,38 @@
         /* ===== النوافذ المنبثقة ===== */
         .modal {
             position: fixed; inset: 0; z-index: 1000;
-            background: rgba(0,0,0,0.88); backdrop-filter: blur(10px);
+            background: rgba(1, 2, 5, 0.92); backdrop-filter: blur(12px);
             display: none; align-items: center; justify-content: center;
         }
         .modal-content {
-            background: #14110e; border: 1px solid var(--accent-gold);
+            background: #0a0f1d; border: 1px solid var(--accent-gold);
             border-radius: 22px; padding: 35px; width: 90%; max-width: 500px;
             position: relative; color: #fff; text-align: center;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 50px rgba(226, 183, 85, 0.3);
         }
         .close-btn { position: absolute; top: 18px; left: 22px; font-size: 26px; cursor: pointer; color: var(--accent-gold); }
 
         #qrcode { display: flex; justify-content: center; margin: 20px 0; padding: 15px; background: #fff; border-radius: 14px; }
 
         .metric-bar { margin: 14px 0; text-align: right; }
-        .bar-outer { height: 10px; background: #222; border-radius: 5px; overflow: hidden; margin-top: 6px; }
-        .bar-inner { height: 100%; background: linear-gradient(90deg, #b58a5b, var(--accent-gold)); transition: width 1s ease; }
+        .bar-outer { height: 10px; background: #02040a; border-radius: 5px; overflow: hidden; margin-top: 6px; border: 1px solid rgba(255,255,255,0.05); }
+        .bar-inner { height: 100%; background: linear-gradient(90deg, #8ab4f8, var(--accent-gold)); transition: width 1s ease; }
 
     </style>
 </head>
 <body>
 
-    <!-- خلفية الجزيئات الطافية -->
+    <!-- الشعار الشفاف في خلفية الواجهة (Watermark Logo) -->
+    <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" class="watermark-logo" alt="Background Logo Watermark" />
+
+    <!-- خلفية النجوم والليل (Canvas Stars) -->
     <canvas id="bgCanvas"></canvas>
 
-    <!-- ===== 1. الشاشة الترحيبية المعرض السينمائية ===== -->
+    <!-- ===== الشاشة الترحيبية ===== -->
     <div id="splash">
         <div class="splash-content">
             <div class="splash-img-wrapper">
-                <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" alt="KATANBUILD" />
+                <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" alt="KATANBUILD Logo" />
             </div>
             <h1 class="splash-title">KATANBUILD</h1>
             <div class="typewriter-container">
@@ -276,10 +301,10 @@
     <!-- ===== الهيدر ===== -->
     <header>
         <div class="logo">
-            <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" height="42" />
+            <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" height="42" width="42" />
             <div>
                 <span class="logo-text">KATANBUILD</span>
-                <span class="logo-sub">INNOVATIVE BUILDING PRODUCTS</span>
+                <span class="logo-sub">STARLIGHT EXHIBITION EDITION</span>
             </div>
         </div>
         <div class="header-actions">
@@ -396,18 +421,17 @@
 
     <script>
         // تأثير الكتابة بالآلة الكاتبة والشاشة الترحيبية
-        const welcomeText = "أهلاً بكم في المعرض التفاعلي الذكي لمواد البناء - KATANBUILD";
+        const welcomeText = "مرحباً بكم في جناح KATANBUILD - عالم من الابتكار في مواد البناء";
         let typeIdx = 0;
 
         function typeWriter() {
             if (typeIdx < welcomeText.length) {
                 document.getElementById("typewriter").innerHTML += welcomeText.charAt(typeIdx);
                 typeIdx++;
-                setTimeout(typeWriter, 55); // سرعة الكتابة
+                setTimeout(typeWriter, 50);
             }
         }
 
-        // تشغيل الآلة الكاتبة ثم إخفاء شاشة الترحيب بعد 3.8 ثوانٍ
         window.addEventListener('load', () => {
             typeWriter();
             setTimeout(() => {
@@ -415,10 +439,10 @@
             }, 3800);
         });
 
-        // 🌟 كود خلفية الجزيئات المضيئة (Floating Particles)
+        // 🌟 كود خلفية النجوم المضيئة المتلألئة (Twinkling Night Stars Canvas)
         const canvas = document.getElementById('bgCanvas');
         const ctx = canvas.getContext('2d');
-        let particles = [];
+        let stars = [];
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -427,39 +451,42 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        class Particle {
+        class Star {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
-                this.alpha = Math.random() * 0.5 + 0.2;
+                this.size = Math.random() * 1.8 + 0.5;
+                this.alpha = Math.random();
+                this.speed = Math.random() * 0.015 + 0.005;
+                this.growing = Math.random() > 0.5;
             }
             update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+                if (this.growing) {
+                    this.alpha += this.speed;
+                    if (this.alpha >= 0.9) this.growing = false;
+                } else {
+                    this.alpha -= this.speed;
+                    if (this.alpha <= 0.1) this.growing = true;
+                }
             }
             draw() {
-                ctx.fillStyle = `rgba(212, 175, 55, ${this.alpha})`;
+                ctx.fillStyle = `rgba(226, 237, 243, ${this.alpha})`;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
 
-        for (let i = 0; i < 45; i++) particles.push(new Particle());
+        for (let i = 0; i < 90; i++) stars.push(new Star());
 
-        function animateParticles() {
+        function animateStars() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animateParticles);
+            stars.forEach(s => { s.update(); s.draw(); });
+            requestAnimationFrame(animateStars);
         }
-        animateParticles();
+        animateStars();
 
-        // 📦 جميع المنتجات الـ 38
+        // 📦 المنتجات الـ 38
         const PRODUCTS = [
             { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/DBpH9TC/الاقرع-ديكور-فيكس.jpg', ad: 95, wat: 75, flex: 85 },
             { id: 2, name: 'ايفرست', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/TDFPJ7LT/ايفرست.jpg', ad: 92, wat: 70, flex: 80 },

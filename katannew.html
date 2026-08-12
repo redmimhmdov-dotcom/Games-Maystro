@@ -140,20 +140,6 @@
         }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        .skip-btn {
-            margin-top: 20px;
-            background: transparent;
-            border: 1px solid var(--accent-gold);
-            color: var(--accent-gold);
-            padding: 8px 22px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-family: 'Cairo';
-            font-weight: 700;
-            transition: 0.3s;
-        }
-        .skip-btn:hover { background: var(--accent-gold); color: #000; box-shadow: 0 0 20px rgba(255,215,0,0.6); }
-
         /* ===== 🏛️ 3. الهيدر الفاخر المدمج مع الكحلي ===== */
         header {
             display: flex; justify-content: space-between; align-items: center;
@@ -187,6 +173,23 @@
         }
 
         .container { max-width: 95%; margin: auto; padding: 35px 10px; position: relative; z-index: 1; }
+
+        /* ===== 📢 الشريط الإعلاني/الرسالة المتغيرة داخل الموقع ===== */
+        .site-banner-box {
+            background: var(--card-glass);
+            border: 1px solid var(--border-glow);
+            border-radius: 18px;
+            padding: 15px 25px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .site-banner-icon { font-size: 22px; color: var(--accent-gold); }
+        .site-banner-text { font-size: 16px; color: var(--accent-cyan); font-weight: 700; text-align: center; }
 
         /* ===== 🤖 4. المساعد الهندسي ===== */
         .smart-assistant-card {
@@ -375,8 +378,6 @@
             <div class="typewriter-box">
                 <span class="typewriter-text" id="typewriterText"></span>
             </div>
-
-            <button class="skip-btn" onclick="closeSplash()">تخطي ودخول المعرض ✨</button>
         </div>
     </div>
 
@@ -396,6 +397,12 @@
     </header>
 
     <div class="container">
+
+        <!-- ===== 📢 الرسالة المتغيرة المدمجة داخل الموقع ===== -->
+        <div class="site-banner-box">
+            <span class="site-banner-icon">✨</span>
+            <span class="typewriter-text site-banner-text" id="siteTypewriterText"></span>
+        </div>
 
         <!-- ===== المساعد الهندسي الذكي ===== -->
         <div class="smart-assistant-card">
@@ -502,50 +509,75 @@
     </div>
 
     <script>
-        // نظام الآلة الكاتبة المتعاقب الديناميكي
+        // قائمة الرسائل المتغيرة
         const messages = [
             "مرحباً بكم في منصة KATANBUILD - الرائدة في صناعة وابتكار مواد البناء المتطورة.",
             "موقعنا مصمم بتكنولوجيا النيون والزجاج التفاعلي ليوفر لكم تجربة هندسية رقمية ممتازة.",
             "استمتعوا بالحاسبة الذكية للكميات، واكتشفوا المشرات الفنية TDS لكل مادة عبر الـ QR Code."
         ];
 
-        let msgIdx = 0;
-        let charIdx = 0;
-        let isDeleting = false;
-        const speed = 40;
-        const deleteSpeed = 20;
-        const delayBetween = 1800;
+        // 1. آلة كاتبة لشاشة الترحيب (تكتب الرسائل وتغلق تلقائياً بعد الانتهاء)
+        let splashMsgIdx = 0;
+        let splashCharIdx = 0;
 
-        function runTypewriter() {
-            const currentMsg = messages[msgIdx];
+        function runSplashTypewriter() {
+            const currentMsg = messages[splashMsgIdx];
             const displayTarget = document.getElementById("typewriterText");
 
-            if (!isDeleting) {
-                displayTarget.innerText = currentMsg.substring(0, charIdx + 1);
-                charIdx++;
-                if (charIdx === currentMsg.length) {
-                    isDeleting = true;
-                    setTimeout(runTypewriter, delayBetween);
+            displayTarget.innerText = currentMsg.substring(0, splashCharIdx + 1);
+            splashCharIdx++;
+
+            if (splashCharIdx < currentMsg.length) {
+                setTimeout(runSplashTypewriter, 40);
+            } else {
+                // عند اكتمال طباعة الرسالة الترحيبية الأولى، يتم الدخول التلقائي للموقع بعد ثانيتين
+                setTimeout(() => {
+                    closeSplash();
+                }, 1200);
+            }
+        }
+
+        function closeSplash() {
+            const splash = document.getElementById('splash');
+            if (splash) {
+                splash.classList.add('fade-out');
+            }
+        }
+
+        // 2. آلة كاتبة داخل الموقع مستمرة ومتغيرة بين الرسائل
+        let siteMsgIdx = 0;
+        let siteCharIdx = 0;
+        let siteIsDeleting = false;
+
+        function runSiteTypewriter() {
+            const currentMsg = messages[siteMsgIdx];
+            const displayTarget = document.getElementById("siteTypewriterText");
+
+            if (!displayTarget) return;
+
+            if (!siteIsDeleting) {
+                displayTarget.innerText = currentMsg.substring(0, siteCharIdx + 1);
+                siteCharIdx++;
+                if (siteCharIdx === currentMsg.length) {
+                    siteIsDeleting = true;
+                    setTimeout(runSiteTypewriter, 2000);
                     return;
                 }
             } else {
-                displayTarget.innerText = currentMsg.substring(0, charIdx - 1);
-                charIdx--;
-                if (charIdx === 0) {
-                    isDeleting = false;
-                    msgIdx = (msgIdx + 1) % messages.length;
+                displayTarget.innerText = currentMsg.substring(0, siteCharIdx - 1);
+                siteCharIdx--;
+                if (siteCharIdx === 0) {
+                    siteIsDeleting = false;
+                    siteMsgIdx = (siteMsgIdx + 1) % messages.length;
                 }
             }
-            setTimeout(runTypewriter, isDeleting ? deleteSpeed : speed);
+            setTimeout(runSiteTypewriter, siteIsDeleting ? 25 : 45);
         }
 
         window.addEventListener('load', () => {
-            runTypewriter();
+            runSplashTypewriter();
+            runSiteTypewriter();
         });
-
-        function closeSplash() {
-            document.getElementById('splash').classList.add('fade-out');
-        }
 
         // خلفية النجوم الديناميكية
         const canvas = document.getElementById('bgCanvas');
@@ -637,39 +669,41 @@
             { id: 34, name: 'الترا جريب (روبة)', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/GfBQ9LxV/الترا-جريب.jpg', ad: 93, wat: 95, flex: 89 },
             { id: 35, name: 'جراولت اصلاح', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/B5FQmxt8/جراولت-اصلاح-الترا-بوند.jpg', ad: 98, wat: 96, flex: 94 },
 
-            { id: 36, name: 'عازل بلاستيكي', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/qhxdYSC/عازل-بلاستيكي.jpg', ad: 95, wat: 100, flex: 97 },
-            { id: 37, name: 'عازل حجر شفاف', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/zV0GwTQy/عازل-حجر-شفاف.jpg', ad: 89, wat: 98, flex: 86 },
-            { id: 38, name: 'عازل مركبين', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/7dSKY11t/عازل-مركبين.jpg', ad: 97, wat: 100, flex: 98 }
+            { id: 36, name: 'عازل بلاستيكي', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/qhxdYSC/عازل-بلاستيكي.jpg', ad: 95, wat: 100, flex: 97 }
         ];
 
-        const CATEGORIES = ['الكل', 'لاصق ديكور', 'لاصق مسابح', 'لاصق غرانيت', 'لاصق خارجي', 'طينة', 'روبة', 'عوازل'];
-        let waNumber = '0952725590';
-
-        document.addEventListener('DOMContentLoaded', () => {
-            renderCategories();
-            renderProducts(PRODUCTS);
-            calculateMaterials();
-        });
-
-        function renderCategories() {
-            const container = document.getElementById('filterBar');
-            container.innerHTML = CATEGORIES.map(c => `
-                <button class="filter-btn ${c === 'الكل' ? 'active' : ''}" onclick="filterCategory('${c}', this)">${c}</button>
-            `).join('');
+        // عرض المنتجات والفلترة
+        const grid = document.getElementById('productGrid');
+        
+        function renderProducts(items) {
+            grid.innerHTML = '';
+            items.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="img-container">
+                        <span class="badge-cat">${p.cat}</span>
+                        <img src="${p.img}" alt="${p.name}" onload="this.classList.add('loaded')" onerror="this.onerror=null; this.src='https://via.placeholder.com/250x250/0b132b/ffd700?text=KATANBUILD';" />
+                    </div>
+                    <div class="product-info">
+                        <div class="product-title">${p.name}</div>
+                        <div class="card-actions">
+                            <button class="btn-card-action" onclick="openTestModal('${p.name}', ${p.ad}, ${p.wat}, ${p.flex})">🔬 فحص القوة</button>
+                            <button class="btn-card-action" onclick="openQRModal('${p.name}')">📱 النشرة TDS</button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
         }
 
-        function filterCategory(cat, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const filtered = cat === 'الكل' ? PRODUCTS : PRODUCTS.filter(p => p.cat === cat);
-            renderProducts(filtered);
-        }
+        renderProducts(PRODUCTS);
 
-        function filterByTag(tag, chip) {
+        function filterByTag(tag, el) {
             document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-            chip.classList.add('active');
+            if(el) el.classList.add('active');
             
-            if(tag === 'all') {
+            if (tag === 'all') {
                 renderProducts(PRODUCTS);
             } else {
                 const filtered = PRODUCTS.filter(p => p.tag === tag);
@@ -677,29 +711,11 @@
             }
         }
 
-        function renderProducts(list) {
-            const grid = document.getElementById('productGrid');
-            grid.innerHTML = list.map(p => `
-                <div class="product-card">
-                    <div class="img-container">
-                        <span class="badge-cat">${p.cat}</span>
-                        <img src="${p.img}" alt="${p.name}" loading="lazy" onload="this.classList.add('loaded')" />
-                    </div>
-                    <div class="product-info">
-                        <div class="product-title">${p.name}</div>
-                        <div class="card-actions">
-                            <button class="btn-card-action" onclick="openTestModal(${p.id})">🧪 الاختبار الفني</button>
-                            <button class="btn-card-action" onclick="openQRModal('${p.name}', ${p.id})">📱 QR المادة</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
+        // الحاسبة
         function calculateMaterials() {
             const area = parseFloat(document.getElementById('calcArea').value) || 0;
             const rate = parseFloat(document.getElementById('calcType').value) || 0;
-
+            
             const totalKg = area * rate;
             const bags = Math.ceil(totalKg / 25);
             const safetyBags = (bags * 1.1).toFixed(1);
@@ -709,42 +725,57 @@
             document.getElementById('resSafety').innerText = `${safetyBags} أكياس`;
         }
 
-        function sendCalcToWA() {
-            const area = document.getElementById('calcArea').value;
-            const bags = document.getElementById('resSafety').innerText;
-            const msg = `مرحباً Katanbuild، لدي مشروع بمساحة ${area} م²، وبحسب حاسبة الموقع أحتاج إلى ${bags}. أود الاستفسار عن التوريد.`;
-            window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+        function scrollToCalc() {
+            document.getElementById('calcSection').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function openTestModal(id) {
-            const p = PRODUCTS.find(item => item.id === id);
-            if(!p) return;
+        function openWhatsApp() {
+            window.open('https://wa.me/?text=' + encodeURIComponent('مرحباً منصة KATANBUILD، أرغب في الاستفسار عن مواد البناء.'), '_blank');
+        }
 
-            document.getElementById('testTitle').innerText = `اختبار الكفاءة: ${p.name}`;
-            document.getElementById('m1').innerText = `${p.ad}%`;
-            document.getElementById('b1').style.width = `${p.ad}%`;
-            document.getElementById('m2').innerText = `${p.wat}%`;
-            document.getElementById('b2').style.width = `${p.wat}%`;
-            document.getElementById('m3').innerText = `${p.flex}%`;
-            document.getElementById('b3').style.width = `${p.flex}%`;
+        function sendCalcToWA() {
+            const area = document.getElementById('calcArea').value;
+            const kg = document.getElementById('resTotalKg').innerText;
+            const bags = document.getElementById('resBags').innerText;
+            const safety = document.getElementById('resSafety').innerText;
+            
+            const msg = `طلب حساب كميات من منصة KATANBUILD:\n- المساحة: ${area} m²\n- الوزن المطلق: ${kg}\n- عدد الأكياس: ${bags}\n- الكمية شاملة الأمان (+10%): ${safety}`;
+            window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+        }
 
+        // Modals
+        function openTestModal(name, ad, wat, flex) {
+            document.getElementById('testTitle').innerText = `اختبار التحمل الفني: ${name}`;
+            document.getElementById('m1').innerText = `${ad}%`;
+            document.getElementById('b1').style.width = `${ad}%`;
+            document.getElementById('m2').innerText = `${wat}%`;
+            document.getElementById('b2').style.width = `${wat}%`;
+            document.getElementById('m3').innerText = `${flex}%`;
+            document.getElementById('b3').style.width = `${flex}%`;
+            
             document.getElementById('testModal').style.display = 'flex';
         }
 
-        function openQRModal(name, id) {
-            document.getElementById('qrTitle').innerText = name;
-            document.getElementById('qrcode').innerHTML = "";
-            new QRCode(document.getElementById("qrcode"), {
-                text: `https://katanbuild.com/tds/product-${id}`,
+        let qrCodeInstance = null;
+        function openQRModal(name) {
+            document.getElementById('qrTitle').innerText = `المواصفات الفنية TDS: ${name}`;
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+            
+            qrCodeInstance = new QRCode(qrContainer, {
+                text: `https://katanbuild.com/tds/${encodeURIComponent(name)}`,
                 width: 160,
-                height: 160
+                height: 160,
+                colorDark : "#030712",
+                colorLight : "#ffffff"
             });
+
             document.getElementById('qrModal').style.display = 'flex';
         }
 
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function scrollToCalc() { document.getElementById('calcSection').scrollIntoView({ behavior: 'smooth' }); }
-        function openWhatsApp() { window.open(`https://wa.me/${waNumber}`, '_blank'); }
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
     </script>
 </body>
 </html>

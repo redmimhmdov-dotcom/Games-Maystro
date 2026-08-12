@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Katanbuild | المتجر الذكي</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Cairo:wght@300;600;800&display=swap" rel="stylesheet"/>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -14,11 +16,12 @@
             position: fixed; inset:0; z-index:9999;
             background: #0b0a09;
             display: flex; align-items: center; justify-content: center;
-            animation: fadeOut 3.5s ease forwards;
+            animation: fadeOut 2.5s ease forwards;
+            animation-delay: 1s;
         }
         @keyframes fadeOut {
             0% { opacity:1; }
-            70% { opacity:1; }
+            80% { opacity:1; visibility:visible; }
             100% { opacity:0; visibility:hidden; }
         }
         .splash-content {
@@ -26,197 +29,175 @@
             animation: pulseGlow 2s ease-in-out infinite;
         }
         @keyframes pulseGlow {
-            0%, 100% { filter: drop-shadow(0 0 20px #b58a5b44); }
-            50% { filter: drop-shadow(0 0 60px #b58a5bcc) drop-shadow(0 0 120px #b58a5b66); }
+            0%, 100% { filter: drop-shadow(0 0 15px #b58a5b44); }
+            50% { filter: drop-shadow(0 0 40px #b58a5bcc); }
         }
         .splash-content img {
-            width: 280px;
-            border-radius: 24px;
-            margin-bottom: 20px;
-            transition: all 0.3s;
+            width: 220px;
+            border-radius: 20px;
+            margin-bottom: 15px;
         }
         .splash-text {
             font-family: 'Orbitron', sans-serif;
-            font-size: 52px;
+            font-size: 42px;
             font-weight: 700;
             color: #fff;
-            letter-spacing: 3px;
-            text-shadow: 0 0 30px #b58a5b88;
+            letter-spacing: 2px;
+            text-shadow: 0 0 25px #b58a5b88;
         }
         .splash-sub {
             color: #b58a5b;
-            font-size: 18px;
-            letter-spacing: 6px;
+            font-size: 16px;
+            letter-spacing: 4px;
             display: block;
-            margin-top: 8px;
+            margin-top: 6px;
         }
         .splash-typewriter {
-            margin-top: 30px;
-            font-size: 22px;
+            margin-top: 20px;
+            font-size: 18px;
             color: #b58a5b;
-            min-height: 40px;
+            min-height: 30px;
             direction: ltr;
         }
-        #splashWriter::after {
+        #splashWriter::after, #typewriter::after {
             content: "|";
             animation: blink 0.7s infinite;
         }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-        /* ===== باقي الأنماط ===== */
+        /* ===== الهيدر والشريط ===== */
         header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 40px; background: #1a1714dd; backdrop-filter:blur(8px);
+            padding: 14px 30px; background: #1a1714dd; backdrop-filter:blur(10px);
             border-bottom: 1px solid #b58a5b44; position:sticky; top:0; z-index:100;
         }
         .logo { display:flex; align-items:center; gap:10px; cursor:pointer; flex-wrap:wrap; }
         .logo-text { font-family:'Orbitron',sans-serif; font-weight:700; font-size:22px; color:#fff; }
         .logo-sub { font-size:10px; color:#b58a5b; letter-spacing:2px; display:block; width:100%; margin-top:-4px; }
-        .flag-logo {
-            animation: flagWave 3s ease-in-out infinite;
-            transform-origin: center left;
-        }
-        @keyframes flagWave {
-            0%,100% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(-2deg) scale(1.02); }
-            75% { transform: rotate(2deg) scale(1.02); }
-        }
-        .header-left { display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
-        .datetime { font-family:'Orbitron',sans-serif; font-size:14px; color:#b58a5b; background:#00000055; padding:6px 14px; border-radius:40px; border:1px solid #b58a5b33; }
+        
+        .header-left { display:flex; align-items:center; gap:15px; flex-wrap:wrap; }
+        .datetime { font-family:'Orbitron',sans-serif; font-size:13px; color:#b58a5b; background:#00000055; padding:6px 12px; border-radius:30px; border:1px solid #b58a5b33; }
         .btn-contact, .btn-order {
             background:transparent; border:1.5px solid #b58a5b; color:#b58a5b;
-            padding:8px 22px; border-radius:40px; font-weight:700; cursor:pointer;
+            padding:8px 20px; border-radius:30px; font-weight:700; cursor:pointer;
             transition:0.2s; font-family:'Cairo',sans-serif;
         }
         .btn-contact:hover, .btn-order:hover { background:#b58a5b; color:#0b0a09; }
 
         .notification-bar {
-            background:#1a1714; padding:12px 20px; text-align:center;
-            border-bottom:1px solid #b58a5b33; min-height:54px;
-            font-size:18px; color:#ece6dc;
+            background:#1a1714; padding:10px 20px; text-align:center;
+            border-bottom:1px solid #b58a5b33; min-height:48px;
+            font-size:16px; color:#ece6dc;
         }
-        #typewriter::after { content: "|"; animation: blink 0.7s infinite; }
 
-        .products { padding:50px 40px; max-width:1400px; margin:auto; }
-        .products h2 { font-size:36px; font-weight:800; margin-bottom:30px; border-right:6px solid #b58a5b; padding-right:20px; }
+        /* ===== قسم المنتجات والتصنيفات ===== */
+        .products { padding:40px 20px; max-width:1400px; margin:auto; }
+        .products h2 { font-size:30px; font-weight:800; margin-bottom:25px; border-right:5px solid #b58a5b; padding-right:15px; }
 
         .filter-buttons {
-            display:flex; gap:14px; flex-wrap:wrap; margin-bottom:40px;
+            display:flex; gap:10px; flex-wrap:wrap; margin-bottom:30px;
         }
         .filter-btn {
-            background:transparent; border:2px solid #b58a5b55; color:#b58a5b;
-            padding:8px 30px; border-radius:40px; font-weight:700; cursor:pointer;
-            transition:0.2s; font-family:'Cairo',sans-serif;
-            font-size:16px;
+            background:#1a1714; border:1px solid #b58a5b55; color:#b58a5b;
+            padding:8px 22px; border-radius:30px; font-weight:700; cursor:pointer;
+            transition:0.2s; font-family:'Cairo',sans-serif; font-size:15px;
         }
         .filter-btn.active, .filter-btn:hover {
             background:#b58a5b; color:#0b0a09; border-color:#b58a5b;
+            box-shadow: 0 4px 15px #b58a5b44;
         }
 
         .product-grid {
-            display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-            gap:30px;
+            display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));
+            gap:25px;
         }
         .product-card {
             background:#1a1714; border-radius:16px; overflow:hidden;
             border:1px solid #b58a5b33; transition:0.25s; cursor:pointer;
+            display: flex; flex-direction: column; justify-content: space-between;
         }
-        .product-card:hover { transform:translateY(-6px); border-color:#b58a5b; box-shadow:0 12px 30px #00000077; }
+        .product-card:hover { transform:translateY(-5px); border-color:#b58a5b; box-shadow:0 10px 25px #00000088; }
+        
+        .img-container {
+            width:100%; height:190px; background:#0b0a09; position:relative; overflow:hidden;
+        }
         .product-card img { 
-            width:100%; height:200px; object-fit:cover; display:block; 
-            background: #1a1714;
+            width:100%; height:100%; object-fit:cover; display:block;
+            transition: opacity 0.3s ease; opacity: 0;
         }
-        .product-card .info { padding:18px; }
-        .product-card h3 { font-size:18px; margin-bottom:4px; color:#fff; }
-        .product-card p { color:#b58a5b; font-size:14px; margin-bottom:10px; }
+        .product-card img.loaded { opacity: 1; }
+
+        .product-card .info { padding:15px; flex-grow: 1; display:flex; flex-direction:column; justify-content:space-between; }
+        .product-card h3 { font-size:17px; margin-bottom:6px; color:#fff; }
+        .product-card p { color:#b58a5b; font-size:13px; margin-bottom:12px; }
         .product-card .btn-detail {
-            background:#b58a5b33; border:none; color:#b58a5b;
-            padding:6px 20px; border-radius:40px; font-weight:700; cursor:pointer;
-            transition:0.2s; font-family:'Cairo',sans-serif;
+            background:#b58a5b22; border:1px solid #b58a5b66; color:#b58a5b;
+            padding:6px 16px; border-radius:20px; font-weight:700; cursor:pointer;
+            transition:0.2s; font-family:'Cairo',sans-serif; width: 100%;
         }
         .product-card .btn-detail:hover { background:#b58a5b; color:#0b0a09; }
 
-        .product-card .img-placeholder {
-            width:100%; height:200px;
-            display:flex; align-items:center; justify-content:center;
-            background: #1a1714;
-            color: #b58a5b44;
-            font-size:14px;
-            border-bottom:2px solid #b58a5b33;
-            font-family:'Cairo',sans-serif;
+        .img-placeholder {
+            position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+            background: #151311; color: #b58a5b66; font-size:13px; text-align:center; padding:10px;
         }
 
         footer {
-            background:#1a1714; padding:30px 40px;
+            background:#1a1714; padding:25px 40px;
             display:flex; justify-content:space-between; align-items:center;
-            border-top:1px solid #b58a5b33; color:#b58a5b88;
+            border-top:1px solid #b58a5b33; color:#b58a5b88; margin-top:50px;
         }
-        .social a { color:#b58a5b88; margin:0 12px; text-decoration:none; font-weight:700; }
-        .social a:hover { color:#b58a5b; }
 
+        /* ===== النوافذ المنبثقة والوحة التحكم ===== */
         .modal, .admin-panel {
             position:fixed; inset:0; z-index:999;
-            background:#000000cc; backdrop-filter:blur(4px);
+            background:#000000cc; backdrop-filter:blur(5px);
             display:none; align-items:center; justify-content:center;
         }
         .modal-content, .admin-content {
-            background:#1a1714; padding:40px; border-radius:24px;
-            max-width:700px; width:90%; max-height:80vh; overflow-y:auto;
+            background:#1a1714; padding:30px; border-radius:20px;
+            max-width:650px; width:92%; max-height:85vh; overflow-y:auto;
             border:1px solid #b58a5b55; position:relative;
         }
         .close {
-            position:absolute; top:12px; left:20px; font-size:32px;
+            position:absolute; top:12px; left:20px; font-size:28px;
             color:#b58a5b; cursor:pointer;
         }
-        .admin-content label { display:block; margin:12px 0 4px; color:#b58a5b; font-weight:600; }
-        .admin-content input, .admin-content select, .admin-content button, .modal input, .modal select, .modal textarea {
-            width:100%; padding:12px; margin:6px 0; border-radius:12px;
+        .admin-content label { display:block; margin:10px 0 4px; color:#b58a5b; font-weight:600; }
+        .admin-content input, .admin-content select, .admin-content button, .modal input, .modal select {
+            width:100%; padding:10px 14px; margin:5px 0 12px; border-radius:10px;
             background:#0b0a09; border:1px solid #b58a5b55; color:#fff;
             font-family:'Cairo',sans-serif;
         }
         .admin-content button, .modal button {
-            background:#b58a5b; color:#0b0a09; font-weight:800; border:none; cursor:pointer;
+            background:#b58a5b; color:#0b0a09; font-weight:800; border:none; cursor:pointer; margin-top:5px;
         }
-        .admin-content button:hover, .modal button:hover { opacity:0.8; }
-        hr { border-color:#b58a5b33; margin:20px 0; }
-
-        #lightbox {
-            position:fixed; inset:0; z-index:9999;
-            background:#000000ee; backdrop-filter:blur(8px);
-            display:flex; align-items:center; justify-content:center;
-            cursor:pointer;
-        }
-        #lightbox img { max-width:90%; max-height:90%; border-radius:16px; box-shadow:0 0 60px #b58a5b66; }
-        #lightbox span { position:absolute; top:20px; left:30px; font-size:48px; color:#b58a5b; font-weight:300; cursor:pointer; }
 
         .admin-product-item {
             display:flex; align-items:center; gap:12px;
-            background:#0b0a09; padding:10px; border-radius:12px;
-            margin:8px 0; border:1px solid #b58a5b33; cursor:pointer;
-            transition:0.2s;
+            background:#0b0a09; padding:10px; border-radius:10px;
+            margin:8px 0; border:1px solid #b58a5b33;
         }
-        .admin-product-item:hover { border-color:#b58a5b; background:#1a1714; }
-        .admin-product-item img { width:50px; height:50px; object-fit:cover; border-radius:8px; background:#0b0a09; }
+        .admin-product-item img { width:45px; height:45px; object-fit:cover; border-radius:6px; background:#1a1714; }
         .admin-product-item .info { flex:1; }
         .admin-product-item .info h4 { color:#fff; font-size:14px; }
-        .admin-product-item .info p { color:#b58a5b; font-size:12px; }
+        .admin-product-item .info p { color:#b58a5b; font-size:11px; }
         .admin-product-item .actions button {
             background:transparent; border:1px solid #b58a5b55; color:#b58a5b;
-            padding:4px 12px; border-radius:8px; cursor:pointer; margin:0 4px;
+            padding:4px 10px; border-radius:6px; cursor:pointer; margin:0 2px; width:auto; display:inline-block;
         }
-        .admin-product-item .actions button:hover { background:#b58a5b; color:#0b0a09; }
         .admin-product-item .actions .delete { border-color:#ff4444; color:#ff4444; }
-        .admin-product-item .actions .delete:hover { background:#ff4444; color:#fff; }
+
+        #lightbox {
+            position:fixed; inset:0; z-index:9999; background:#000000f0;
+            display:flex; align-items:center; justify-content:center; cursor:pointer;
+        }
+        #lightbox img { max-width:90%; max-height:85vh; border-radius:12px; border:1px solid #b58a5b; }
 
         @media (max-width:700px) {
-            header { flex-direction:column; padding:12px; gap:12px; }
-            .header-left { width:100%; justify-content:center; flex-wrap:wrap; }
-            .products { padding:30px 16px; }
-            .splash-text { font-size:32px; }
-            .splash-content img { width: 180px; }
-        }
-        @media (max-width:480px) {
-            .product-grid { grid-template-columns:1fr; }
+            header { flex-direction:column; padding:12px; gap:10px; }
+            .products { padding:20px 12px; }
+            .splash-text { font-size:30px; }
         }
     </style>
 </head>
@@ -238,10 +219,12 @@
     <div id="main" style="display:none;">
 
         <header>
-            <div class="logo flag-logo" id="mainLogo">
-                <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" alt="Katanbuild" height="50" style="border-radius:8px; margin-left:10px;" />
-                <span class="logo-text">Katanbuild</span>
-                <span class="logo-sub">INNOVATIVE BUILDING PRODUCTS</span>
+            <div class="logo" id="mainLogo">
+                <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" alt="Katanbuild" height="45" style="border-radius:6px; margin-left:8px;" />
+                <div>
+                    <span class="logo-text">Katanbuild</span>
+                    <span class="logo-sub">INNOVATIVE BUILDING PRODUCTS</span>
+                </div>
             </div>
             <div class="header-left">
                 <div class="datetime" id="datetime">--:-- --</div>
@@ -255,20 +238,15 @@
         </div>
 
         <section class="products">
-            <h2>منتجاتنا</h2>
-            <div class="filter-buttons" id="filterButtons">
-                <!-- سيتم توليد أزرار التصنيفات تلقائياً -->
-            </div>
+            <h2>منتجاتنا بحسب القسم</h2>
+            <!-- أزرار التصنيفات والفرعيات -->
+            <div class="filter-buttons" id="filterButtons"></div>
+            <!-- شبكة عرض المنتجات -->
             <div class="product-grid" id="productGrid"></div>
         </section>
 
         <footer>
             <p>© 2026 Katanbuild – جميع الحقوق محفوظة</p>
-            <div class="social">
-                <a href="#">FB</a>
-                <a href="#">IG</a>
-                <a href="#">YT</a>
-            </div>
         </footer>
     </div>
 
@@ -276,31 +254,29 @@
     <div id="orderModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('orderModal')">&times;</span>
-            <h2>🛒 طلب منتج</h2>
-            <form onsubmit="event.preventDefault(); alert('✅ تم إرسال الطلب'); this.reset();">
-                <select id="productSelect" required><option value="">اختر المنتج</option></select>
-                <input type="number" placeholder="الكمية" min="1" required />
-                <input type="text" placeholder="اسمك" required />
-                <input type="text" placeholder="رقم الهاتف" required />
-                <button type="submit">إرسال الطلب</button>
+            <h2 style="margin-bottom:15px; color:#b58a5b;">🛒 طلب منتج</h2>
+            <form onsubmit="event.preventDefault(); alert('✅ تم إرسال طلبك بنجاح وسنتواصل معك قريباً'); closeModal('orderModal');">
+                <select id="productSelect" required><option value="">اختر المنتج المطلوب</option></select>
+                <input type="number" placeholder="الكمية المطلوبة" min="1" value="1" required />
+                <input type="text" placeholder="الاسم الكامل" required />
+                <input type="text" placeholder="رقم الهاتف للتواصل" required />
+                <button type="submit">إرسال الطلب عبر الواتساب</button>
             </form>
         </div>
     </div>
 
     <!-- ===== لوحة التحكم (CMS) ===== -->
-    <div id="adminPanel" class="admin-panel" style="display:none;">
+    <div id="adminPanel" class="admin-panel">
         <div class="admin-content">
             <span class="close" onclick="closeAdmin()">&times;</span>
-            <h2>🔐 لوحة التحكم - إدارة المنتجات</h2>
+            <h2 style="color:#b58a5b; margin-bottom:15px;">🔐 لوحة التحكم</h2>
 
-            <!-- نموذج الإضافة -->
             <form id="adminForm" onsubmit="event.preventDefault(); addProduct();">
-                <h3 style="color:#b58a5b; margin:10px 0;">➕ إضافة منتج جديد</h3>
-                <input type="text" id="newImg" placeholder="رابط الصورة (مباشر)" required />
+                <h3>➕ إضافة منتج جديد</h3>
                 <input type="text" id="newName" placeholder="اسم المنتج" required />
-                <input type="text" id="newDesc" placeholder="الوصف (مثل: لاصق ديكور)" required />
+                <input type="text" id="newDesc" placeholder="الوصف والخصائص" required />
                 <select id="newCategory" required>
-                    <option value="">-- اختر التصنيف الرئيسي --</option>
+                    <option value="">-- اختر القسم الأساسي --</option>
                     <option value="لاصق ديكور">لاصق ديكور</option>
                     <option value="لاصق مسابح">لاصق مسابح</option>
                     <option value="لاصق غرانيت">لاصق غرانيت</option>
@@ -309,43 +285,33 @@
                     <option value="روبة">روبة</option>
                     <option value="عوازل">عوازل</option>
                 </select>
-                <button type="submit">➕ إضافة منتج</button>
+                <input type="text" id="newImg" placeholder="رابط الصورة (URL)" required />
+                <button type="submit">حفظ وإضافة</button>
             </form>
 
-            <hr />
+            <hr style="border-color:#b58a5b33; margin:20px 0;" />
 
-            <!-- قائمة المنتجات مع إدارة -->
-            <h3 style="color:#b58a5b; margin:10px 0;">📋 قائمة المنتجات (اضغط على المنتج لتعديل الصورة)</h3>
+            <h3>📋 إدارة المنتجات الحالية</h3>
             <div id="adminProductList"></div>
 
-            <hr />
+            <hr style="border-color:#b58a5b33; margin:20px 0;" />
 
-            <!-- إعدادات إضافية -->
-            <label>📞 تحديث رقم واتساب</label>
-            <input type="text" id="whatsappNumber" placeholder="0952725590" />
+            <label>📞 رقم الواتساب الأساسي:</label>
+            <input type="text" id="whatsappNumber" />
             <button onclick="updateWhatsApp()">تحديث الرقم</button>
 
-            <label>✏️ تحديث رسالة الآلة الكاتبة</label>
-            <input type="text" id="typewriterMsg" placeholder="أدخل الرسالة..." />
-            <button onclick="updateTypewriter()">تحديث الرسالة</button>
+            <label style="margin-top:10px;">✏️ الشريط الإخباري المتحرك:</label>
+            <input type="text" id="typewriterMsg" />
+            <button onclick="updateTypewriter()">تحديث النص</button>
         </div>
     </div>
 
     <script>
-        // ===== التصنيفات المسموحة =====
-        const ALLOWED_CATEGORIES = [
-            'لاصق ديكور',
-            'لاصق مسابح',
-            'لاصق غرانيت',
-            'لاصق خارجي',
-            'طينة',
-            'روبة',
-            'عوازل'
-        ];
+        // الأقسام المعتمدة
+        const CATEGORIES = ['الكل', 'لاصق ديكور', 'لاصق مسابح', 'لاصق غرانيت', 'لاصق خارجي', 'طينة', 'روبة', 'عوازل'];
 
-        // ===== البيانات الافتراضية (جميع المنتجات مرتبة حسب الأقسام) =====
+        // المنتجات الأساسية
         const DEFAULT_PRODUCTS = [
-            // ===== لاصق ديكور =====
             { id: 1, name: 'الأقرع فيكس', desc: 'لاصق ديكور عالي الجودة', category: 'لاصق ديكور', img: 'https://i.ibb.co/DBpH9TC/الاقرع-ديكور-فيكس.jpg' },
             { id: 2, name: 'ايفرست', desc: 'لاصق ديكور ممتاز', category: 'لاصق ديكور', img: 'https://i.ibb.co/TDFPJ7LT/ايفرست.jpg' },
             { id: 3, name: 'بروسيل احمر', desc: 'لاصق ديكور احمر', category: 'لاصق ديكور', img: 'https://i.ibb.co/35m6YGQ0/بروسيل-احمر.jpg' },
@@ -353,8 +319,6 @@
             { id: 5, name: 'كاربوفيكس', desc: 'لاصق ديكور متخصص', category: 'لاصق ديكور', img: 'https://i.ibb.co/7N0RWnvP/كاربوفيكس.jpg' },
             { id: 6, name: 'كلايتور', desc: 'لاصق ديكور قوي', category: 'لاصق ديكور', img: 'https://i.ibb.co/BVQ2Yfg2/كلايتور.jpg' },
             { id: 7, name: 'لازورد', desc: 'لاصق ديكور أزرق', category: 'لاصق ديكور', img: 'https://i.ibb.co/xthHpF5G/لازورد.jpg' },
-
-            // ===== لاصق مسابح =====
             { id: 8, name: 'أكوا فيكس', desc: 'لاصق مسابح مقاوم للماء', category: 'لاصق مسابح', img: 'https://i.ibb.co/VYWHvTpS/اكوا-فيكس.jpg' },
             { id: 9, name: 'الباسل', desc: 'لاصق مسابح عالي الجودة', category: 'لاصق مسابح', img: 'https://i.ibb.co/zHjWrC9M/الباسل.jpg' },
             { id: 10, name: 'الترا بوند ازرق', desc: 'لاصق مسابح أزرق', category: 'لاصق مسابح', img: 'https://i.ibb.co/NgFkRVRL/الترا-بوند-ازرق.jpg' },
@@ -363,8 +327,6 @@
             { id: 13, name: 'أونكس فيكس', desc: 'لاصق مسابح فاخر', category: 'لاصق مسابح', img: 'https://i.ibb.co/992BBQX7/أونكس-فيكس.jpg' },
             { id: 14, name: 'بروسيل مسابح', desc: 'لاصق مسابح احترافي', category: 'لاصق مسابح', img: 'https://i.ibb.co/JWs3tZrj/بروسيل-مسابح.jpg' },
             { id: 15, name: 'عباس', desc: 'لاصق مسابح متخصص', category: 'لاصق مسابح', img: 'https://i.ibb.co/Jj0wY6rV/عباس.jpg' },
-
-            // ===== لاصق غرانيت =====
             { id: 16, name: 'الترا بوند اخضر', desc: 'لاصق غرانيت أخضر', category: 'لاصق غرانيت', img: 'https://i.ibb.co/3y56Fx4p/الترا-بوند-اخضر.jpg' },
             { id: 17, name: 'الترا جريب', desc: 'لاصق غرانيت ممتاز', category: 'لاصق غرانيت', img: 'https://i.ibb.co/YFvHRxQh/الترا-جريب.jpg' },
             { id: 18, name: 'بروسيل اخضر', desc: 'لاصق غرانيت أخضر', category: 'لاصق غرانيت', img: 'https://i.ibb.co/s96mf8zR/بروسيل-اخضر.jpg' },
@@ -375,322 +337,246 @@
             { id: 23, name: 'كلوبال فيكس', desc: 'لاصق غرانيت عالمي', category: 'لاصق غرانيت', img: 'https://i.ibb.co/fV9ph6mK/كلوبال-فيكس.jpg' },
             { id: 24, name: 'ليث ازرق', desc: 'لاصق غرانيت أزرق', category: 'لاصق غرانيت', img: 'https://i.ibb.co/CKNMFZBC/ليث-ازرق.jpg' },
             { id: 25, name: 'ناولو فيكس', desc: 'لاصق غرانيت فاخر', category: 'لاصق غرانيت', img: 'https://i.ibb.co/rL94Rv8/ناولو-فيكس.jpg' },
-
-            // ===== لاصق خارجي =====
             { id: 26, name: 'الترا بوند اورنج', desc: 'لاصق خارجي برتقالي', category: 'لاصق خارجي', img: 'https://i.ibb.co/dz2TJw6/الترا-بوند-اورنج.jpg' },
             { id: 27, name: 'الترا بوند ذهبي', desc: 'لاصق خارجي ذهبي', category: 'لاصق خارجي', img: 'https://i.ibb.co/jZPVc56C/الترا-بوند-ذهبي.jpg' },
             { id: 28, name: 'مارفيل', desc: 'لاصق خارجي ممتاز', category: 'لاصق خارجي', img: 'https://i.ibb.co/B2Y414rf/مارفيل.jpg' },
-
-            // ===== طينة =====
             { id: 29, name: 'الترا بوند طينة اكرليكية', desc: 'طينة اكريليكية عالية الجودة', category: 'طينة', img: 'https://i.ibb.co/hxWRDJb7/الترا-بوند-طينة-اكرليكية.jpg' },
             { id: 30, name: 'الترا بوند طينة بلاستيكية', desc: 'طينة بلاستيكية متينة', category: 'طينة', img: 'https://i.ibb.co/JWT5rBsr/الترا-بوند-طينة-بلاستيكية.jpg' },
             { id: 31, name: 'سولايد ميكس', desc: 'طينة سولايد ميكس', category: 'طينة', img: 'https://i.ibb.co/ZpT7rgpH/سولايد-ميكس.jpg' },
             { id: 32, name: 'سولايد ميكس اسمنتية', desc: 'طينة اسمنتية 50 كغ', category: 'طينة', img: 'https://i.ibb.co/LzWJ1dXG/سولايد-ميكس-اسمنتية.jpg' },
             { id: 33, name: 'طينة غرانيت', desc: 'طينة غرانيت فاخرة', category: 'طينة', img: 'https://i.ibb.co/mr2CNfwM/طينة-غرانيت.jpg' },
-
-            // ===== روبة =====
             { id: 34, name: 'الترا جريب', desc: 'روبة عالية الجودة', category: 'روبة', img: 'https://i.ibb.co/GfBQ9LxV/الترا-جريب.jpg' },
             { id: 35, name: 'جراولت اصلاح الترا بوند', desc: 'روبة اصلاح الترا بوند', category: 'روبة', img: 'https://i.ibb.co/B5FQmxt8/جراولت-اصلاح-الترا-بوند.jpg' },
-
-            // ===== عوازل =====
             { id: 36, name: 'عازل بلاستيكي', desc: 'عازل بلاستيكي عالي الجودة', category: 'عوازل', img: 'https://i.ibb.co/qhxdYSC/عازل-بلاستيكي.jpg' },
             { id: 37, name: 'عازل حجر شفاف', desc: 'عازل حجر شفاف ممتاز', category: 'عوازل', img: 'https://i.ibb.co/zV0GwTQy/عازل-حجر-شفاف.jpg' },
             { id: 38, name: 'عازل مركبين', desc: 'عازل مركبين فاخر', category: 'عوازل', img: 'https://i.ibb.co/7dSKY11t/عازل-مركبين.jpg' }
         ];
 
-        // ===== المتغيرات العامة =====
         let products = [];
         let whatsappNumber = '0952725590';
-        let typewriterMsg = 'مرحباً بكم في Katanbuild – حلول بناء مبتكرة ذات جودة ألمانية.';
-        let splashMsg = 'جودة ألمانية في كل منتج';
+        let typewriterMsg = 'مرحباً بكم في Katanbuild – مواد بناء متطورة بأعلى معايير الجودة.';
 
-        // ===== تحميل البيانات =====
-        function loadData() {
-            const stored = localStorage.getItem('katanbuild_products');
-            if (stored) {
-                products = JSON.parse(stored);
-            } else {
-                products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
-                saveData();
-            }
-
-            const savedWhatsApp = localStorage.getItem('katanbuild_whatsapp');
-            if (savedWhatsApp) whatsappNumber = savedWhatsApp;
+        function initData() {
+            const stored = localStorage.getItem('kb_products_v2');
+            products = stored ? JSON.parse(stored) : DEFAULT_PRODUCTS;
             
-            const savedMsg = localStorage.getItem('katanbuild_typewriter');
-            if (savedMsg) typewriterMsg = savedMsg;
+            const savedNum = localStorage.getItem('kb_wa');
+            if(savedNum) whatsappNumber = savedNum;
             
-            const savedSplash = localStorage.getItem('katanbuild_splashmsg');
-            if (savedSplash) splashMsg = savedSplash;
+            const savedMsg = localStorage.getItem('kb_msg');
+            if(savedMsg) typewriterMsg = savedMsg;
+            
+            document.getElementById('whatsappNumber').value = whatsappNumber;
+            document.getElementById('typewriterMsg').value = typewriterMsg;
         }
 
         function saveData() {
-            localStorage.setItem('katanbuild_products', JSON.stringify(products));
-            localStorage.setItem('katanbuild_whatsapp', whatsappNumber);
-            localStorage.setItem('katanbuild_typewriter', typewriterMsg);
-            localStorage.setItem('katanbuild_splashmsg', splashMsg);
+            localStorage.setItem('kb_products_v2', JSON.stringify(products));
+            localStorage.setItem('kb_wa', whatsappNumber);
+            localStorage.setItem('kb_msg', typewriterMsg);
         }
 
-        // ===== عناصر DOM =====
-        const grid = document.getElementById('productGrid');
-        const splash = document.getElementById('splash');
-        const main = document.getElementById('main');
-        const datetimeEl = document.getElementById('datetime');
-        const typewriterEl = document.getElementById('typewriter');
-        const splashWriterEl = document.getElementById('splashWriter');
-        const productSelect = document.getElementById('productSelect');
-        const filterContainer = document.getElementById('filterButtons');
-        const adminList = document.getElementById('adminProductList');
+        // تشغيل الواجهة
+        document.addEventListener("DOMContentLoaded", () => {
+            initData();
 
-        // ===== تهيئة الصفحة =====
-        loadData();
+            setTimeout(() => {
+                document.getElementById('splash').style.display = 'none';
+                document.getElementById('main').style.display = 'block';
+                updateClock();
+                setInterval(updateClock, 1000);
+                renderCategoryButtons();
+                renderProducts('الكل');
+                populateProductSelect();
+                startTypewriter();
+            }, 2000);
+        });
 
-        setTimeout(() => {
-            splash.style.display = 'none';
-            main.style.display = 'block';
-            updateClock();
-            setInterval(updateClock, 1000);
-            renderFilters();
-            renderProducts('all');
-            populateSelect();
-            renderAdminList();
-            startTypewriter();
-            startSplashTypewriter();
-        }, 3500);
-
-        // ===== الساعة =====
         function updateClock() {
             const now = new Date();
-            const d = now.toLocaleDateString('ar-EG', { weekday:'short', year:'numeric', month:'short', day:'numeric' });
-            const t = now.toLocaleTimeString('ar-EG', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
-            datetimeEl.textContent = `${d} | ${t}`;
+            document.getElementById('datetime').textContent = now.toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'});
         }
 
-        // ===== عرض أزرار التصنيفات =====
-        function renderFilters() {
-            const categories = [...new Set(products.map(p => p.category))];
-            const validCategories = categories.filter(cat => ALLOWED_CATEGORIES.includes(cat));
-            
-            let html = `<button class="filter-btn active" data-filter="all">الكل</button>`;
-            validCategories.forEach(cat => {
-                html += `<button class="filter-btn" data-filter="${cat}">${cat}</button>`;
-            });
-            filterContainer.innerHTML = html;
-
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    renderProducts(this.dataset.filter);
-                });
-            });
+        // عرض أزرار الأقسام والفرعيات
+        function renderCategoryButtons() {
+            const container = document.getElementById('filterButtons');
+            container.innerHTML = CATEGORIES.map(cat => `
+                <button class="filter-btn ${cat === 'الكل' ? 'active' : ''}" onclick="filterCategory('${cat}', this)">${cat}</button>
+            `).join('');
         }
 
-        // ===== عرض المنتجات =====
-        function renderProducts(category = 'all') {
-            const filtered = category === 'all' ? products : products.filter(p => p.category === category);
-            
-            grid.innerHTML = filtered.map(p => `
+        function filterCategory(cat, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderProducts(cat);
+        }
+
+        // عرض المنتجات وتسريع تحميل الصور
+        function renderProducts(category) {
+            const grid = document.getElementById('productGrid');
+            const list = category === 'الكل' ? products : products.filter(p => p.category === category);
+
+            if(list.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#b58a5b; padding:40px;">لا توجد مواد متاحة في هذا القسم حالياً.</p>`;
+                return;
+            }
+
+            grid.innerHTML = list.map(p => `
                 <div class="product-card" onclick="openLightbox('${p.img}')">
-                    <img 
-                        src="${p.img}" 
-                        alt="${p.name}" 
-                        loading="lazy"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                    />
-                    <div class="img-placeholder" style="display:none;">
-                        <span>📷 ${p.name}</span>
+                    <div class="img-container">
+                        <div class="img-placeholder">⏳ جاري التحميل...</div>
+                        <img 
+                            src="${p.img}" 
+                            alt="${p.name}" 
+                            loading="lazy" 
+                            onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none';" 
+                            onerror="this.previousElementSibling.innerHTML='📷 صورة غير متاحة';"
+                        />
                     </div>
                     <div class="info">
-                        <h3>${p.name}</h3>
-                        <p>${p.desc}</p>
-                        <button class="btn-detail" onclick="event.stopPropagation(); alert('تفاصيل: ${p.name}')">تفاصيل</button>
+                        <div>
+                            <h3>${p.name}</h3>
+                            <p>${p.desc}</p>
+                        </div>
+                        <button class="btn-detail" onclick="event.stopPropagation(); quickOrder('${p.name}')">طلب المادة</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        function populateSelect() {
-            productSelect.innerHTML = '<option value="">اختر المنتج</option>' +
-                products.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
+        function populateProductSelect() {
+            const select = document.getElementById('productSelect');
+            select.innerHTML = '<option value="">اختر المنتج المطلوب</option>' + 
+                products.map(p => `<option value="${p.name}">${p.name} (${p.category})</option>`).join('');
         }
 
-        // ===== Lightbox =====
-        function openLightbox(imgSrc) {
-            const existing = document.getElementById('lightbox');
-            if (existing) existing.remove();
-            const lightbox = document.createElement('div');
-            lightbox.id = 'lightbox';
-            lightbox.innerHTML = `<img src="${imgSrc}" alt="منتج" /><span onclick="this.parentElement.remove()">&times;</span>`;
-            lightbox.onclick = function(e) { if (e.target === this) this.remove(); };
-            document.body.appendChild(lightbox);
-        }
-
-        // ===== الآلة الكاتبة =====
+        // آلة كاتبة
         function startTypewriter() {
+            const el = document.getElementById('typewriter');
             let i = 0;
-            typewriterEl.textContent = '';
+            el.textContent = '';
             function type() {
                 if (i < typewriterMsg.length) {
-                    typewriterEl.textContent += typewriterMsg.charAt(i);
+                    el.textContent += typewriterMsg.charAt(i);
                     i++;
-                    setTimeout(type, 60);
+                    setTimeout(type, 50);
                 } else {
-                    setTimeout(() => { i=0; typewriterEl.textContent=''; type(); }, 4000);
+                    setTimeout(() => { i = 0; el.textContent = ''; type(); }, 3000);
                 }
             }
             type();
         }
 
-        function startSplashTypewriter() {
-            let i = 0;
-            splashWriterEl.textContent = '';
-            function type() {
-                if (i < splashMsg.length) {
-                    splashWriterEl.textContent += splashMsg.charAt(i);
-                    i++;
-                    setTimeout(type, 80);
-                }
-            }
-            type();
-        }
-
-        // ===== واتساب =====
-        function openWhatsApp() {
-            const num = whatsappNumber.replace(/\D/g, '');
-            window.open(`https://wa.me/${num}`, '_blank');
-        }
-
-        // ===== النوافذ المنبثقة =====
+        // التحكم بالنوافذ
+        function openWhatsApp() { window.open(`https://wa.me/${whatsappNumber}`, '_blank'); }
         function openOrder() { document.getElementById('orderModal').style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        window.onclick = function(e) {
-            if (e.target.classList.contains('modal')) e.target.style.display = 'none';
-        };
+        function quickOrder(pName) {
+            openOrder();
+            document.getElementById('productSelect').value = pName;
+        }
 
-        // ===== لوحة التحكم =====
-        let clickCount = 0;
-        document.getElementById('mainLogo').addEventListener('click', function() {
-            clickCount++;
-            if (clickCount === 5) {
-                const pwd = prompt('🔐 أدخل كلمة المرور:');
-                if (pwd === 'katan2026') {
+        function openLightbox(src) {
+            const box = document.createElement('div');
+            box.id = 'lightbox';
+            box.innerHTML = `<img src="${src}" /><span class="close" style="top:20px; left:30px;">&times;</span>`;
+            box.onclick = () => box.remove();
+            document.body.appendChild(box);
+        }
+
+        // دخول لوحة التحكم (5 ضغطات على اللوجو)
+        let logoClicks = 0;
+        document.getElementById('mainLogo').addEventListener('click', () => {
+            logoClicks++;
+            if(logoClicks >= 5) {
+                logoClicks = 0;
+                const pass = prompt('🔐 كلمة المرور للوحة التحكم:');
+                if(pass === 'katan2026') {
                     document.getElementById('adminPanel').style.display = 'flex';
                     renderAdminList();
                 } else {
-                    alert('كلمة مرور خاطئة.');
+                    alert('كلمة المرور غير صحيحة.');
                 }
-                clickCount = 0;
             }
         });
 
         function closeAdmin() { document.getElementById('adminPanel').style.display = 'none'; }
 
-        // ===== إدارة المنتجات =====
+        // إداريات
         function renderAdminList() {
-            adminList.innerHTML = products.map(p => `
-                <div class="admin-product-item" onclick="editProductImage(${p.id})">
-                    <img src="${p.img}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/50/1a1714/b58a5b?text=?'" />
+            const container = document.getElementById('adminProductList');
+            container.innerHTML = products.map(p => `
+                <div class="admin-product-item">
+                    <img src="${p.img}" />
                     <div class="info">
                         <h4>${p.name}</h4>
-                        <p>${p.desc} | ${p.category}</p>
+                        <p>${p.category} - ${p.desc}</p>
                     </div>
-                    <div class="actions" onclick="event.stopPropagation();">
+                    <div class="actions">
                         <button onclick="editProduct(${p.id})">✏️ تعديل</button>
-                        <button class="delete" onclick="deleteProduct(${p.id})">🗑️</button>
+                        <button class="delete" onclick="deleteProduct(${p.id})">🗑️ حذف</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        function editProductImage(id) {
-            const p = products.find(pr => pr.id === id);
-            if (!p) return;
-            const newImg = prompt('📷 أدخل رابط الصورة الجديد:', p.img);
-            if (newImg !== null && newImg.trim() !== '') {
-                p.img = newImg.trim();
-                saveData();
-                renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');
-                renderAdminList();
-                alert('✅ تم تحديث الصورة');
-            }
-        }
-
         function addProduct() {
-            const img = document.getElementById('newImg').value.trim();
             const name = document.getElementById('newName').value.trim();
             const desc = document.getElementById('newDesc').value.trim();
             const category = document.getElementById('newCategory').value;
-            if (!img || !name || !desc || !category) { alert('يرجى ملء جميع الحقول'); return; }
-            products.push({ id: Date.now(), name, desc, category, img });
-            saveData();
-            renderFilters();
-            renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');
-            populateSelect();
-            renderAdminList();
-            alert('✅ تم إضافة المنتج');
-            document.querySelectorAll('#adminForm input').forEach(el => el.value='');
-        }
+            const img = document.getElementById('newImg').value.trim();
 
-        function deleteProduct(id) {
-            if (!confirm('هل أنت متأكد من حذف هذا المنتج؟')) return;
-            products = products.filter(p => p.id !== id);
+            if(!name || !desc || !category || !img) return alert('يرجى ملء جميع الحقول');
+
+            products.unshift({ id: Date.now(), name, desc, category, img });
             saveData();
-            renderFilters();
-            renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');
-            populateSelect();
+            renderProducts('الكل');
+            populateProductSelect();
             renderAdminList();
-            alert('✅ تم حذف المنتج');
+            document.getElementById('adminForm').reset();
+            alert('✅ تم إضافة المادة بنجاح');
         }
 
         function editProduct(id) {
-            const p = products.find(pr => pr.id === id);
-            if (!p) return;
-            const newName = prompt('✏️ الاسم الجديد:', p.name);
-            if (newName !== null && newName.trim() !== '') p.name = newName.trim();
-            const newDesc = prompt('✏️ الوصف الجديد:', p.desc);
-            if (newDesc !== null && newDesc.trim() !== '') p.desc = newDesc.trim();
-            const newCat = prompt('✏️ التصنيف الجديد (لاصق ديكور، لاصق مسابح، الخ):', p.category);
-            if (newCat !== null && newCat.trim() !== '' && ALLOWED_CATEGORIES.includes(newCat.trim())) {
-                p.category = newCat.trim();
-            } else if (newCat !== null && newCat.trim() !== '') {
-                alert('❌ تصنيف غير مسموح. استخدم: ' + ALLOWED_CATEGORIES.join('، '));
-            }
+            const p = products.find(item => item.id === id);
+            if(!p) return;
+
+            const nName = prompt('اسم المادة:', p.name);
+            const nDesc = prompt('الوصف:', p.desc);
+            const nImg = prompt('رابط الصورة:', p.img);
+
+            if(nName) p.name = nName;
+            if(nDesc) p.desc = nDesc;
+            if(nImg) p.img = nImg;
+
             saveData();
-            renderFilters();
-            renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');
-            populateSelect();
+            renderProducts('الكل');
+            populateProductSelect();
             renderAdminList();
-            alert('✅ تم تحديث المنتج');
+        }
+
+        function deleteProduct(id) {
+            if(confirm('هل انت متأكد من الحذف؟')) {
+                products = products.filter(p => p.id !== id);
+                saveData();
+                renderProducts('الكل');
+                populateProductSelect();
+                renderAdminList();
+            }
         }
 
         function updateWhatsApp() {
-            const val = document.getElementById('whatsappNumber').value.trim();
-            if (val) { 
-                whatsappNumber = val; 
-                saveData(); 
-                alert('✅ تم تحديث رقم واتساب'); 
-            }
+            whatsappNumber = document.getElementById('whatsappNumber').value.trim();
+            saveData();
+            alert('✅ تم تحديث رقم الواتساب');
         }
 
         function updateTypewriter() {
-            const val = document.getElementById('typewriterMsg').value.trim();
-            if (val) { 
-                typewriterMsg = val; 
-                saveData(); 
-                startTypewriter(); 
-                alert('✅ تم تحديث الرسالة'); 
-            }
+            typewriterMsg = document.getElementById('typewriterMsg').value.trim();
+            saveData();
+            startTypewriter();
+            alert('✅ تم تحديث نص الشريط المتحرك');
         }
-
-        // ===== إغلاق النوافذ بالضغط على ESC =====
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                document.querySelectorAll('.modal, .admin-panel, #lightbox').forEach(el => {
-                    if (el) el.style.display = 'none';
-                });
-            }
-        });
     </script>
 </body>
 </html>

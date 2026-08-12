@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Katanbuild | المتجر الذكي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Cairo:wght@300;600;800&display=swap" rel="stylesheet"/>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Cairo', sans-serif; background: #0b0a09; color: #ece6dc; }
+
+        /* splash */
+        #splash {
+            position: fixed; inset:0; z-index:9999;
+            background: #0b0a09;
+            display: flex; align-items: center; justify-content: center;
+            animation: fadeOut 2.5s ease forwards;
+        }
+        @keyframes fadeOut {
+            0% { opacity:1; }
+            80% { opacity:1; }
+            100% { opacity:0; visibility:hidden; }
+        }
+        .splash-logo { text-align: center; }
+        .splash-text { font-family:'Orbitron',sans-serif; font-size:48px; font-weight:700; color:#fff; letter-spacing:2px; }
+        .splash-sub { color:#b58a5b; font-size:16px; letter-spacing:4px; }
+
+        /* header */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 40px; background: #1a1714dd; backdrop-filter:blur(8px);
+            border-bottom: 1px solid #b58a5b44; position:sticky; top:0; z-index:100;
+        }
+        .logo { display:flex; align-items:center; gap:10px; cursor:pointer; flex-wrap:wrap; }
+        .logo-text { font-family:'Orbitron',sans-serif; font-weight:700; font-size:22px; color:#fff; }
+        .logo-sub { font-size:10px; color:#b58a5b; letter-spacing:2px; display:block; width:100%; margin-top:-4px; }
+        .flag-logo {
+            animation: flagWave 3s ease-in-out infinite;
+            transform-origin: center left;
+        }
+        @keyframes flagWave {
+            0%,100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-2deg) scale(1.02); }
+            75% { transform: rotate(2deg) scale(1.02); }
+        }
+
+        .header-left { display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+        .datetime { font-family:'Orbitron',sans-serif; font-size:14px; color:#b58a5b; background:#00000055; padding:6px 14px; border-radius:40px; border:1px solid #b58a5b33; }
+        .btn-contact, .btn-order {
+            background:transparent; border:1.5px solid #b58a5b; color:#b58a5b;
+            padding:8px 22px; border-radius:40px; font-weight:700; cursor:pointer;
+            transition:0.2s; font-family:'Cairo',sans-serif;
+        }
+        .btn-contact:hover, .btn-order:hover { background:#b58a5b; color:#0b0a09; }
+
+        /* notification */
+        .notification-bar {
+            background:#1a1714; padding:12px 20px; text-align:center;
+            border-bottom:1px solid #b58a5b33; min-height:54px;
+            font-size:18px; color:#ece6dc;
+        }
+        #typewriter::after {
+            content: "|"; animation: blink 0.7s infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+        /* products */
+        .products { padding:50px 40px; max-width:1400px; margin:auto; }
+        .products h2 { font-size:36px; font-weight:800; margin-bottom:30px; border-right:6px solid #b58a5b; padding-right:20px; }
+
+        .filter-buttons {
+            display:flex; gap:14px; flex-wrap:wrap; margin-bottom:40px;
+        }
+        .filter-btn {
+            background:transparent; border:2px solid #b58a5b55; color:#b58a5b;
+            padding:8px 30px; border-radius:40px; font-weight:700; cursor:pointer;
+            transition:0.2s; font-family:'Cairo',sans-serif;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background:#b58a5b; color:#0b0a09; border-color:#b58a5b;
+        }
+
+        .product-grid {
+            display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+            gap:30px;
+        }
+        .product-card {
+            background:#1a1714; border-radius:16px; overflow:hidden;
+            border:1px solid #b58a5b33; transition:0.25s; cursor:pointer;
+        }
+        .product-card:hover { transform:translateY(-6px); border-color:#b58a5b; box-shadow:0 12px 30px #00000077; }
+        .product-card img { width:100%; height:200px; object-fit:cover; display:block; }
+        .product-card .info { padding:18px; }
+        .product-card h3 { font-size:18px; margin-bottom:4px; color:#fff; }
+        .product-card p { color:#b58a5b; font-size:14px; margin-bottom:10px; }
+        .product-card .btn-detail {
+            background:#b58a5b33; border:none; color:#b58a5b;
+            padding:6px 20px; border-radius:40px; font-weight:700; cursor:pointer;
+            transition:0.2s; font-family:'Cairo',sans-serif;
+        }
+        .product-card .btn-detail:hover { background:#b58a5b; color:#0b0a09; }
+
+        /* footer */
+        footer {
+            background:#1a1714; padding:30px 40px;
+            display:flex; justify-content:space-between; align-items:center;
+            border-top:1px solid #b58a5b33; color:#b58a5b88;
+        }
+        .social a { color:#b58a5b88; margin:0 12px; text-decoration:none; font-weight:700; }
+        .social a:hover { color:#b58a5b; }
+
+        /* modals */
+        .modal, .admin-panel {
+            position:fixed; inset:0; z-index:999;
+            background:#000000cc; backdrop-filter:blur(4px);
+            display:none; align-items:center; justify-content:center;
+        }
+        .modal-content, .admin-content {
+            background:#1a1714; padding:40px; border-radius:24px;
+            max-width:600px; width:90%; max-height:80vh; overflow-y:auto;
+            border:1px solid #b58a5b55; position:relative;
+        }
+        .close {
+            position:absolute; top:12px; left:20px; font-size:32px;
+            color:#b58a5b; cursor:pointer;
+        }
+        .admin-content { max-width:700px; }
+        .admin-content label { display:block; margin:12px 0 4px; color:#b58a5b; font-weight:600; }
+        .admin-content input, .admin-content button, .modal input, .modal select, .modal textarea {
+            width:100%; padding:12px; margin:6px 0; border-radius:12px;
+            background:#0b0a09; border:1px solid #b58a5b55; color:#fff;
+            font-family:'Cairo',sans-serif;
+        }
+        .admin-content button, .modal button {
+            background:#b58a5b; color:#0b0a09; font-weight:800; border:none; cursor:pointer;
+        }
+        .admin-content button:hover, .modal button:hover { opacity:0.8; }
+        hr { border-color:#b58a5b33; margin:20px 0; }
+
+        /* lightbox */
+        #lightbox {
+            position:fixed; inset:0; z-index:9999;
+            background:#000000ee; backdrop-filter:blur(8px);
+            display:flex; align-items:center; justify-content:center;
+            cursor:pointer;
+        }
+        #lightbox img {
+            max-width:90%; max-height:90%; border-radius:16px;
+            box-shadow:0 0 60px #b58a5b66;
+        }
+        #lightbox span {
+            position:absolute; top:20px; left:30px;
+            font-size:48px; color:#b58a5b; font-weight:300; cursor:pointer;
+        }
+
+        /* responsive */
+        @media (max-width:700px) {
+            header { flex-direction:column; padding:12px; gap:12px; }
+            .header-left { width:100%; justify-content:center; flex-wrap:wrap; }
+            .products { padding:30px 16px; }
+            .splash-text { font-size:32px; }
+        }
+        @media (max-width:480px) {
+            .product-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== شاشة الترحيب (Splash) ===== -->
+    <div id="splash">
+        <div class="splash-logo">
+            <img src="شعار_القطان_page-0001.jpg" alt="Katanbuild" width="140" style="margin-bottom:10px; border-radius:16px; box-shadow:0 0 40px #b58a5b55;" />
+            <span class="splash-text">Katanbuild</span>
+            <span class="splash-sub">INNOVATIVE BUILDING PRODUCTS</span>
+        </div>
+    </div>
+
+    <!-- ===== الصفحة الرئيسية ===== -->
+    <div id="main" style="display:none;">
+
+        <!-- ===== الهيدر ===== -->
+        <header>
+            <div class="logo flag-logo" id="mainLogo">
+                <img src="شعار_القطان_page-0001.jpg" alt="Katanbuild" height="50" style="border-radius:8px; margin-left:10px;" />
+                <span class="logo-text">Katanbuild</span>
+                <span class="logo-sub">INNOVATIVE BUILDING PRODUCTS</span>
+            </div>
+            <div class="header-left">
+                <div class="datetime" id="datetime">--:-- --</div>
+                <button class="btn-contact" onclick="openContact()">📞 تواصل معنا</button>
+                <button class="btn-order" onclick="openOrder()">🛒 طلب منتج</button>
+            </div>
+        </header>
+
+        <!-- ===== شريط الإشعارات (آلة كاتبة) ===== -->
+        <div class="notification-bar">
+            <span id="typewriter"></span>
+        </div>
+
+        <!-- ===== قسم المنتجات ===== -->
+        <section class="products">
+            <h2>منتجاتنا</h2>
+            
+            <!-- فلاتر -->
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">الكل</button>
+                <button class="filter-btn" data-filter="ceramic">سيراميك</button>
+                <button class="filter-btn" data-filter="tile">بلاط</button>
+                <button class="filter-btn" data-filter="robot">روبوتات</button>
+            </div>
+
+            <!-- شبكة المنتجات -->
+            <div class="product-grid" id="productGrid">
+                <!-- سيتم تعبئتها بواسطة JS -->
+            </div>
+        </section>
+
+        <!-- ===== الفوتر ===== -->
+        <footer>
+            <p>© 2026 Katanbuild – جميع الحقوق محفوظة</p>
+            <div class="social">
+                <a href="#">FB</a>
+                <a href="#">IG</a>
+                <a href="#">YT</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ===== نافذة التواصل ===== -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('contactModal')">&times;</span>
+            <h2>📞 تواصل معنا</h2>
+            <p id="contactInfo" style="margin:20px 0; color:#b58a5b;">البريد: info@katanbuild.com | الهاتف: +963 999 999 999</p>
+            <form id="contactForm" onsubmit="event.preventDefault(); alert('✅ تم إرسال رسالتك'); this.reset();">
+                <input type="text" placeholder="اسمك" required />
+                <input type="email" placeholder="بريدك الإلكتروني" required />
+                <textarea placeholder="رسالتك" rows="4" required></textarea>
+                <button type="submit">إرسال</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== نافذة طلب منتج ===== -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('orderModal')">&times;</span>
+            <h2>🛒 طلب منتج</h2>
+            <form id="orderForm" onsubmit="event.preventDefault(); alert('✅ تم إرسال الطلب'); this.reset();">
+                <select id="productSelect" required>
+                    <option value="">اختر المنتج</option>
+                </select>
+                <input type="number" placeholder="الكمية" min="1" required />
+                <input type="text" placeholder="اسمك" required />
+                <input type="text" placeholder="رقم الهاتف" required />
+                <button type="submit">إرسال الطلب</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== لوحة التحكم (مخفية) ===== -->
+    <div id="adminPanel" class="admin-panel" style="display:none;">
+        <div class="admin-content">
+            <span class="close" onclick="closeAdmin()">&times;</span>
+            <h2>🔐 لوحة التحكم</h2>
+            <form id="adminForm">
+                <label>➕ إضافة منتج جديد</label>
+                <input type="text" id="newImg" placeholder="رابط الصورة (اسم الملف)" />
+                <input type="text" id="newName" placeholder="اسم المنتج" />
+                <input type="text" id="newDesc" placeholder="وصف مختصر" />
+                <input type="text" id="newCategory" placeholder="الفئة (ceramic/tile/robot)" />
+                <button type="button" onclick="addProduct()">➕ إضافة منتج</button>
+                
+                <hr />
+                
+                <label>📞 تحديث معلومات التواصل</label>
+                <input type="text" id="contactAddress" placeholder="info@katanbuild.com | +963..." />
+                <button type="button" onclick="updateContact()">تحديث التواصل</button>
+                
+                <hr />
+                
+                <label>✏️ تحديث رسالة الآلة الكاتبة</label>
+                <input type="text" id="typewriterMsg" placeholder="أدخل الرسالة..." />
+                <button type="button" onclick="updateTypewriter()">تحديث الرسالة</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ===== البيانات باستخدام ملفاتك الفعلية =====
+        let products = [
+            {
+                id: 1,
+                name: 'لاصق سيراميك – Forever Fix',
+                desc: 'ألماني الصنع – مقاوم للماء – داخلي وخارجي',
+                category: 'ceramic',
+                img: '12_KThread_1786521559866_52058416972149.png'
+            },
+            {
+                id: 2,
+                name: 'لاصق بلاط – Everest Stone',
+                desc: 'لجميع أنواع البلاط – مقاوم للماء',
+                category: 'tile',
+                img: '13_KThread_1786521559906_52064347410837.png'
+            },
+            {
+                id: 3,
+                name: 'LAZURD FIX – لاصق متعدد',
+                desc: 'للسيراميك، الزجاج، الرخام – عازل للماء',
+                category: 'tile',
+                img: '11_KThread_1786521559847_52052350730653.png'
+            },
+            {
+                id: 4,
+                name: 'منتج 4',
+                desc: 'وصف المنتج الرابع',
+                category: 'ceramic',
+                img: '22_KThread_1786521560293_51987040997085.png'
+            },
+            {
+                id: 5,
+                name: 'منتج 5',
+                desc: 'وصف المنتج الخامس',
+                category: 'tile',
+                img: '24_KThread_1786521560310_51976944685707.png'
+            },
+            {
+                id: 6,
+                name: 'منتج 6',
+                desc: 'وصف المنتج السادس',
+                category: 'robot',
+                img: '25_KThread_1786521560320_51970752412212.png'
+            },
+            {
+                id: 7,
+                name: 'منتج 7',
+                desc: 'وصف المنتج السابع',
+                category: 'ceramic',
+                img: '26_KThread_1786521560330_51964172756447.png'
+            },
+            {
+                id: 8,
+                name: 'منتج 8',
+                desc: 'وصف المنتج الثامن',
+                category: 'tile',
+                img: '27_KThread_1786521560356_51956764715914.png'
+            },
+            {
+                id: 9,
+                name: 'منتج 9',
+                desc: 'وصف المنتج التاسع',
+                category: 'ceramic',
+                img: '28_KThread_1786521560365_51948556911420.png'
+            },
+            {
+                id: 10,
+                name: 'منتج 10',
+                desc: 'وصف المنتج العاشر',
+                category: 'robot',
+                img: '2_KThread_1786521478361_51798118075681.png'
+            },
+            {
+                id: 11,
+                name: 'منتج 11',
+                desc: 'وصف المنتج الحادي عشر',
+                category: 'tile',
+                img: '39_KThread_1786521561014_51861300854405.png'
+            }
+        ];
+
+        let contactInfo = 'البريد: info@katanbuild.com | الهاتف: +963 999 999 999';
+        let typewriterMsg = 'مرحباً بكم في Katanbuild – حلول بناء مبتكرة ذات جودة ألمانية.';
+
+        // ===== عناصر DOM =====
+        const grid = document.getElementById('productGrid');
+        const splash = document.getElementById('splash');
+        const main = document.getElementById('main');
+        const datetimeEl = document.getElementById('datetime');
+        const typewriterEl = document.getElementById('typewriter');
+        const productSelect = document.getElementById('productSelect');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        // ===== شاشة الترحيب =====
+        setTimeout(() => {
+            splash.style.display = 'none';
+            main.style.display = 'block';
+            updateClock();
+            setInterval(updateClock, 1000);
+            renderProducts('all');
+            populateSelect();
+            startTypewriter();
+        }, 2500);
+
+        // ===== الساعة =====
+        function updateClock() {
+            const now = new Date();
+            const d = now.toLocaleDateString('ar-EG', { weekday:'short', year:'numeric', month:'short', day:'numeric' });
+            const t = now.toLocaleTimeString('ar-EG', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+            datetimeEl.textContent = `${d} | ${t}`;
+        }
+
+        // ===== عرض المنتجات مع الفلتر =====
+        function renderProducts(category = 'all') {
+            const filtered = category === 'all' 
+                ? products 
+                : products.filter(p => p.category === category);
+            
+            grid.innerHTML = filtered.map(p => `
+                <div class="product-card" onclick="openLightbox('${p.img}')">
+                    <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300/1a1714/b58a5b?text=Katanbuild'"/>
+                    <div class="info">
+                        <h3>${p.name}</h3>
+                        <p>${p.desc}</p>
+                        <button class="btn-detail" onclick="event.stopPropagation(); alert('تفاصيل: ${p.name}')">تفاصيل</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function populateSelect() {
+            productSelect.innerHTML = '<option value="">اختر المنتج</option>' +
+                products.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
+        }
+
+        // ===== تفعيل الفلاتر =====
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                renderProducts(this.dataset.filter);
+            });
+        });
+
+        // ===== Lightbox =====
+        function openLightbox(imgSrc) {
+            const existing = document.getElementById('lightbox');
+            if (existing) existing.remove();
+            
+            const lightbox = document.createElement('div');
+            lightbox.id = 'lightbox';
+            lightbox.innerHTML = `
+                <img src="${imgSrc}" alt="منتج" />
+                <span onclick="this.parentElement.remove()">&times;</span>
+            `;
+            lightbox.onclick = function(e) {
+                if (e.target === this) this.remove();
+            };
+            document.body.appendChild(lightbox);
+        }
+
+        // ===== الآلة الكاتبة =====
+        function startTypewriter() {
+            let i = 0;
+            typewriterEl.textContent = '';
+            function type() {
+                if (i < typewriterMsg.length) {
+                    typewriterEl.textContent += typewriterMsg.charAt(i);
+                    i++;
+                    setTimeout(type, 60);
+                } else {
+                    setTimeout(() => { i=0; typewriterEl.textContent=''; type(); }, 4000);
+                }
+            }
+            type();
+        }
+
+        // ===== النوافذ المنبثقة =====
+        function openContact() {
+            document.getElementById('contactModal').style.display = 'flex';
+            document.getElementById('contactInfo').textContent = contactInfo;
+        }
+        function openOrder() { document.getElementById('orderModal').style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        window.onclick = function(e) {
+            if (e.target.classList.contains('modal')) e.target.style.display = 'none';
+        };
+
+        // ===== لوحة التحكم (الزر المخفي) =====
+        let clickCount = 0;
+        document.getElementById('mainLogo').addEventListener('click', function() {
+            clickCount++;
+            if (clickCount === 5) {
+                const pwd = prompt('🔐 أدخل كلمة المرور:');
+                if (pwd === 'katan2026') {
+                    document.getElementById('adminPanel').style.display = 'flex';
+                } else {
+                    alert('كلمة مرور خاطئة.');
+                }
+                clickCount = 0;
+            }
+        });
+
+        function closeAdmin() { document.getElementById('adminPanel').style.display = 'none'; }
+
+        // ===== وظائف لوحة التحكم =====
+        function addProduct() {
+            const img = document.getElementById('newImg').value.trim();
+            const name = document.getElementById('newName').value.trim();
+            const desc = document.getElementById('newDesc').value.trim();
+            const cat = document.getElementById('newCategory').value.trim() || 'ceramic';
+            if (!img || !name || !desc) { alert('يرجى ملء جميع الحقول'); return; }
+            products.push({ id: Date.now(), name, desc, category:cat, img });
+            renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');
+            populateSelect();
+            alert('✅ تم إضافة المنتج');
+            document.querySelectorAll('#adminForm input').forEach(el => el.value='');
+        }
+
+        function updateContact() {
+            const val = document.getElementById('contactAddress').value.trim();
+            if (val) { contactInfo = val; alert('✅ تم تحديث معلومات التواصل'); }
+        }
+
+        function updateTypewriter() {
+            const val = document.getElementById('typewriterMsg').value.trim();
+            if (val) { typewriterMsg = val; startTypewriter(); alert('✅ تم تحديث الرسالة'); }
+        }
+
+        // ===== إغلاق النوافذ بالضغط على ESC =====
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal, .admin-panel, #lightbox').forEach(el => {
+                    if (el) el.style.display = 'none';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Katanbuild | المعرض الذكي لمواد البناء</title>
     
-    <!-- الخطوط ورسومات QR -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Cairo:wght@300;600;800;900&display=swap" rel="stylesheet"/>
@@ -14,7 +13,7 @@
     <style>
         :root {
             --bg-dark: #070708;
-            --card-bg: rgba(26, 23, 20, 0.75);
+            --card-bg: rgba(22, 19, 16, 0.85);
             --accent-gold: #d4af37;
             --accent-glow: #b58a5b;
             --text-light: #ece6dc;
@@ -35,12 +34,12 @@
             background-size: 100% 100%, 40px 40px, 40px 40px;
         }
 
-        /* ===== شاشة الترحيب بالمستقبل ===== */
+        /* ===== شاشة الترحيب ===== */
         #splash {
             position: fixed; inset:0; z-index:9999;
             background: #050505;
             display: flex; align-items: center; justify-content: center;
-            animation: fadeOut 1.5s ease forwards 1.2s;
+            animation: fadeOut 1.2s ease forwards 1s;
         }
         @keyframes fadeOut { 100% { opacity:0; visibility:hidden; } }
         
@@ -52,11 +51,11 @@
         }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
-        /* ===== الهيدر الزجاجي ===== */
+        /* ===== الهيدر ===== */
         header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 16px 40px; 
-            background: rgba(11, 10, 9, 0.85); 
+            background: rgba(11, 10, 9, 0.9); 
             backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--border-glow); 
             position: sticky; top:0; z-index:100;
@@ -80,7 +79,7 @@
 
         .container { max-width: 1400px; margin: auto; padding: 30px 20px; }
 
-        /* ===== 1. قسم المساعد الهندسي الذكي ===== */
+        /* ===== 1. المساعد الهندسي الذكي ===== */
         .smart-assistant-card {
             background: var(--card-bg);
             border: 1px solid var(--border-glow);
@@ -103,7 +102,7 @@
             border-color: var(--accent-gold); box-shadow: 0 0 15px var(--border-glow);
         }
 
-        /* ===== 2. حاسبة المشاريع الذكية ===== */
+        /* ===== 2. حاسبة الاحتياجات ===== */
         .calculator-section {
             background: linear-gradient(135deg, rgba(26,23,20,0.9), rgba(10,10,10,0.95));
             border: 1px solid var(--accent-gold);
@@ -125,7 +124,7 @@
         .res-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 16px; }
         .res-value { font-weight: 800; color: var(--accent-gold); font-size: 18px; }
 
-        /* ===== شبكة المنتجات العصرية ===== */
+        /* ===== الفلترة والعرض ===== */
         .filter-bar { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 25px; }
         .filter-btn {
             background: rgba(255,255,255,0.05); border: 1px solid var(--border-glow);
@@ -147,28 +146,52 @@
         }
         .product-card:hover {
             transform: translateY(-8px); border-color: var(--accent-gold);
-            box-shadow: 0 15px 35px rgba(181, 138, 91, 0.2);
+            box-shadow: 0 15px 35px rgba(181, 138, 91, 0.25);
         }
 
-        .img-container { height: 200px; position: relative; background: #000; overflow: hidden; }
-        .product-card img {
-            width: 100%; height: 100%; object-fit: cover;
-            transition: 0.4s ease; opacity: 0;
+        /* ===== تحسين إطار ودقة الصور ===== */
+        .img-container { 
+            height: 240px; 
+            position: relative; 
+            background: radial-gradient(circle, #221f1c 0%, #080808 100%); 
+            overflow: hidden; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            padding: 12px;
         }
+
+        .product-card img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* لإظهار كيس المنتج كاملاً بدون قص */
+            
+            /* معالجة زيادة الدقة والوضوح للمتصفح */
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            filter: drop-shadow(0px 8px 15px rgba(0,0,0,0.7)) contrast(105%) brightness(102%);
+            
+            transition: transform 0.4s ease, filter 0.4s ease;
+            opacity: 0;
+        }
+        
         .product-card img.loaded { opacity: 1; }
+        .product-card:hover img {
+            transform: scale(1.08);
+            filter: drop-shadow(0px 12px 20px rgba(212, 175, 55, 0.3)) contrast(110%);
+        }
         
         .badge-cat {
-            position: absolute; top: 12px; right: 12px;
-            background: rgba(0,0,0,0.75); color: var(--accent-gold);
+            position: absolute; top: 12px; right: 12px; z-index: 2;
+            background: rgba(0,0,0,0.8); color: var(--accent-gold);
             padding: 4px 12px; border-radius: 20px; font-size: 11px;
             border: 1px solid var(--border-glow); backdrop-filter: blur(5px);
         }
 
         .product-info { padding: 18px; }
         .product-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 6px; }
-        .product-desc { font-size: 13px; color: #aaa; margin-bottom: 15px; min-height: 38px; }
-
-        .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        
+        .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; }
         .btn-card-action {
             padding: 8px; border-radius: 8px; border: 1px solid var(--border-glow);
             background: rgba(0,0,0,0.4); color: #fff; font-size: 12px;
@@ -189,10 +212,8 @@
         }
         .close-btn { position: absolute; top: 15px; left: 20px; font-size: 24px; cursor: pointer; color: var(--accent-gold); }
 
-        /* QR Code Output */
         #qrcode { display: flex; justify-content: center; margin: 20px 0; padding: 15px; background: #fff; border-radius: 12px; }
 
-        /* Torture Test Metrics */
         .metric-bar { margin: 12px 0; text-align: right; }
         .bar-outer { height: 8px; background: #222; border-radius: 4px; overflow: hidden; margin-top: 4px; }
         .bar-inner { height: 100%; background: linear-gradient(90deg, var(--accent-glow), var(--accent-gold)); }
@@ -210,9 +231,9 @@
         </div>
     </div>
 
-    <!-- ===== الهيدر الرئيسي ===== -->
+    <!-- ===== الهيدر ===== -->
     <header>
-        <div class="logo" id="logoClick">
+        <div class="logo">
             <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" height="40" style="border-radius:8px;" />
             <div>
                 <span class="logo-text">KATANBUILD</span>
@@ -230,38 +251,40 @@
         <!-- ===== 1. المساعد الهندسي الذكي ===== -->
         <div class="smart-assistant-card">
             <div class="assistant-title">
-                🤖 المساعد الهندسي الذكي: اختر طبيعة التحدي في مشروعك لتحديد المادة
+                🤖 المساعد الهندسي: اختر نوع التحدي في مشروعك لتحديد المادة
             </div>
             <div class="assistant-chips">
-                <div class="chip active" onclick="filterByDiagnosis('all', this)">عرض كافة المواد</div>
-                <div class="chip" onclick="filterByDiagnosis('pool', this)">🏊‍♂️ تثبيت بلاط المسابح ومقاومة ضغط الماء</div>
-                <div class="chip" onclick="filterByDiagnosis('heat', this)">☀️ الواجهات الخارجية المعرضة للشمس والتمدد</div>
-                <div class="chip" onclick="filterByDiagnosis('heavy', this)">🏛️ الغرانيت والبورسلين الثقيل</div>
-                <div class="chip" onclick="filterByDiagnosis('decor', this)">🎨 الديكورات والتكسيات الداخلية</div>
-                <div class="chip" onclick="filterByDiagnosis('waterproof', this)">🛡️ العزل المائي وتكتيم الرطوبة</div>
+                <div class="chip active" onclick="filterByTag('all', this)">عرض كافة المنتجات (38)</div>
+                <div class="chip" onclick="filterByTag('decor', this)">🎨 الديكورات والتكسيات الداخلية</div>
+                <div class="chip" onclick="filterByTag('pool', this)">🏊‍♂️ المسابح والعزل المائي المباشر</div>
+                <div class="chip" onclick="filterByTag('heavy', this)">🏛️ الغرانيت والبورسلين الضخم</div>
+                <div class="chip" onclick="filterByTag('outdoor', this)">☀️ الواجهات الخارجية والظروف القاسية</div>
+                <div class="chip" onclick="filterByTag('plaster', this)">🧱 الطينة الجاهزة والأكريليك</div>
+                <div class="chip" onclick="filterByTag('grout', this)">🛠️ الروبة وجر أوت الإصلاح</div>
+                <div class="chip" onclick="filterByTag('insulation', this)">🛡️ عوازل الحماية والتكتيم</div>
             </div>
         </div>
 
-        <!-- ===== 2. حاسبة الاحتياجات والميزانية الذكية ===== -->
+        <!-- ===== 2. حاسبة الاحتياجات والميزانية ===== -->
         <div class="calculator-section" id="calcSection">
             <div class="calc-inputs">
-                <h3 style="color:var(--accent-gold); margin-bottom:15px;">🧮 حاسبة المواد والميزانية</h3>
+                <h3 style="color:var(--accent-gold); margin-bottom:15px;">🧮 حاسبة الكميات للمشاريع</h3>
                 <label>مساحة المشروع الإجمالية ($m^2$):</label>
                 <input type="number" id="calcArea" value="50" min="1" oninput="calculateMaterials()" />
 
-                <label>نوع التطبيق والمراد تنفيذه:</label>
+                <label>نوع التطبيق والمادة:</label>
                 <select id="calcType" onchange="calculateMaterials()">
-                    <option value="4">لاصق ديكور داخلي (استهلاك ~4 كغ/m²)</option>
-                    <option value="5">لاصق غرانيت وبورسلين (استهلاك ~5 كغ/m²)</option>
-                    <option value="6">لاصق مسابح وعوازل (استهلاك ~6 كغ/m²)</option>
-                    <option value="0.5">روبة وملء فواصل (استهلاك ~0.5 كغ/m²)</option>
+                    <option value="4">لاصق ديكور داخلي (~4 كغ/m²)</option>
+                    <option value="5">لاصق غرانيت وبورسلين (~5 كغ/m²)</option>
+                    <option value="6">لاصق مسابح وعوازل (~6 كغ/m²)</option>
+                    <option value="0.5">روبة وملء فواصل (~0.5 كغ/m²)</option>
                 </select>
             </div>
 
             <div class="calc-result-box">
-                <h4 style="color:#fff; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">📊 التقرير التقديري للمشروع:</h4>
+                <h4 style="color:#fff; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">📊 التقرير التقديري للكميات:</h4>
                 <div class="res-item">
-                    <span>الكمية الإجمالية المطلوبة:</span>
+                    <span>الوزن الإجمالي المطلوب:</span>
                     <span class="res-value" id="resTotalKg">200 كغ</span>
                 </div>
                 <div class="res-item">
@@ -269,84 +292,123 @@
                     <span class="res-value" id="resBags">8 أكياس</span>
                 </div>
                 <div class="res-item">
-                    <span>نسبة الأمان والهدر الموصى بها (+10%):</span>
+                    <span>مع نسبة الأمان والهدر (+10%):</span>
                     <span class="res-value" id="resSafety">8.8 أكياس</span>
                 </div>
                 <button class="btn-cyber" style="width:100%; margin-top:15px; justify-content:center;" onclick="sendCalcToWA()">📲 إرسال التقرير للمهندس عبر الواتساب</button>
             </div>
         </div>
 
-        <!-- ===== فلترة وتصنيف المنتجات ===== -->
-        <h2 style="margin-bottom:15px; border-right:4px solid var(--accent-gold); padding-right:12px;">📦 كتالوج المنتجات</h2>
+        <!-- ===== الفلترة التمريرية ===== -->
+        <h2 style="margin-bottom:15px; border-right:4px solid var(--accent-gold); padding-right:12px;">📦 كتالوج المنتجات الشامل</h2>
         <div class="filter-bar" id="filterBar"></div>
 
-        <!-- شبكة المنتجات -->
+        <!-- شبكة المنتجات الـ 38 -->
         <div class="product-grid" id="productGrid"></div>
 
     </div>
 
-    <!-- ===== 3. نافذة اختبارات التحمل والجودة (Torture Test) ===== -->
+    <!-- ===== نافذة اختبار الجودة ===== -->
     <div id="testModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('testModal')">&times;</span>
-            <h3 style="color:var(--accent-gold); margin-bottom:10px;" id="testTitle">اختبار التحمل والجودة</h3>
-            <p id="testDesc" style="font-size:13px; color:#aaa; margin-bottom:20px;"></p>
+            <h3 style="color:var(--accent-gold); margin-bottom:10px;" id="testTitle">اختبار التحمل الفني</h3>
+            <p id="testDesc" style="font-size:13px; color:#aaa; margin-bottom:20px;">مواصفات القوة والالتصاق للمادة تحت الاختبارات الميدانية.</p>
             
             <div id="testMetrics">
                 <div class="metric-bar">
                     <div style="display:flex; justify-content:space-between; font-size:12px;">
                         <span>قوة الالتصاق والربط (Adhesion)</span>
-                        <span id="m1">98%</span>
+                        <span id="m1">95%</span>
                     </div>
-                    <div class="bar-outer"><div class="bar-inner" id="b1" style="width:98%;"></div></div>
+                    <div class="bar-outer"><div class="bar-inner" id="b1" style="width:95%;"></div></div>
                 </div>
                 <div class="metric-bar">
                     <div style="display:flex; justify-content:space-between; font-size:12px;">
-                        <span>مقاومة الرطوبة والضغط المائي</span>
-                        <span id="m2">95%</span>
+                        <span>مقاومة الماء والظروف الجوية</span>
+                        <span id="m2">92%</span>
                     </div>
-                    <div class="bar-outer"><div class="bar-inner" id="b2" style="width:95%;"></div></div>
+                    <div class="bar-outer"><div class="bar-inner" id="b2" style="width:92%;"></div></div>
                 </div>
                 <div class="metric-bar">
                     <div style="display:flex; justify-content:space-between; font-size:12px;">
-                        <span>المرونة ومقاومة التمدد الحراري</span>
-                        <span id="m3">90%</span>
+                        <span>المرونة واستيعاب إجهاد المباني</span>
+                        <span id="m3">88%</span>
                     </div>
-                    <div class="bar-outer"><div class="bar-inner" id="b3" style="width:90%;"></div></div>
+                    <div class="bar-outer"><div class="bar-inner" id="b3" style="width:88%;"></div></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ===== 4. نافذة QR Code TDS ===== -->
+    <!-- ===== نافذة الـ QR ===== -->
     <div id="qrModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('qrModal')">&times;</span>
             <h3 style="color:var(--accent-gold);" id="qrTitle">المواصفات الفنية TDS</h3>
-            <p style="font-size:12px; color:#aaa; margin-top:5px;">امسح الرمز بهاتفك لفتح البطاقة الفنية الخاصة بالمادة</p>
+            <p style="font-size:12px; color:#aaa; margin-top:5px;">امسح الرمز بهاتفك للوصول للنشرة الفنية الخاصة بالمادة</p>
             <div id="qrcode"></div>
             <button class="btn-cyber" style="width:100%; justify-content:center;" onclick="closeModal('qrModal')">إغلاق</button>
         </div>
     </div>
 
     <script>
-        // بيانات المنتجات المعتمدة مع ربطها بالتشخيص الهندسي واختبارات التحمل
+        // جميع المنتجات الـ 38 المحدثة بالروابط الكاملة
         const PRODUCTS = [
-            { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', tag: 'decor', desc: 'لاصق ديكور عالي الجودة للتكسيات الداخلية والجبس.', img: 'https://i.ibb.co/DBpH9TC/الاقرع-ديكور-فيكس.jpg', ad: 95, wat: 75, flex: 85 },
-            { id: 2, name: 'ايفرست', cat: 'لاصق ديكور', tag: 'decor', desc: 'لاصق ممتاز للديكورات والحجر الداخلي خفيف الوزن.', img: 'https://i.ibb.co/TDFPJ7LT/ايفرست.jpg', ad: 92, wat: 70, flex: 80 },
-            { id: 8, name: 'أكوا فيكس', cat: 'لاصق مسابح', tag: 'pool', desc: 'لاصق مسابح عالي المرونة مقاوم للضغط المائي المستمر.', img: 'https://i.ibb.co/VYWHvTpS/اكوا-فيكس.jpg', ad: 99, wat: 100, flex: 95 },
-            { id: 9, name: 'الباسل', cat: 'لاصق مسابح', tag: 'pool', desc: 'مخصص للمسابح والنافورة مع طارد للرطوبة والكلور.', img: 'https://i.ibb.co/zHjWrC9M/الباسل.jpg', ad: 96, wat: 98, flex: 90 },
-            { id: 16, name: 'الترا بوند اخضر', cat: 'لاصق غرانيت', tag: 'heavy', desc: 'لاصق معزز بالبوليمر للغرانيت والأرضيات الثقيلة.', img: 'https://i.ibb.co/3y56Fx4p/الترا-بوند-اخضر.jpg', ad: 98, wat: 85, flex: 92 },
-            { id: 17, name: 'الترا جريب', cat: 'لاصق غرانيت', tag: 'heavy', desc: 'قوة ربط فائقة للبورسلين واسع القياسات.', img: 'https://i.ibb.co/YFvHRxQh/الترا-جريب.jpg', ad: 97, wat: 88, flex: 90 },
-            { id: 26, name: 'الترا بوند اورنج', cat: 'لاصق خارجي', tag: 'heat', desc: 'لاصق الواجهات الخارجية المخصص للظروف الجوية القاسية.', img: 'https://i.ibb.co/dz2TJw6/الترا-بوند-اورنج.jpg', ad: 99, wat: 92, flex: 98 },
-            { id: 27, name: 'الترا بوند ذهبي', cat: 'لاصق خارجي', tag: 'heat', desc: 'مرونة فائقة لمقاومة التمدد والتقلص الحراري.', img: 'https://i.ibb.co/jZPVc56C/الترا-بوند-ذهبي.jpg', ad: 98, wat: 90, flex: 99 },
-            { id: 29, name: 'طينة اكرليكية', cat: 'طينة', tag: 'heat', desc: 'طينة جاهزة للاستخدام الخارجي ذات ثبات عالي للون.', img: 'https://i.ibb.co/hxWRDJb7/الترا-بوند-طينة-اكرليكية.jpg', ad: 90, wat: 85, flex: 92 },
-            { id: 36, name: 'عازل بلاستيكي', cat: 'عوازل', tag: 'waterproof', desc: 'عازل مائي متطور لتكتيم الأسطح والأساسات.', img: 'https://i.ibb.co/qhxdYSC/عازل-بلاستيكي.jpg', ad: 94, wat: 100, flex: 96 },
-            { id: 37, name: 'عازل حجر شفاف', cat: 'عوازل', tag: 'waterproof', desc: 'حماية شفافة للواجهات الحجرية من امتصاص الماء.', img: 'https://i.ibb.co/zV0GwTQy/عازل-حجر-شفاف.jpg', ad: 88, wat: 98, flex: 85 }
+            // 1. لاصق ديكور (7)
+            { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/DBpH9TC/الاقرع-ديكور-فيكس.jpg', ad: 95, wat: 75, flex: 85 },
+            { id: 2, name: 'ايفرست', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/TDFPJ7LT/ايفرست.jpg', ad: 92, wat: 70, flex: 80 },
+            { id: 3, name: 'بروسيل احمر', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/35m6YGQ0/بروسيل-احمر.jpg', ad: 94, wat: 78, flex: 82 },
+            { id: 4, name: 'فوريفر فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/GfSkd10Y/فوريفر-فيكس.jpg', ad: 93, wat: 72, flex: 84 },
+            { id: 5, name: 'كاربوفيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/7N0RWnvP/كاربوفيكس.jpg', ad: 91, wat: 70, flex: 80 },
+            { id: 6, name: 'كلايتور', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/BVQ2Yfg2/كلايتور.jpg', ad: 90, wat: 74, flex: 83 },
+            { id: 7, name: 'لازورد', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/xthHpF5G/لازورد.jpg', ad: 95, wat: 80, flex: 86 },
+
+            // 2. لاصق مسابح (8)
+            { id: 8, name: 'أكوا فيكس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/VYWHvTpS/اكوا-فيكس.jpg', ad: 99, wat: 100, flex: 95 },
+            { id: 9, name: 'الباسل', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/zHjWrC9M/الباسل.jpg', ad: 97, wat: 98, flex: 92 },
+            { id: 10, name: 'الترا بوند ازرق', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/NgFkRVRL/الترا-بوند-ازرق.jpg', ad: 98, wat: 99, flex: 94 },
+            { id: 11, name: 'الترا غريب اكسترا', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/35FdwgSL/الترا-غريب-اكسترا.jpg', ad: 99, wat: 97, flex: 96 },
+            { id: 12, name: 'آن ازرق', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/zhJvWCdx/آن-ازرق.jpg', ad: 95, wat: 96, flex: 90 },
+            { id: 13, name: 'أونكس فيكس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/992BBQX7/أونكس-فيكس.jpg', ad: 96, wat: 98, flex: 93 },
+            { id: 14, name: 'بروسيل مسابح', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/JWs3tZrj/بروسيل-مسابح.jpg', ad: 97, wat: 99, flex: 91 },
+            { id: 15, name: 'عباس', cat: 'لاصق مسابح', tag: 'pool', img: 'https://i.ibb.co/Jj0wY6rV/عباس.jpg', ad: 94, wat: 95, flex: 89 },
+
+            // 3. لاصق غرانيت (10)
+            { id: 16, name: 'الترا بوند اخضر', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/3y56Fx4p/الترا-بوند-اخضر.jpg', ad: 98, wat: 88, flex: 92 },
+            { id: 17, name: 'الترا جريب', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/YFvHRxQh/الترا-جريب.jpg', ad: 97, wat: 86, flex: 90 },
+            { id: 18, name: 'بروسيل اخضر', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/s96mf8zR/بروسيل-اخضر.jpg', ad: 96, wat: 85, flex: 88 },
+            { id: 19, name: 'توب فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/twSLHwgC/توب-فيكس.jpg', ad: 95, wat: 84, flex: 87 },
+            { id: 20, name: 'سبان فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/XZHZ3YF3/سبان-فيكس.jpg', ad: 94, wat: 82, flex: 86 },
+            { id: 21, name: 'سلامات فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/B210rXJ9/سلامات-فيكس.jpg', ad: 93, wat: 80, flex: 85 },
+            { id: 22, name: 'شربجي', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/pvtp7pWW/شربجي.jpg', ad: 95, wat: 85, flex: 88 },
+            { id: 23, name: 'كلوبال فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/fV9ph6mK/كلوبال-فيكس.jpg', ad: 96, wat: 87, flex: 89 },
+            { id: 24, name: 'ليث ازرق', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/CKNMFZBC/ليث-ازرق.jpg', ad: 94, wat: 83, flex: 87 },
+            { id: 25, name: 'ناولو فيكس', cat: 'لاصق غرانيت', tag: 'heavy', img: 'https://i.ibb.co/rL94Rv8/ناولو-فيكس.jpg', ad: 95, wat: 84, flex: 88 },
+
+            // 4. لاصق خارجي (3)
+            { id: 26, name: 'الترا بوند اورنج', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/dz2TJw6/الترا-بوند-اورنج.jpg', ad: 99, wat: 94, flex: 98 },
+            { id: 27, name: 'الترا بوند ذهبي', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/jZPVc56C/الترا-بوند-ذهبي.jpg', ad: 98, wat: 92, flex: 99 },
+            { id: 28, name: 'مارفيل', cat: 'لاصق خارجي', tag: 'outdoor', img: 'https://i.ibb.co/B2Y414rf/مارفيل.jpg', ad: 96, wat: 90, flex: 95 },
+
+            // 5. طينة (5)
+            { id: 29, name: 'طينة اكرليكية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/hxWRDJb7/الترا-بوند-طينة-اكرليكية.jpg', ad: 92, wat: 88, flex: 93 },
+            { id: 30, name: 'طينة بلاستيكية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/JWT5rBsr/الترا-بوند-طينة-بلاستيكية.jpg', ad: 90, wat: 85, flex: 91 },
+            { id: 31, name: 'سولايد ميكس', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/ZpT7rgpH/سولايد-ميكس.jpg', ad: 91, wat: 82, flex: 88 },
+            { id: 32, name: 'سولايد اسمنتية', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/LzWJ1dXG/سولايد-ميكس-اسمنتية.jpg', ad: 94, wat: 89, flex: 87 },
+            { id: 33, name: 'طينة غرانيت', cat: 'طينة', tag: 'plaster', img: 'https://i.ibb.co/mr2CNfwM/طينة-غرانيت.jpg', ad: 95, wat: 90, flex: 92 },
+
+            // 6. روبة (2)
+            { id: 34, name: 'الترا جريب (روبة)', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/GfBQ9LxV/الترا-جريب.jpg', ad: 93, wat: 95, flex: 89 },
+            { id: 35, name: 'جراولت اصلاح', cat: 'روبة', tag: 'grout', img: 'https://i.ibb.co/B5FQmxt8/جراولت-اصلاح-الترا-بوند.jpg', ad: 98, wat: 96, flex: 94 },
+
+            // 7. عوازل (3)
+            { id: 36, name: 'عازل بلاستيكي', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/qhxdYSC/عازل-بلاستيكي.jpg', ad: 95, wat: 100, flex: 97 },
+            { id: 37, name: 'عازل حجر شفاف', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/zV0GwTQy/عازل-حجر-شفاف.jpg', ad: 89, wat: 98, flex: 86 },
+            { id: 38, name: 'عازل مركبين', cat: 'عوازل', tag: 'insulation', img: 'https://i.ibb.co/7dSKY11t/عازل-مركبين.jpg', ad: 97, wat: 100, flex: 98 }
         ];
 
-        const CATEGORIES = ['الكل', 'لاصق ديكور', 'لاصق مسابح', 'لاصق غرانيت', 'لاصق خارجي', 'طينة', 'عوازل'];
-        let currentCategory = 'الكل';
+        const CATEGORIES = ['الكل', 'لاصق ديكور', 'لاصق مسابح', 'لاصق غرانيت', 'لاصق خارجي', 'طينة', 'روبة', 'عوازل'];
         let waNumber = '0952725590';
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -355,7 +417,6 @@
             calculateMaterials();
         });
 
-        // 1. تشغيل الفلترة والتصنيفات
         function renderCategories() {
             const container = document.getElementById('filterBar');
             container.innerHTML = CATEGORIES.map(c => `
@@ -366,13 +427,11 @@
         function filterCategory(cat, btn) {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            currentCategory = cat;
             const filtered = cat === 'الكل' ? PRODUCTS : PRODUCTS.filter(p => p.cat === cat);
             renderProducts(filtered);
         }
 
-        // 2. المساعد الهندسي التشخيصي
-        function filterByDiagnosis(tag, chip) {
+        function filterByTag(tag, chip) {
             document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
             chip.classList.add('active');
             
@@ -384,7 +443,6 @@
             }
         }
 
-        // 3. عرض المنتجات وتسريع التحميل
         function renderProducts(list) {
             const grid = document.getElementById('productGrid');
             grid.innerHTML = list.map(p => `
@@ -395,7 +453,6 @@
                     </div>
                     <div class="product-info">
                         <div class="product-title">${p.name}</div>
-                        <div class="product-desc">${p.desc}</div>
                         <div class="card-actions">
                             <button class="btn-card-action" onclick="openTestModal(${p.id})">🧪 الاختبار الفني</button>
                             <button class="btn-card-action" onclick="openQRModal('${p.name}', ${p.id})">📱 QR المادة</button>
@@ -405,7 +462,6 @@
             `).join('');
         }
 
-        // 4. حاسبة الاحتياجات المباشرة
         function calculateMaterials() {
             const area = parseFloat(document.getElementById('calcArea').value) || 0;
             const rate = parseFloat(document.getElementById('calcType').value) || 0;
@@ -426,37 +482,29 @@
             window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // 5. محاكي اختبارات التحمل (Torture Test)
         function openTestModal(id) {
             const p = PRODUCTS.find(item => item.id === id);
             if(!p) return;
 
             document.getElementById('testTitle').innerText = `اختبار الكفاءة: ${p.name}`;
-            document.getElementById('testDesc').innerText = p.desc;
-            
             document.getElementById('m1').innerText = `${p.ad}%`;
             document.getElementById('b1').style.width = `${p.ad}%`;
-
             document.getElementById('m2').innerText = `${p.wat}%`;
             document.getElementById('b2').style.width = `${p.wat}%`;
-
             document.getElementById('m3').innerText = `${p.flex}%`;
             document.getElementById('b3').style.width = `${p.flex}%`;
 
             document.getElementById('testModal').style.display = 'flex';
         }
 
-        // 6. مولد الـ QR Code
         function openQRModal(name, id) {
             document.getElementById('qrTitle').innerText = name;
             document.getElementById('qrcode').innerHTML = "";
-            
             new QRCode(document.getElementById("qrcode"), {
                 text: `https://katanbuild.com/tds/product-${id}`,
                 width: 160,
                 height: 160
             });
-
             document.getElementById('qrModal').style.display = 'flex';
         }
 

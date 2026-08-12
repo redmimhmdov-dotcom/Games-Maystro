@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Katanbuild | المعرض الذكي لمواد البناء</title>
+    
+    <!-- الخطوط ورسومات QR -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Cairo:wght@300;600;800;900&display=swap" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #070708;
+            --card-bg: rgba(26, 23, 20, 0.75);
+            --accent-gold: #d4af37;
+            --accent-glow: #b58a5b;
+            --text-light: #ece6dc;
+            --border-glow: rgba(181, 138, 91, 0.35);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background: var(--bg-dark); 
+            color: var(--text-light);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(181, 138, 91, 0.15), transparent 70%),
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        /* ===== شاشة الترحيب بالمستقبل ===== */
+        #splash {
+            position: fixed; inset:0; z-index:9999;
+            background: #050505;
+            display: flex; align-items: center; justify-content: center;
+            animation: fadeOut 1.5s ease forwards 1.2s;
+        }
+        @keyframes fadeOut { 100% { opacity:0; visibility:hidden; } }
+        
+        .splash-content { text-align: center; }
+        .splash-content img {
+            width: 180px; border-radius: 20px;
+            box-shadow: 0 0 50px rgba(181, 138, 91, 0.4);
+            animation: pulse 2s infinite ease-in-out;
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        /* ===== الهيدر الزجاجي ===== */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 40px; 
+            background: rgba(11, 10, 9, 0.85); 
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border-glow); 
+            position: sticky; top:0; z-index:100;
+        }
+        .logo { display:flex; align-items:center; gap:12px; cursor:pointer; }
+        .logo-text { font-family:'Orbitron', sans-serif; font-weight:900; font-size:24px; color:#fff; letter-spacing: 1px; }
+        .logo-sub { font-size:9px; color:var(--accent-glow); letter-spacing:3px; display:block; }
+        
+        .header-actions { display:flex; align-items:center; gap:12px; }
+        .btn-cyber {
+            background: linear-gradient(135deg, rgba(181,138,91,0.2), rgba(0,0,0,0.6));
+            border: 1px solid var(--accent-glow); color: #fff;
+            padding: 10px 20px; border-radius: 12px; font-weight: 700;
+            cursor: pointer; transition: 0.3s; font-size: 14px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .btn-cyber:hover {
+            background: var(--accent-glow); color: #000;
+            box-shadow: 0 0 20px var(--border-glow);
+        }
+
+        .container { max-width: 1400px; margin: auto; padding: 30px 20px; }
+
+        /* ===== 1. قسم المساعد الهندسي الذكي ===== */
+        .smart-assistant-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 20px; padding: 25px; margin-bottom: 35px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .assistant-title {
+            font-size: 20px; font-weight: 800; color: var(--accent-gold);
+            margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
+        }
+        .assistant-chips { display: flex; gap: 10px; flex-wrap: wrap; }
+        .chip {
+            background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);
+            color: #ccc; padding: 8px 18px; border-radius: 30px; cursor: pointer;
+            font-size: 13px; transition: 0.3s;
+        }
+        .chip:hover, .chip.active {
+            background: var(--accent-glow); color: #000; font-weight: 800;
+            border-color: var(--accent-gold); box-shadow: 0 0 15px var(--border-glow);
+        }
+
+        /* ===== 2. حاسبة المشاريع الذكية ===== */
+        .calculator-section {
+            background: linear-gradient(135deg, rgba(26,23,20,0.9), rgba(10,10,10,0.95));
+            border: 1px solid var(--accent-gold);
+            border-radius: 20px; padding: 30px; margin-bottom: 40px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+        }
+        @media (max-width: 900px) { .calculator-section { grid-template-columns: 1fr; } }
+        
+        .calc-inputs input, .calc-inputs select {
+            width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 18px;
+            background: #000; border: 1px solid var(--border-glow);
+            color: #fff; border-radius: 10px; font-family: 'Cairo';
+        }
+        .calc-result-box {
+            background: rgba(0,0,0,0.6); border-radius: 15px;
+            border: 1px dashed var(--accent-glow); padding: 20px;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .res-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 16px; }
+        .res-value { font-weight: 800; color: var(--accent-gold); font-size: 18px; }
+
+        /* ===== شبكة المنتجات العصرية ===== */
+        .filter-bar { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 25px; }
+        .filter-btn {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border-glow);
+            color: #fff; padding: 8px 22px; border-radius: 30px; white-space: nowrap;
+            cursor: pointer; transition: 0.3s;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--accent-glow); color: #000; font-weight: 800;
+        }
+
+        .product-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px;
+        }
+        .product-card {
+            background: var(--card-bg); border-radius: 18px;
+            border: 1px solid var(--border-glow); overflow: hidden;
+            transition: 0.3s; display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; backdrop-filter: blur(5px);
+        }
+        .product-card:hover {
+            transform: translateY(-8px); border-color: var(--accent-gold);
+            box-shadow: 0 15px 35px rgba(181, 138, 91, 0.2);
+        }
+
+        .img-container { height: 200px; position: relative; background: #000; overflow: hidden; }
+        .product-card img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: 0.4s ease; opacity: 0;
+        }
+        .product-card img.loaded { opacity: 1; }
+        
+        .badge-cat {
+            position: absolute; top: 12px; right: 12px;
+            background: rgba(0,0,0,0.75); color: var(--accent-gold);
+            padding: 4px 12px; border-radius: 20px; font-size: 11px;
+            border: 1px solid var(--border-glow); backdrop-filter: blur(5px);
+        }
+
+        .product-info { padding: 18px; }
+        .product-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+        .product-desc { font-size: 13px; color: #aaa; margin-bottom: 15px; min-height: 38px; }
+
+        .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .btn-card-action {
+            padding: 8px; border-radius: 8px; border: 1px solid var(--border-glow);
+            background: rgba(0,0,0,0.4); color: #fff; font-size: 12px;
+            cursor: pointer; transition: 0.2s; font-family: 'Cairo';
+        }
+        .btn-card-action:hover { background: var(--accent-glow); color: #000; font-weight: 700; }
+
+        /* ===== النوافذ المنبثقة ===== */
+        .modal {
+            position: fixed; inset: 0; z-index: 1000;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+            display: none; align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background: #12100e; border: 1px solid var(--accent-gold);
+            border-radius: 20px; padding: 30px; width: 90%; max-width: 500px;
+            position: relative; color: #fff; text-align: center;
+        }
+        .close-btn { position: absolute; top: 15px; left: 20px; font-size: 24px; cursor: pointer; color: var(--accent-gold); }
+
+        /* QR Code Output */
+        #qrcode { display: flex; justify-content: center; margin: 20px 0; padding: 15px; background: #fff; border-radius: 12px; }
+
+        /* Torture Test Metrics */
+        .metric-bar { margin: 12px 0; text-align: right; }
+        .bar-outer { height: 8px; background: #222; border-radius: 4px; overflow: hidden; margin-top: 4px; }
+        .bar-inner { height: 100%; background: linear-gradient(90deg, var(--accent-glow), var(--accent-gold)); }
+
+    </style>
+</head>
+<body>
+
+    <!-- ===== شاشة الترحيب ===== -->
+    <div id="splash">
+        <div class="splash-content">
+            <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" alt="Katanbuild" />
+            <h1 style="font-family:'Orbitron'; color:#fff; margin-top:15px;">KATANBUILD</h1>
+            <p style="color:var(--accent-glow); letter-spacing:3px; font-size:12px;">EXHIBITION EDITION 2026</p>
+        </div>
+    </div>
+
+    <!-- ===== الهيدر الرئيسي ===== -->
+    <header>
+        <div class="logo" id="logoClick">
+            <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" height="40" style="border-radius:8px;" />
+            <div>
+                <span class="logo-text">KATANBUILD</span>
+                <span class="logo-sub">INNOVATIVE BUILDING PRODUCTS</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="btn-cyber" onclick="scrollToCalc()">🧮 حاسبة المشاريع</button>
+            <button class="btn-cyber" onclick="openWhatsApp()">📞 تواصل مباشر</button>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- ===== 1. المساعد الهندسي الذكي ===== -->
+        <div class="smart-assistant-card">
+            <div class="assistant-title">
+                🤖 المساعد الهندسي الذكي: اختر طبيعة التحدي في مشروعك لتحديد المادة
+            </div>
+            <div class="assistant-chips">
+                <div class="chip active" onclick="filterByDiagnosis('all', this)">عرض كافة المواد</div>
+                <div class="chip" onclick="filterByDiagnosis('pool', this)">🏊‍♂️ تثبيت بلاط المسابح ومقاومة ضغط الماء</div>
+                <div class="chip" onclick="filterByDiagnosis('heat', this)">☀️ الواجهات الخارجية المعرضة للشمس والتمدد</div>
+                <div class="chip" onclick="filterByDiagnosis('heavy', this)">🏛️ الغرانيت والبورسلين الثقيل</div>
+                <div class="chip" onclick="filterByDiagnosis('decor', this)">🎨 الديكورات والتكسيات الداخلية</div>
+                <div class="chip" onclick="filterByDiagnosis('waterproof', this)">🛡️ العزل المائي وتكتيم الرطوبة</div>
+            </div>
+        </div>
+
+        <!-- ===== 2. حاسبة الاحتياجات والميزانية الذكية ===== -->
+        <div class="calculator-section" id="calcSection">
+            <div class="calc-inputs">
+                <h3 style="color:var(--accent-gold); margin-bottom:15px;">🧮 حاسبة المواد والميزانية</h3>
+                <label>مساحة المشروع الإجمالية ($m^2$):</label>
+                <input type="number" id="calcArea" value="50" min="1" oninput="calculateMaterials()" />
+
+                <label>نوع التطبيق والمراد تنفيذه:</label>
+                <select id="calcType" onchange="calculateMaterials()">
+                    <option value="4">لاصق ديكور داخلي (استهلاك ~4 كغ/m²)</option>
+                    <option value="5">لاصق غرانيت وبورسلين (استهلاك ~5 كغ/m²)</option>
+                    <option value="6">لاصق مسابح وعوازل (استهلاك ~6 كغ/m²)</option>
+                    <option value="0.5">روبة وملء فواصل (استهلاك ~0.5 كغ/m²)</option>
+                </select>
+            </div>
+
+            <div class="calc-result-box">
+                <h4 style="color:#fff; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">📊 التقرير التقديري للمشروع:</h4>
+                <div class="res-item">
+                    <span>الكمية الإجمالية المطلوبة:</span>
+                    <span class="res-value" id="resTotalKg">200 كغ</span>
+                </div>
+                <div class="res-item">
+                    <span>عدد الأكياس القياسية (25 كغ):</span>
+                    <span class="res-value" id="resBags">8 أكياس</span>
+                </div>
+                <div class="res-item">
+                    <span>نسبة الأمان والهدر الموصى بها (+10%):</span>
+                    <span class="res-value" id="resSafety">8.8 أكياس</span>
+                </div>
+                <button class="btn-cyber" style="width:100%; margin-top:15px; justify-content:center;" onclick="sendCalcToWA()">📲 إرسال التقرير للمهندس عبر الواتساب</button>
+            </div>
+        </div>
+
+        <!-- ===== فلترة وتصنيف المنتجات ===== -->
+        <h2 style="margin-bottom:15px; border-right:4px solid var(--accent-gold); padding-right:12px;">📦 كتالوج المنتجات</h2>
+        <div class="filter-bar" id="filterBar"></div>
+
+        <!-- شبكة المنتجات -->
+        <div class="product-grid" id="productGrid"></div>
+
+    </div>
+
+    <!-- ===== 3. نافذة اختبارات التحمل والجودة (Torture Test) ===== -->
+    <div id="testModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('testModal')">&times;</span>
+            <h3 style="color:var(--accent-gold); margin-bottom:10px;" id="testTitle">اختبار التحمل والجودة</h3>
+            <p id="testDesc" style="font-size:13px; color:#aaa; margin-bottom:20px;"></p>
+            
+            <div id="testMetrics">
+                <div class="metric-bar">
+                    <div style="display:flex; justify-content:space-between; font-size:12px;">
+                        <span>قوة الالتصاق والربط (Adhesion)</span>
+                        <span id="m1">98%</span>
+                    </div>
+                    <div class="bar-outer"><div class="bar-inner" id="b1" style="width:98%;"></div></div>
+                </div>
+                <div class="metric-bar">
+                    <div style="display:flex; justify-content:space-between; font-size:12px;">
+                        <span>مقاومة الرطوبة والضغط المائي</span>
+                        <span id="m2">95%</span>
+                    </div>
+                    <div class="bar-outer"><div class="bar-inner" id="b2" style="width:95%;"></div></div>
+                </div>
+                <div class="metric-bar">
+                    <div style="display:flex; justify-content:space-between; font-size:12px;">
+                        <span>المرونة ومقاومة التمدد الحراري</span>
+                        <span id="m3">90%</span>
+                    </div>
+                    <div class="bar-outer"><div class="bar-inner" id="b3" style="width:90%;"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 4. نافذة QR Code TDS ===== -->
+    <div id="qrModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('qrModal')">&times;</span>
+            <h3 style="color:var(--accent-gold);" id="qrTitle">المواصفات الفنية TDS</h3>
+            <p style="font-size:12px; color:#aaa; margin-top:5px;">امسح الرمز بهاتفك لفتح البطاقة الفنية الخاصة بالمادة</p>
+            <div id="qrcode"></div>
+            <button class="btn-cyber" style="width:100%; justify-content:center;" onclick="closeModal('qrModal')">إغلاق</button>
+        </div>
+    </div>
+
+    <script>
+        // بيانات المنتجات المعتمدة مع ربطها بالتشخيص الهندسي واختبارات التحمل
+        const PRODUCTS = [
+            { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', tag: 'decor', desc: 'لاصق ديكور عالي الجودة للتكسيات الداخلية والجبس.', img: 'https://i.ibb.co/DBpH9TC/الاقرع-ديكور-فيكس.jpg', ad: 95, wat: 75, flex: 85 },
+            { id: 2, name: 'ايفرست', cat: 'لاصق ديكور', tag: 'decor', desc: 'لاصق ممتاز للديكورات والحجر الداخلي خفيف الوزن.', img: 'https://i.ibb.co/TDFPJ7LT/ايفرست.jpg', ad: 92, wat: 70, flex: 80 },
+            { id: 8, name: 'أكوا فيكس', cat: 'لاصق مسابح', tag: 'pool', desc: 'لاصق مسابح عالي المرونة مقاوم للضغط المائي المستمر.', img: 'https://i.ibb.co/VYWHvTpS/اكوا-فيكس.jpg', ad: 99, wat: 100, flex: 95 },
+            { id: 9, name: 'الباسل', cat: 'لاصق مسابح', tag: 'pool', desc: 'مخصص للمسابح والنافورة مع طارد للرطوبة والكلور.', img: 'https://i.ibb.co/zHjWrC9M/الباسل.jpg', ad: 96, wat: 98, flex: 90 },
+            { id: 16, name: 'الترا بوند اخضر', cat: 'لاصق غرانيت', tag: 'heavy', desc: 'لاصق معزز بالبوليمر للغرانيت والأرضيات الثقيلة.', img: 'https://i.ibb.co/3y56Fx4p/الترا-بوند-اخضر.jpg', ad: 98, wat: 85, flex: 92 },
+            { id: 17, name: 'الترا جريب', cat: 'لاصق غرانيت', tag: 'heavy', desc: 'قوة ربط فائقة للبورسلين واسع القياسات.', img: 'https://i.ibb.co/YFvHRxQh/الترا-جريب.jpg', ad: 97, wat: 88, flex: 90 },
+            { id: 26, name: 'الترا بوند اورنج', cat: 'لاصق خارجي', tag: 'heat', desc: 'لاصق الواجهات الخارجية المخصص للظروف الجوية القاسية.', img: 'https://i.ibb.co/dz2TJw6/الترا-بوند-اورنج.jpg', ad: 99, wat: 92, flex: 98 },
+            { id: 27, name: 'الترا بوند ذهبي', cat: 'لاصق خارجي', tag: 'heat', desc: 'مرونة فائقة لمقاومة التمدد والتقلص الحراري.', img: 'https://i.ibb.co/jZPVc56C/الترا-بوند-ذهبي.jpg', ad: 98, wat: 90, flex: 99 },
+            { id: 29, name: 'طينة اكرليكية', cat: 'طينة', tag: 'heat', desc: 'طينة جاهزة للاستخدام الخارجي ذات ثبات عالي للون.', img: 'https://i.ibb.co/hxWRDJb7/الترا-بوند-طينة-اكرليكية.jpg', ad: 90, wat: 85, flex: 92 },
+            { id: 36, name: 'عازل بلاستيكي', cat: 'عوازل', tag: 'waterproof', desc: 'عازل مائي متطور لتكتيم الأسطح والأساسات.', img: 'https://i.ibb.co/qhxdYSC/عازل-بلاستيكي.jpg', ad: 94, wat: 100, flex: 96 },
+            { id: 37, name: 'عازل حجر شفاف', cat: 'عوازل', tag: 'waterproof', desc: 'حماية شفافة للواجهات الحجرية من امتصاص الماء.', img: 'https://i.ibb.co/zV0GwTQy/عازل-حجر-شفاف.jpg', ad: 88, wat: 98, flex: 85 }
+        ];
+
+        const CATEGORIES = ['الكل', 'لاصق ديكور', 'لاصق مسابح', 'لاصق غرانيت', 'لاصق خارجي', 'طينة', 'عوازل'];
+        let currentCategory = 'الكل';
+        let waNumber = '0952725590';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCategories();
+            renderProducts(PRODUCTS);
+            calculateMaterials();
+        });
+
+        // 1. تشغيل الفلترة والتصنيفات
+        function renderCategories() {
+            const container = document.getElementById('filterBar');
+            container.innerHTML = CATEGORIES.map(c => `
+                <button class="filter-btn ${c === 'الكل' ? 'active' : ''}" onclick="filterCategory('${c}', this)">${c}</button>
+            `).join('');
+        }
+
+        function filterCategory(cat, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentCategory = cat;
+            const filtered = cat === 'الكل' ? PRODUCTS : PRODUCTS.filter(p => p.cat === cat);
+            renderProducts(filtered);
+        }
+
+        // 2. المساعد الهندسي التشخيصي
+        function filterByDiagnosis(tag, chip) {
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            
+            if(tag === 'all') {
+                renderProducts(PRODUCTS);
+            } else {
+                const filtered = PRODUCTS.filter(p => p.tag === tag);
+                renderProducts(filtered);
+            }
+        }
+
+        // 3. عرض المنتجات وتسريع التحميل
+        function renderProducts(list) {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = list.map(p => `
+                <div class="product-card">
+                    <div class="img-container">
+                        <span class="badge-cat">${p.cat}</span>
+                        <img src="${p.img}" alt="${p.name}" loading="lazy" onload="this.classList.add('loaded')" />
+                    </div>
+                    <div class="product-info">
+                        <div class="product-title">${p.name}</div>
+                        <div class="product-desc">${p.desc}</div>
+                        <div class="card-actions">
+                            <button class="btn-card-action" onclick="openTestModal(${p.id})">🧪 الاختبار الفني</button>
+                            <button class="btn-card-action" onclick="openQRModal('${p.name}', ${p.id})">📱 QR المادة</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 4. حاسبة الاحتياجات المباشرة
+        function calculateMaterials() {
+            const area = parseFloat(document.getElementById('calcArea').value) || 0;
+            const rate = parseFloat(document.getElementById('calcType').value) || 0;
+
+            const totalKg = area * rate;
+            const bags = Math.ceil(totalKg / 25);
+            const safetyBags = (bags * 1.1).toFixed(1);
+
+            document.getElementById('resTotalKg').innerText = `${totalKg} كغ`;
+            document.getElementById('resBags').innerText = `${bags} أكياس`;
+            document.getElementById('resSafety').innerText = `${safetyBags} أكياس`;
+        }
+
+        function sendCalcToWA() {
+            const area = document.getElementById('calcArea').value;
+            const bags = document.getElementById('resSafety').innerText;
+            const msg = `مرحباً Katanbuild، لدي مشروع بمساحة ${area} م²، وبحسب حاسبة الموقع أحتاج إلى ${bags}. أود الاستفسار عن التوريد.`;
+            window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // 5. محاكي اختبارات التحمل (Torture Test)
+        function openTestModal(id) {
+            const p = PRODUCTS.find(item => item.id === id);
+            if(!p) return;
+
+            document.getElementById('testTitle').innerText = `اختبار الكفاءة: ${p.name}`;
+            document.getElementById('testDesc').innerText = p.desc;
+            
+            document.getElementById('m1').innerText = `${p.ad}%`;
+            document.getElementById('b1').style.width = `${p.ad}%`;
+
+            document.getElementById('m2').innerText = `${p.wat}%`;
+            document.getElementById('b2').style.width = `${p.wat}%`;
+
+            document.getElementById('m3').innerText = `${p.flex}%`;
+            document.getElementById('b3').style.width = `${p.flex}%`;
+
+            document.getElementById('testModal').style.display = 'flex';
+        }
+
+        // 6. مولد الـ QR Code
+        function openQRModal(name, id) {
+            document.getElementById('qrTitle').innerText = name;
+            document.getElementById('qrcode').innerHTML = "";
+            
+            new QRCode(document.getElementById("qrcode"), {
+                text: `https://katanbuild.com/tds/product-${id}`,
+                width: 160,
+                height: 160
+            });
+
+            document.getElementById('qrModal').style.display = 'flex';
+        }
+
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function scrollToCalc() { document.getElementById('calcSection').scrollIntoView({ behavior: 'smooth' }); }
+        function openWhatsApp() { window.open(`https://wa.me/${waNumber}`, '_blank'); }
+    </script>
+</body>
+</html>

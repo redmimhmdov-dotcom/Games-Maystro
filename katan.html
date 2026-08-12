@@ -107,6 +107,7 @@
             background:transparent; border:2px solid #b58a5b55; color:#b58a5b;
             padding:8px 30px; border-radius:40px; font-weight:700; cursor:pointer;
             transition:0.2s; font-family:'Cairo',sans-serif;
+            font-size:16px;
         }
         .filter-btn.active, .filter-btn:hover {
             background:#b58a5b; color:#0b0a09; border-color:#b58a5b;
@@ -121,7 +122,10 @@
             border:1px solid #b58a5b33; transition:0.25s; cursor:pointer;
         }
         .product-card:hover { transform:translateY(-6px); border-color:#b58a5b; box-shadow:0 12px 30px #00000077; }
-        .product-card img { width:100%; height:200px; object-fit:cover; display:block; }
+        .product-card img { 
+            width:100%; height:200px; object-fit:cover; display:block; 
+            background: #1a1714;
+        }
         .product-card .info { padding:18px; }
         .product-card h3 { font-size:18px; margin-bottom:4px; color:#fff; }
         .product-card p { color:#b58a5b; font-size:14px; margin-bottom:10px; }
@@ -131,6 +135,17 @@
             transition:0.2s; font-family:'Cairo',sans-serif;
         }
         .product-card .btn-detail:hover { background:#b58a5b; color:#0b0a09; }
+
+        /* صورة احتياطية أنيقة عند فشل التحميل */
+        .product-card .img-placeholder {
+            width:100%; height:200px;
+            display:flex; align-items:center; justify-content:center;
+            background: #1a1714;
+            color: #b58a5b44;
+            font-size:14px;
+            border-bottom:2px solid #b58a5b33;
+            font-family:'Cairo',sans-serif;
+        }
 
         footer {
             background:#1a1714; padding:30px 40px;
@@ -182,7 +197,7 @@
             transition:0.2s;
         }
         .admin-product-item:hover { border-color:#b58a5b; background:#1a1714; }
-        .admin-product-item img { width:50px; height:50px; object-fit:cover; border-radius:8px; }
+        .admin-product-item img { width:50px; height:50px; object-fit:cover; border-radius:8px; background:#0b0a09; }
         .admin-product-item .info { flex:1; }
         .admin-product-item .info h4 { color:#fff; font-size:14px; }
         .admin-product-item .info p { color:#b58a5b; font-size:12px; }
@@ -284,7 +299,7 @@
                 <h3 style="color:#b58a5b; margin:10px 0;">➕ إضافة منتج جديد</h3>
                 <input type="text" id="newImg" placeholder="رابط الصورة (مباشر)" required />
                 <input type="text" id="newName" placeholder="اسم المنتج (مثل: كاروفيكس)" required />
-                <input type="text" id="newDesc" placeholder="وصف مختصر" required />
+                <input type="text" id="newDesc" placeholder="الوصف (مثل: لاصق ديكور)" required />
                 <select id="newCategory" required>
                     <option value="">-- اختر التصنيف الرئيسي --</option>
                     <option value="لاصق ديكور">لاصق ديكور</option>
@@ -324,13 +339,24 @@
         let typewriterMsg = 'مرحباً بكم في Katanbuild – حلول بناء مبتكرة ذات جودة ألمانية.';
         let splashMsg = 'جودة ألمانية في كل منتج';
 
+        // ===== التصنيفات المسموحة (عربية فقط) =====
+        const ALLOWED_CATEGORIES = [
+            'لاصق ديكور',
+            'لاصق مسابح',
+            'لاصق غرانيت',
+            'لاصق سيراميك',
+            'لاصق خارجي',
+            'طينة',
+            'روبة'
+        ];
+
         // ===== تحميل البيانات من LocalStorage =====
         function loadData() {
             const stored = localStorage.getItem('katanbuild_products');
             if (stored) {
                 products = JSON.parse(stored);
             } else {
-                // البيانات الافتراضية بالمسميات الجديدة
+                // البيانات الافتراضية بالمسميات العربية فقط
                 products = [
                     { id: 1, name: 'كاروفيكس', desc: 'لاصق ديكور عالي الجودة', category: 'لاصق ديكور', img: 'https://i.ibb.co/Mk0y0k2h/1.png' },
                     { id: 2, name: 'مادة عازلة', desc: 'لاصق مسابح مقاوم للماء', category: 'لاصق مسابح', img: 'https://i.ibb.co/Mk0y0k2h/1.png' },
@@ -395,11 +421,15 @@
             datetimeEl.textContent = `${d} | ${t}`;
         }
 
-        // ===== عرض أزرار التصنيفات =====
+        // ===== عرض أزرار التصنيفات (عربية فقط) =====
         function renderFilters() {
+            // استخراج التصنيفات من المنتجات الموجودة
             const categories = [...new Set(products.map(p => p.category))];
+            // فلترة التصنيفات لتكون فقط ضمن المسموح
+            const validCategories = categories.filter(cat => ALLOWED_CATEGORIES.includes(cat));
+            
             let html = `<button class="filter-btn active" data-filter="all">الكل</button>`;
-            categories.forEach(cat => {
+            validCategories.forEach(cat => {
                 html += `<button class="filter-btn" data-filter="${cat}">${cat}</button>`;
             });
             filterContainer.innerHTML = html;
@@ -413,12 +443,21 @@
             });
         }
 
-        // ===== عرض المنتجات =====
+        // ===== عرض المنتجات مع معالج صور محسّن =====
         function renderProducts(category = 'all') {
             const filtered = category === 'all' ? products : products.filter(p => p.category === category);
+            
             grid.innerHTML = filtered.map(p => `
                 <div class="product-card" onclick="openLightbox('${p.img}')">
-                    <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300/1a1714/b58a5b?text=Katanbuild'"/>
+                    <img 
+                        src="${p.img}" 
+                        alt="${p.name}" 
+                        loading="lazy"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                    />
+                    <div class="img-placeholder" style="display:none;">
+                        <span>📷 ${p.name}</span>
+                    </div>
                     <div class="info">
                         <h3>${p.name}</h3>
                         <p>${p.desc}</p>
@@ -521,7 +560,6 @@
             `).join('');
         }
 
-        // دالة جديدة لتعديل الصورة فقط عند الضغط على المنتج
         function editProductImage(id) {
             const p = products.find(pr => pr.id === id);
             if (!p) return;
@@ -570,7 +608,11 @@
             const newDesc = prompt('✏️ الوصف الجديد:', p.desc);
             if (newDesc !== null && newDesc.trim() !== '') p.desc = newDesc.trim();
             const newCat = prompt('✏️ التصنيف الجديد (لاصق ديكور، لاصق مسابح، الخ):', p.category);
-            if (newCat !== null && newCat.trim() !== '') p.category = newCat.trim();
+            if (newCat !== null && newCat.trim() !== '' && ALLOWED_CATEGORIES.includes(newCat.trim())) {
+                p.category = newCat.trim();
+            } else if (newCat !== null && newCat.trim() !== '') {
+                alert('❌ تصنيف غير مسموح. استخدم: ' + ALLOWED_CATEGORIES.join('، '));
+            }
             saveData();
             renderFilters();
             renderProducts(document.querySelector('.filter-btn.active')?.dataset?.filter || 'all');

